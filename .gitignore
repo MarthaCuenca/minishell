@@ -1,0 +1,7 @@
+minishell
+*.o
+*.a
+*.d
+
+# Folders
+obj/
