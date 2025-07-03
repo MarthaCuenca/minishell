@@ -6,5 +6,5 @@
 int	main(void)
 {
 	printf("Hola minishell!\n");
-	return (0);	
+	return (0);
 }
