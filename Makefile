@@ -7,8 +7,7 @@ LIB_PATH := $(LIB)/$(LIB).a
 SRC_PATH := src
 OBJ_PATH := obj
 
-HEAD := include/minishell.h \
-	libft/libft.h
+HEAD := include/minishell.h
 
 SRCS := src/main.c \
 
