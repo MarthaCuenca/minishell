@@ -49,8 +49,11 @@ fclean: clean
 
 re: fclean all
 
-export_srcs:
-	@echo $(SRCS) $(HEAD)
+export_src:
+	@echo $(SRCS)
+
+export_head:
+	@echo $(HEAD)
 
 -include $(DEPS)
 
