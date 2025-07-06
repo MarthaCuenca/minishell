@@ -10,6 +10,7 @@ OBJ_PATH := obj
 HEAD := include/minishell.h
 
 SRCS := src/main.c \
+	src/print.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

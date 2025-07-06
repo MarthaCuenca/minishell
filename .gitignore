@@ -5,3 +5,4 @@ minishell
 
 # Folders
 obj/
+*bin*
