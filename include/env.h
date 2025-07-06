@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:12:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/04 20:29:26 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:00:23 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "./libft/libft.h"
+
+char	**ft_env_dup(char **env_ori);
+void	ft_2p_free(char **array);
 
 #endif

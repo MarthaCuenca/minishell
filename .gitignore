@@ -2,6 +2,7 @@ minishell
 *.o
 *.a
 *.d
+*.swp
 
 # Folders
 obj/

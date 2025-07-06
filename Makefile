@@ -7,10 +7,11 @@ LIB_PATH := $(LIB)/$(LIB).a
 SRC_PATH := src
 OBJ_PATH := obj
 
-HEAD := include/minishell.h
+HEAD := include/minishell.h \
+		include/env.h
 
 SRCS := src/main.c \
-	src/print.c
+		src/env_cp.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)
@@ -27,7 +28,7 @@ LIB_SRCS := $(addprefix $(LIB)/, $(shell $(MAKE) -s -C $(LIB) export_srcs))
 all: $(LIB_PATH) $(NAME)
 
 $(NAME): $(OBJS) Makefile
-	$(CC) $(OBJS) $(LIB_PATH) $(MLX_PATH) $(CFLAGS_I) $(CFLAGS_L) -o $(NAME)
+	$(CC) $(OBJS) $(LIB_PATH) $(CFLAGS_I) $(CFLAGS_L) -o $(NAME)
 
 $(LIB_PATH): $(LIB_SRCS)
 	$(MAKE) -C $(LIB)

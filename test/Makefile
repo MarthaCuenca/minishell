@@ -1,6 +1,7 @@
 # My tests
 
 LIB = minishell.a
+LIBFT = ../libft/libft.a
 SRC_MINISHELL := $(filter-out %main.c, $(addprefix ../, $(shell $(MAKE) -s -C ../ export_src)))
 HEAD_MINISHELL := $(addprefix ../, $(shell $(MAKE) -s -C ../ export_head))
 OBJ_MINISHELL := $(SRC_MINISHELL:.c=.o)
@@ -19,7 +20,7 @@ all: $(EXE_TEST)
 
 bin/%: src/%.c $(LIB)
 	@mkdir -p bin
-	$(CC) $(CFLAGS) $< $(LIB) -o $@
+	$(CC) $(CFLAGS) $< $(LIBFT) $(LIB) -o $@
 
 # Creation of library
 $(LIB): $(OBJ_MINISHELL) Makefile

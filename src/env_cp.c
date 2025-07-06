@@ -1,4 +1,3 @@
-#include "env.h"//Cambiar a minishell.h
 /*PODER CREAR VARIABLES DE ENTORNO ->
 * export + "HOLA=mundo"
 * tomar la str, dividirla por el "="
@@ -11,6 +10,9 @@
 /*PODER ELIMINAR VARIABLES DE ENTORNO ->
 * unset + "EL_NOMBRE_EXACTO_DE_LA_VAR"
 */
+
+#include "env.h"//Cambiar a minishell.h
+#include "libft.h"
 
 void	ft_2p_free(char **array)
 {
@@ -34,7 +36,7 @@ char	**ft_p2_dup(char **arr_ori)
 	j = 0;
 	while (arr_ori[j] != NULL)
 		j++;
-	ft_printf("%i\n", j);//
+	//printf("%i\n", j);//
 	cp = malloc((j + 1) * sizeof(char *));//malloc(len * sizeof()) para inicializaciones inmediatas
 										  //calloc(len, sizoef()) para ser seguro pero menos optimo
 	while (i < j)
@@ -61,7 +63,7 @@ char	**ft_env_dup(char **env_ori)
 }
 
 //BORRAR
-int	main(int argc, char **argv, char **env)
+/*int	main(int argc, char **argv, char **env)
 {
 	int		j;
 	char	**env_cp;
@@ -71,7 +73,7 @@ int	main(int argc, char **argv, char **env)
 	if (!env_cp)
 		return (1);
 	while (env_cp[j] != NULL)//
-		ft_printf("%s\n", env_cp[j++]);//
+		printf("%s\n", env_cp[j++]);//
 	ft_2p_free(env_cp);//
 	return (0);
-}
+}*/
