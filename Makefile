@@ -46,8 +46,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	rm -rf $(MLX)
-
 
 re: fclean all
 
