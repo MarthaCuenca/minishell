@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include "env.h"
-#include "libft.h"
+#include "test_utils.h"
+#include <stdlib.h>
+#include <string.h>
 
-int ft_count_env_vars(char **env, char **env_cp)
+static int	compare_n_env(char **env, char **env_cp)
 {
 	int i;
 	int j;
@@ -29,15 +31,34 @@ int ft_count_env_vars(char **env, char **env_cp)
 	return (1);
 }
 
+static int	compare_env(char **env, char **env_cp)
+{
+	int i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (strcmp(env[i], env_cp[i]) != 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	char **env_cp;
+	char	verbose;
+	int	test_result;
+	char	**env_cp;
 
 	(void)argc;
-	(void)argv;
-	/*COUNT ENV VARS*/
+	verbose = argv[1][0];
 	env_cp = ft_env_dup(env);
-	if (!ft_count_env_vars(env, env_cp))
-		return (1);
+	// Compare number of env variables
+	test_result = compare_n_env(env, env_cp);
+	eval_result(test_result, verbose, "env: compare number of variables");
+	// Compare env variables
+	test_result = compare_env(env, env_cp);
+	eval_result(test_result, verbose, "env: compare variables one to one");
 	return (0);
 }
