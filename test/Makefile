@@ -13,7 +13,7 @@ EXE_TEST := $(patsubst src/%.c, bin/%, $(SRC_TEST))
 CC := cc
 CFLAGS := -Wall -Wextra -Werror -O2 -I../include -I../libft -Iutils
 
-VERBOSE = 1
+VERBOSE ?= 1
 
 # ===========================================================
 
@@ -33,10 +33,8 @@ $(LIB): $(OBJ_MINISHELL) $(LIBFT) Makefile
 $(LIBFT):
 	$(MAKE) -s -C ../libft
 
-$(OBJ_MINISHELL): | make_parent
-
-make_parent:
-	@$(MAKE) -s -C ..
+../obj/%.o: ../src/%.c ../Makefile $(HEAD_MINISHELL)
+	@$(MAKE) -s -C ../ $@
 
 # Clean
 clean:
@@ -65,4 +63,4 @@ test: all
 
 
 
-.PHONY: make_parent test
+.PHONY: test

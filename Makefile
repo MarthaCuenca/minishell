@@ -2,16 +2,18 @@
 
 NAME := minishell
 LIB := libft
+VERBOSE ?= 1
+export VERBOSE
 
 LIB_PATH := $(LIB)/$(LIB).a
 SRC_PATH := src
 OBJ_PATH := obj
 
 HEAD := include/minishell.h \
-		include/env.h
+	include/env.h
 
 SRCS := src/main.c \
-		src/env_cp.c
+	src/env_cp.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)
@@ -27,12 +29,11 @@ LIB_SRCS := $(addprefix $(LIB)/, $(shell $(MAKE) -s -C $(LIB) export_srcs))
 
 all: $(LIB_PATH) $(NAME)
 
-$(NAME): $(OBJS) Makefile
-	$(CC) $(OBJS) $(LIB_PATH) $(CFLAGS_I) $(CFLAGS_L) -o $(NAME)
+$(NAME): $(LIB_PATH) $(OBJS) Makefile
+	$(CC) $(CFLAGS) $(CFLAGS_I) $(OBJS) $(LIB_PATH) -o $(NAME)
 
 $(LIB_PATH): $(LIB_SRCS)
 	$(MAKE) -C $(LIB)
-	$(MAKE) re
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) $(CFLAGS) $(CFLAGS_I) -c -o $@ $<
@@ -41,8 +42,7 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 
 clean:
-	rm -f $(OBJS) $(DEPS)
-	rm -fd $(OBJ_PATH)
+	rm -rf $(OBJ_PATH)
 
 fclean: clean
 	rm -f $(NAME)
@@ -55,6 +55,9 @@ export_src:
 export_head:
 	@echo $(HEAD)
 
+test:
+	$(MAKE) -C test test
+
 -include $(DEPS)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re export_src export_head test
