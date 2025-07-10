@@ -17,7 +17,7 @@ int	main(int argc, char **argv, char **env)
 	tmp = env_cp;
 	while (tmp)
 	{
-		printf("%s\n", tmp->var);
+		printf("%c  %c  %i\n%s\n\n\n", tmp->var[0], tmp->content[0], tmp->id_len, tmp->var);
 		tmp = tmp->next;
 	}
 	ft_env_free(&env_cp);
