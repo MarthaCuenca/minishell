@@ -2,28 +2,23 @@
 
 ## TODO ☐ ☑:
 
-- ☐ Planear tareas:
-	- ☑ Listar los diferentes puntos del subject
-	- ☐ Que tareas se relacionan entre si? Crear esquema?
-	- ☐ Estructuras en comun entre tareas?
-	- ☐ Repartir tareas
+- ☐ Variables de entorno: 20/07/25 (M)
+	- ☐ Recolectar las variables del shell anterior v3
 
-- ☐ Variables de entorno:
-	- ☐ Recolectar las variables del shell anterior
-	- ☐ Almacenar nuevas variables
-- ☐ UI:
-	- ☐ Como se ve minishell
-	- ☐ Uso de readline...
-- ☐ Recibir input, interpretar-lo, almacenar-lo:
-	- ☐ Lexer
-	- ☐ Parser...
-	- ☐ Gestion comillas, apostrofs, simbolo dolar...
-- ☐ Historial
-- ☐ Ejecutables:
+- ☐ Recibir input, interpretar-lo, almacenar-lo: 10/07/25 (M)
+	- ☐ Lexer 23/07/25 (M)
+		- ☑ Uso de readline y hacer free
+ 		- ☐ Struct token
+   		- ☐ Gestion comillas, apostrofs
+     		- ☐ Simbolo dolar
+	- ☐ Parser 03/07/25 (M)
+	- ☐ Expander 10/07/25 (M)
+  
+- ☐ Ejecutables: 22/07/25 (F)
 	- ☐ Ejecutar ejecutable
-	- ☐ Pipex: |
+	- ☐ Pipex: | 
 	- ☐ Redirecciones: <, <<, >, >>
-- ☐ Gestor de señales?
+   
 - ☐ Built-ins:
 	- ☐ ctrl-C, ctrl-D, ctrl-\
 	- ☐ echo
@@ -33,3 +28,7 @@
 	- ☐ unset
 	- ☐ env
 	- ☐ exit
+   
+ - ☐ HEREDOC
+ - ☐ Gestor de señales 29/07/25 (F)
+ - ☐ Historial
