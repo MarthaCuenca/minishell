@@ -32,3 +32,12 @@
  - ☐ HEREDOC
  - ☐ Gestor de señales 29/07/25 (F)
  - ☐ Historial
+
+- [x] learn the mlx
+     - [ ] compile it.
+     - [ ] create a window.
+     - [ ] paint pixels.
+         - [ ] all the srean red.
+         - [ ] paint a square.
+     - [ ] learn the hoks.
+     - [ ] make proper use of images.
