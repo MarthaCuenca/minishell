@@ -3,7 +3,7 @@
 ## TODO ☐ ☑:
 
 - ☐ Variables de entorno: 20/07/25 (M)
-	- ☐ Recolectar las variables del shell anterior v3
+	- ☑ Recolectar las variables del shell anterior v3 (t_list)
 
 - ☐ Recibir input, interpretar-lo, almacenar-lo: 10/07/25 (M)
 	- ☐ Lexer 23/07/25 (M)
