@@ -6,15 +6,26 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:12:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/10 18:25:08 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:33:03 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
 # define ENV_H
 
-#include <stdio.h>
-#include <stdlib.h>
+# include "libft.h"
+
+# define TRUE 1
+
+# define FALSE 0
+
+/*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
+
+/*** *** *** *** *** *** *** *** *** Vs3 *** *** *** *** *** *** *** *** ***/
+t_list	*env_dup(char **env);
+void	del_content(void *content);
+
+/*** *** *** *** *** *** *** *** *** Vs2 *** *** *** *** *** *** *** *** ***/
 /*	*"var": duplicado de la env_var original
 	*"id_len": el espacio que ocupa el nombre de la variable
 por ej.:  LESS=-R, ocupa 4, SHLVL=1, ocupa 5, PWD=..., ocupa 3
@@ -25,7 +36,7 @@ y si coinciden pues haremos un ft_strncmp
     *"content": donde empieza el contenido de una variable, 
 tambien sirve para calcular id_len
 	*"i": numero de indice, por si lo hago alfabeticamente el orden de las vars */
-typedef struct s_env
+/*typedef struct s_env
 {
 	struct s_env	*prev;
 	char			*var;
@@ -36,7 +47,9 @@ typedef struct s_env
 }	t_env;
 
 t_env	*ft_env_dup(char **env_ori);
-void    ft_env_free(t_env **env_lst);
-//char	**ft_env_dup(char **env_ori);
+void    ft_env_free(t_env **env_lst);*/
+
+/*** *** *** *** *** *** *** *** *** Vs1 *** *** *** *** *** *** *** *** ***/
+/*char	**ft_env_dup(char **env_ori);*/
 
 #endif

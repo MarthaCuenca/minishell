@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:13:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/10 19:43:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:43:54 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@
 /*RECUERDA SIEMPRE ACTUALIZAR EL ENVIRONMENT 
 CUANDO HAGAS CUALQUIER COSAS Y/O LO BUILT-INS DE env I export*/
 
-#include "env.h"/*Cambiar a minishell.h*/
+#include "minishell.h"/*Cambiar a minishell.h*/
 #include "libft.h"
+
+#include <stdlib.h>
 
 /*Esta funcion sirve para hacer free de todos los miembros del nodo que ocupen
 memoria dinamica (creados con malloc). Solo "var" es un duplicado (malloc)*/
-void	ft_env_nd_free(t_env *nd)
+void	env_nd_free(t_env *nd)
 {
 	if (!nd)
 		return ;
@@ -41,7 +43,7 @@ void	ft_env_nd_free(t_env *nd)
 /*Esta funcion sirve para liberar la lista doble enlazada, pasando por cada nodo
 y por cada miembro de cada nodo. 
 NO hago free de t_env ** porque es memoria estatica creada en el main.*/
-void	ft_env_free(t_env **env_lst)
+void	env_free(t_env **env_lst)
 {
 	size_t	i;
 	t_env	*tmp;
@@ -60,7 +62,7 @@ void	ft_env_free(t_env **env_lst)
 /*Aqui voy crando los datos de cada miembro de un nodo.
 malloc(len * sizeof()) para inicializaciones inmediatas
 calloc(len, sizoef()) para ser seguro pero menos optimo*/
-t_env	*ft_env_nd_data(char *var)
+t_env	*env_nd_data(char *var)
 {
 	t_env	*new_nd;
 	char	*tmp;
@@ -83,14 +85,14 @@ t_env	*ft_env_nd_data(char *var)
 
 /*2da parte de donde itero para crear la lista doble enlazada.
 return int: lo hago funcionar como un bolean, si sale bien 1, sino 0*/
-int	ft_env_array_to_list_2(t_env **new_nd, t_env **head, char *env_ori)
+int	env_array_to_list_2(t_env **new_nd, t_env **head, char *env_ori)
 {
 	t_env	*tmp;
 
 	tmp = *new_nd;
 	*new_nd = ft_env_nd_data(env_ori);
 	if (!*new_nd)
-		return (ft_env_free(new_nd), 0);
+		return (ft_env_free(new_nd), FALSE);
 	if (!*head)
 		*head = *new_nd;
 	if (tmp)
@@ -98,28 +100,24 @@ int	ft_env_array_to_list_2(t_env **new_nd, t_env **head, char *env_ori)
 		tmp->next = *new_nd;
 		(*new_nd)->prev = tmp;
 	}
-	return (1);
+	return (TRUE);
 }
 
 /*Creo la lista doble enlazada de environment,
 teniendo en cuenta que es el environment orignal es un char**
 y nosotros queremos una lista.*/
-t_env	*ft_env_array_to_list(char **env_ori)
+t_env	*env_array_to_list(char **env_ori)
 {
 	int		i;
-	int		j;
 	t_env	*head;
 	t_env	*new_nd;
 
 	if (!env_ori)
 		return (NULL);
 	i = 0;
-	j = 0;
 	head = NULL;
 	new_nd = NULL;
-	while (env_ori[j] != NULL)
-		j++;
-	while (env_ori[i] && i < j)
+	while (env_ori[i])
 		if (!ft_env_array_to_list_2(&new_nd, &head, env_ori[i++]))
 			return (ft_env_free(&new_nd), NULL);
 	return (head);
@@ -128,7 +126,7 @@ t_env	*ft_env_array_to_list(char **env_ori)
 /*Esta funcion es como un "init_env_dup", solo va llamando a las funciones 
  para poder hacer el resultado final.
  SI TODO SALE BIEN, ANTES DE CERRAR EL PROGRAMA (exit) LIBERA EL ENV*/
-t_env	*ft_env_dup(char **env_ori)
+t_env	*env_dup(char **env_ori)
 {
 	t_env	*env_cp;
 
@@ -138,4 +136,25 @@ t_env	*ft_env_dup(char **env_ori)
 	if (!env_cp)
 		return (NULL);
 	return (env_cp);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	t_env	*env_cp;
+	t_env	*tmp;
+
+	(void)argc;
+	(void)argv;
+	env_cp = ft_env_dup(env);
+	if (!env_cp)
+		return (1);
+	tmp = env_cp;
+	while (tmp)
+	{
+		//printf("%c  %c  %i\n%s\n\n\n", tmp->var[0], tmp->content[0], tmp->id_len, tmp->var);
+		printf("%s\n", tmp->var);
+		tmp = tmp->next;
+	}
+	ft_env_free(&env_cp);
+	return (0);
 }
