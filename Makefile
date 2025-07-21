@@ -13,14 +13,16 @@ HEAD := include/minishell.h \
 	include/env.h
 
 SRCS := src/main.c \
-	src/env_cp.c
+		src/env_v3.c \
+		src/lexer.c
+#src/env_cp_array.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)
 
 CC := cc
 CFLAGS := -Wall -Werror -Wextra -g -MMD -MP
-CFLAGS_I := -Iinclude -I$(LIB)
+CFLAGS_I := -Iinclude -I $(LIB)
 
 LIB_SRCS := $(addprefix $(LIB)/, $(shell $(MAKE) -s -C $(LIB) export_srcs))
 
@@ -30,7 +32,7 @@ LIB_SRCS := $(addprefix $(LIB)/, $(shell $(MAKE) -s -C $(LIB) export_srcs))
 all: $(LIB_PATH) $(NAME)
 
 $(NAME): $(LIB_PATH) $(OBJS) Makefile
-	$(CC) $(CFLAGS) $(CFLAGS_I) $(OBJS) $(LIB_PATH) -o $(NAME)
+	$(CC) $(CFLAGS) $(CFLAGS_I) $(OBJS) $(LIB_PATH) -o $(NAME) -lreadline
 
 $(LIB_PATH): $(LIB_SRCS)
 	$(MAKE) -C $(LIB)
