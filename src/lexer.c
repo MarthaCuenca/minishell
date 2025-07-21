@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/21 13:21:46 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/21 14:42:18 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,62 @@
 	return ;
 }*/
 
+static int	no_quote(char *cmmd, int *simple, int *dou, int *w, int *w_bool)	
+{
+	int	i;
 
+	i = 0;
+	if (cmmd[i] == 39)
+		*simple = 1;
+	else if (cmmd[i] == 34)
+		*dou = 1;
+	else if (cmmd[i] == 32)
+			*w_bool = 0;
+	else
+	{
+		if (*w_bool == 0)
+		{
+			(*w)++;
+			*w_bool = 1;
+		}
+	}
+	i++;
+	return (i);
+}
+
+static int	simple_quote(char *cmmd, int *simple, int *w, int *w_bool)	
+{
+	int	i;
+
+	i = 0;
+	while (cmmd[i] && cmmd[i] != 39)
+			i++;
+	if (cmmd[i] == 39)
+	{
+		*simple = 0;
+		(*w)++;
+		i++;
+		*w_bool = 0;
+	}
+	return (i);
+}
+
+static int	dou_quote(char *cmmd, int *dou, int *w, int *w_bool)	
+{
+	int	i;
+
+	i = 0;
+	while (cmmd[i] && cmmd[i] != 34)
+		i++;
+	if (cmmd[i] == 34)
+	{
+		*dou = 0;
+		(*w)++;
+		i++;
+		*w_bool = 0;
+	}
+	return (i);
+}
 
 static int	count_token(char *cmmd)
 {
@@ -67,6 +122,8 @@ static int	count_token(char *cmmd)
 	if (!cmmd)
 		return (0);
 	i = 0;
+	simple = 0;
+	dou = 0;
 	w = 0;
 	w_bool = 0;
 	while (6 < cmmd[i] && 14 > cmmd[i] && cmmd[i] != 32)//ft_isprint(cmmd[i])
@@ -74,47 +131,11 @@ static int	count_token(char *cmmd)
 	while (cmmd[i])//ESTO FUNCIONA, SOLO HACE FALTA GUARDARLOS EN UN TOKEN
 	{
 		if (simple == 1)//si abro ' da igual cualquier otra comilla, espero a cerrarla con '//
-		{
-			while (cmmd[i] && cmmd[i] != 39)
-				i++;
-			if (cmmd[i] == 39)
-			{
-				simple = 0;
-				w++;
-				i++;
-				w_bool = 0;
-			}
-		}
+			i += simple_quote(&cmmd[i], &simple, &w, &w_bool); 
 		else if (dou == 1)
-		{
-			while (cmmd[i] && cmmd[i] != 34)
-				i++;
-			if (cmmd[i] == 34)
-			{
-				dou = 0;
-				w++;
-				i++;
-				w_bool = 0;
-			}
-		}
+			i += dou_quote(&cmmd[i], &dou, &w, &w_bool); 
 		else 
-		{
-			if (cmmd[i] == 39)
-				simple = 1;
-			else if (cmmd[i] == 34)
-				dou = 1;
-			else if (cmmd[i] == 32)
-				w_bool = 0;
-			else
-			{
-				if (w_bool == 0)
-				{
-					w++;
-					w_bool = 1;
-				}
-			}
-			i++;
-		}
+			i += no_quote(&cmmd[i], &simple, &dou, &w, &w_bool); 
 	}
 	if (simple == 1 || dou == 1)
 		return (0);
