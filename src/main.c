@@ -12,6 +12,8 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*cmmd;
 	t_list	*env_cp;
+	t_list	*lex;
+
 	(void)argc;
 	(void)argv;
 	env_cp = env_dup(env);
@@ -22,7 +24,8 @@ int	main(int argc, char **argv, char **env)
 		cmmd = readline("minishell>");//Hay que proteger el readline? Hay que liberar readline?
 		if (!cmmd)
 			break ;
-		lexer(cmmd);
+		lex = lexer(cmmd);
+		ft_lstclear(&lex, del_content);
 		if (ft_strncmp(cmmd, "exit", 5) == 0)
 			break ;
 		free(cmmd);

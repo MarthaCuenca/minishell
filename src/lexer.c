@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/21 14:42:18 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/22 11:06:58 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,108 +54,26 @@
 	return ;
 }*/
 
-static int	no_quote(char *cmmd, int *simple, int *dou, int *w, int *w_bool)	
+t_list	*lexer(char *cmmd)
 {
-	int	i;
-
-	i = 0;
-	if (cmmd[i] == 39)
-		*simple = 1;
-	else if (cmmd[i] == 34)
-		*dou = 1;
-	else if (cmmd[i] == 32)
-			*w_bool = 0;
-	else
-	{
-		if (*w_bool == 0)
-		{
-			(*w)++;
-			*w_bool = 1;
-		}
-	}
-	i++;
-	return (i);
-}
-
-static int	simple_quote(char *cmmd, int *simple, int *w, int *w_bool)	
-{
-	int	i;
-
-	i = 0;
-	while (cmmd[i] && cmmd[i] != 39)
-			i++;
-	if (cmmd[i] == 39)
-	{
-		*simple = 0;
-		(*w)++;
-		i++;
-		*w_bool = 0;
-	}
-	return (i);
-}
-
-static int	dou_quote(char *cmmd, int *dou, int *w, int *w_bool)	
-{
-	int	i;
-
-	i = 0;
-	while (cmmd[i] && cmmd[i] != 34)
-		i++;
-	if (cmmd[i] == 34)
-	{
-		*dou = 0;
-		(*w)++;
-		i++;
-		*w_bool = 0;
-	}
-	return (i);
-}
-
-static int	count_token(char *cmmd)
-{
-	int	i;
-	int	simple;
-	int	dou;
-	int	w;
-	int	w_bool;
-
-	if (!cmmd)
-		return (0);
-	i = 0;
-	simple = 0;
-	dou = 0;
-	w = 0;
-	w_bool = 0;
-	while (6 < cmmd[i] && 14 > cmmd[i] && cmmd[i] != 32)//ft_isprint(cmmd[i])
-		i++;
-	while (cmmd[i])//ESTO FUNCIONA, SOLO HACE FALTA GUARDARLOS EN UN TOKEN
-	{
-		if (simple == 1)//si abro ' da igual cualquier otra comilla, espero a cerrarla con '//
-			i += simple_quote(&cmmd[i], &simple, &w, &w_bool); 
-		else if (dou == 1)
-			i += dou_quote(&cmmd[i], &dou, &w, &w_bool); 
-		else 
-			i += no_quote(&cmmd[i], &simple, &dou, &w, &w_bool); 
-	}
-	if (simple == 1 || dou == 1)
-		return (0);
-	if (w == 0)
-		return (1);
-	return (w);
-}
-
-t_token	*lexer(char *cmmd)
-{	
-	int	i;
-	int	w;
-	//t_env	*token_list;
+	//int	count_tk;
+	t_list	*token_list;
+	t_list	*tmp;//
 
 	if (!cmmd)
 		return (NULL);
-	i = 0;
-	w = count_token(cmmd);
-	if (!w)
+	/*count_tk = count_token(cmmd);	
+	if (!count_tk)
 		return (printf("SYNTAX ERROR\n"), NULL);//syntax error
-	printf("%i\n", w);
-	return (NULL);
+	printf("%i\n", count_tk);*/
+	token_list = save_token(cmmd);
+	if (!token_list)
+		return (NULL);
+	tmp = token_list;//
+	while (tmp)//QUIZAS ESTO HACE QE IMPRIMA ESPACIOS, PERO PORQUE NO HAY NADA??
+	{
+		printf("%s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+	return (token_list);
 }

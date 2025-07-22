@@ -5,15 +5,25 @@
 
 # include "libft.h"
 
-# define TRUE 1
-
-# define FALSE 0
+typedef enum e_bool
+{
+	FALSE = 0,
+	TRUE = 1
+}	t_bool;
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
 t_list	*env_dup(char **env);
 void	del_content(void *content);
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
+typedef enum e_util
+{
+	START = 0,
+	END = 1,
+	I = 2,
+	BOOL = 3,
+	LEN = 4
+}	t_util;
 
 typedef enum e_quote
 {
@@ -39,7 +49,9 @@ typedef struct s_token
 	void			*next;
 }	t_token;
 
-t_token	*lexer(char *cmmd);
+t_list	*lexer(char *cmmd);
+int	count_token(char *cmmd);
+t_list	*save_token(char *cmmd);
 //void	lexer(char *cmmd);
 
 #endif
