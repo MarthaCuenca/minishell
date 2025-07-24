@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/22 11:06:58 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:59:38 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@
 	 * echo   "123    "    "456" <- printea 123      456
 	 * echo 123"456" <- printea 123456
 	 * echo 123"456"789 <- printea 123456789
-	 * "
+	 * echo te vi." <- espera a que cierre comillas
+	 *
 	*MALLOC de 1 nodo, 
 	*Verificar si las comillas estan cerradas: 
 	*IDEA: default: bool = 0,
@@ -53,6 +54,45 @@
 		printf("%s\n",split[i++]);
 	return ;
 }*/
+
+static const char *quote_to_str(t_quote q)
+{
+	switch (q)
+	{
+		case NO_QUOTE:
+			return ("NO_QUOTE");
+		case SIMPLE_QUOTE:
+			return ("SIMPLE_QUOTE");
+		case DOUBLE_QUOTE:
+			return ("DOUBLE_QUOTE");
+		default:
+			return ("UNKNOWN_QUOTE");
+	}
+}
+
+static const char *type_to_str(t_token_type tt)
+{
+	switch (tt)
+	{
+		case WORD:
+			return ("WORD");
+		case EXP:
+			return ("EXP");
+		case PIPE:
+			return ("PIPE");
+		case DIR_IN:
+			return ("DIR_IN");
+		case DIR_OUT:
+			return ("DIR_OUT");
+		case APPEND:
+			return ("APPEND");
+		case HEREDOC:
+			return ("HEREDOC");
+		default:
+			return ("UNKNOWN_TYPE");
+	}
+}
+
 
 t_list	*lexer(char *cmmd)
 {
@@ -72,7 +112,9 @@ t_list	*lexer(char *cmmd)
 	tmp = token_list;//
 	while (tmp)//QUIZAS ESTO HACE QE IMPRIMA ESPACIOS, PERO PORQUE NO HAY NADA??
 	{
-		printf("%s\n", (char *)tmp->content);
+		printf("[TOKEN]\n%s\n%s\n%s\n\n", ((t_token *)tmp->content)->token, 
+				quote_to_str(((t_token *)(tmp->content))->quote_type), 
+				type_to_str(((t_token *)(tmp->content))->type));
 		tmp = tmp->next;
 	}
 	return (token_list);

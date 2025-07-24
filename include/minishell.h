@@ -13,17 +13,15 @@ typedef enum e_bool
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
 t_list	*env_dup(char **env);
-void	del_content(void *content);
+void	del_char_ptr(void *content);
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
-typedef enum e_util
+
+typedef enum e_start_end
 {
 	START = 0,
 	END = 1,
-	I = 2,
-	BOOL = 3,
-	LEN = 4
-}	t_util;
+}	t_start_end;
 
 typedef enum e_quote
 {
@@ -38,20 +36,22 @@ typedef enum e_token_type
 	EXP,
 	PIPE,
 	DIR_IN,
-	DIR_OUT
+	DIR_OUT,
+	APPEND,
+	HEREDOC
 }	t_token_type;
 
 typedef struct s_token
 {
 	char			*token;
-	t_token_type	type;
 	t_quote			quote_type;
-	void			*next;
+	t_token_type	type;
 }	t_token;
 
 t_list	*lexer(char *cmmd);
 int	count_token(char *cmmd);
 t_list	*save_token(char *cmmd);
+void	del_t_token(void *token_nd);
 //void	lexer(char *cmmd);
 
 #endif
