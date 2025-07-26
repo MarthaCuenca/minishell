@@ -14,9 +14,9 @@
 	- [ ] Parser 03/07/25 (M)
 	- [ ] Expander 10/07/25 (M)
   
-- [ ] Ejecutables: 22/07/25 (F)
+- [ ] Ejecutables: 31/07/25 (F)
 	- [ ] Ejecutar ejecutable
-	- [ ] Pipex: | 
+	- [ ] Pipex: | (Info interesante: [link](https://www.cs.toronto.edu/~rupert/209/lec09.pdf))
 	- [ ] Redirecciones: <, <<, >, >>
    
 - [ ] Built-ins:
@@ -30,5 +30,5 @@
 	- [ ] exit
    
  - [ ] HEREDOC
- - [ ] Gestor de señales 29/07/25 (F)
+ - [ ] Gestor de señales 05/07/25 (F)
  - [ ] Historial
