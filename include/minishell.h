@@ -52,6 +52,5 @@ t_list	*lexer(char *cmmd);
 int	count_token(char *cmmd);
 t_list	*save_token(char *cmmd);
 void	del_t_token(void *token_nd);
-//void	lexer(char *cmmd);
 
 #endif

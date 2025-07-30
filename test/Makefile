@@ -11,7 +11,7 @@ SRC_TEST := $(wildcard src/*)
 EXE_TEST := $(patsubst src/%.c, bin/%, $(SRC_TEST))
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -O2 -I../include -I../libft -Iutils
+CFLAGS := -Wall -Wextra -Werror -O2 -I../include -I../libft -Iutils -g
 
 VERBOSE ?= 1
 

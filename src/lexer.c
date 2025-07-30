@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/24 14:59:38 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/30 18:13:34 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,24 @@
 	 *'1 "2" 3'
 	 * "123 123
 	 * '123 123
-	 * 123 123"
-	 * 123 123'
-	 * "'123 123"' <- eso no esta cerrado, espera ' para cerrarse
-	 * '"123 123'" <- eso no esta cerrado, espera " para cerrarse
-	 * """123""" <- solo printea 123
-	 * """123"" <- eso no esta cerrado, espera " para cerrarse
+	 * 123 123" !!!
+	 * 123 123'!!!
+	 * "'123 123"' <- eso no esta cerrado, espera ' para cerrarse !!!
+	 * '"123 123'" <- eso no esta cerrado, espera " para cerrarse !!!
+	 * """123""" <- solo printea 123 las !!! "" deben hacer un token?
+	 * """123"" <- eso no esta cerrado, espera " para cerrarse !!!
 	 * "123" "456" esto son 2 argumentos
 	 * echo   "123"    "456" <- printea 123 456
-	 * echo   "123    "    "456" <- printea 123      456
-	 * echo 123"456" <- printea 123456
-	 * echo 123"456"789 <- printea 123456789
+	 * echo   "123    "    "    456" <- printea 123      456
+	 * echo 123"456" <- printea 123456, si no hay espacios, entonces todo se fusiona en un solo argumento !!!
+	 * echo 123"456"789 <- printea 123456789 !!!No detecta el 1ra token
 	 * echo te vi." <- espera a que cierre comillas
-	 *
+	 * 1
+	 * 12345
+	 * 1 2 3 (con ' ' al final)
+	 * 1 2 3(sin ' ' al final)
+	 * hola mundo!
+	 * $"jon"`
 	*MALLOC de 1 nodo, 
 	*Verificar si las comillas estan cerradas: 
 	*IDEA: default: bool = 0,
@@ -96,24 +101,21 @@ static const char *type_to_str(t_token_type tt)
 
 t_list	*lexer(char *cmmd)
 {
-	//int	count_tk;
 	t_list	*token_list;
-	t_list	*tmp;//
+	t_list	*tmp;
 
 	if (!cmmd)
 		return (NULL);
-	/*count_tk = count_token(cmmd);	
-	if (!count_tk)
-		return (printf("SYNTAX ERROR\n"), NULL);//syntax error
-	printf("%i\n", count_tk);*/
 	token_list = save_token(cmmd);
 	if (!token_list)
 		return (NULL);
-	tmp = token_list;//
-	while (tmp)//QUIZAS ESTO HACE QE IMPRIMA ESPACIOS, PERO PORQUE NO HAY NADA??
+	tmp = token_list;
+	while (tmp)
 	{
-		printf("[TOKEN]\n%s\n%s\n%s\n\n", ((t_token *)tmp->content)->token, 
+		printf("[TOKEN]\n%s\n%i: %s\n%i: %s\n\n", ((t_token *)tmp->content)->token, 
+				((t_token *)(tmp->content))->quote_type,
 				quote_to_str(((t_token *)(tmp->content))->quote_type), 
+				((t_token *)(tmp->content))->type,
 				type_to_str(((t_token *)(tmp->content))->type));
 		tmp = tmp->next;
 	}
