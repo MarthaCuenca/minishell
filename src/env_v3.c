@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:48:45 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/19 17:56:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/07/24 12:09:50 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,6 @@
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-void	del_content(void *content)
-{
-	char	*tmp;
-
-	tmp = (char *)content;
-	free(tmp);
-}
 
 t_list	*env_dup(char **env)
 {
@@ -38,10 +30,10 @@ t_list	*env_dup(char **env)
 	{
 		dup_var = ft_strdup(env[i]);
 		if (!dup_var)
-			return (ft_lstclear(&new_nd, del_content), NULL);
+			return (ft_lstclear(&new_nd, del_char_ptr), NULL);
 		new_nd = ft_lstnew(dup_var);
 		if (!new_nd)
-			return (ft_lstclear(&new_nd, del_content), NULL);
+			return (ft_lstclear(&new_nd, del_char_ptr), NULL);
 		if (!head)
 			head = new_nd;
 		else
