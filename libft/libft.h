@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/23 15:42:30 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:10:03 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_printf(char const *str, ...);
 char	*get_next_line(int fd);
+void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *));
 
 #endif

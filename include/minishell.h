@@ -27,7 +27,8 @@ typedef enum e_quote
 {
 	NO_QUOTE = 0,
 	SIMPLE_QUOTE,
-	DOUBLE_QUOTE
+	DOUBLE_QUOTE,
+	MIXED_QUOTE
 }	t_quote;
 
 typedef enum e_token_type
@@ -52,5 +53,7 @@ t_list	*lexer(char *cmmd);
 int	count_token(char *cmmd);
 t_list	*save_token(char *cmmd);
 void	del_t_token(void *token_nd);
+
+/*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
 #endif

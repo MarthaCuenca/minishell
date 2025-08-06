@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/30 18:13:34 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:30:16 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,30 @@
 	 *'1 "2" 3'
 	 * "123 123
 	 * '123 123
-	 * 123 123" !!!
-	 * 123 123'!!!
-	 * "'123 123"' <- eso no esta cerrado, espera ' para cerrarse !!!
-	 * '"123 123'" <- eso no esta cerrado, espera " para cerrarse !!!
-	 * """123""" <- solo printea 123 las !!! "" deben hacer un token?
-	 * """123"" <- eso no esta cerrado, espera " para cerrarse !!!
+	 * 123 123"
+	 * 123 123'
+	 * "'123 123"' <- eso no esta cerrado, espera ' para cerrarse 
+	 * '"123 123'" <- eso no esta cerrado, espera " para cerrarse
+	 * """123""" <- solo printea 123
+	 * """123"" <- eso no esta cerrado, espera " para cerrarse 
 	 * "123" "456" esto son 2 argumentos
 	 * echo   "123"    "456" <- printea 123 456
 	 * echo   "123    "    "    456" <- printea 123      456
-	 * echo 123"456" <- printea 123456, si no hay espacios, entonces todo se fusiona en un solo argumento !!!
-	 * echo 123"456"789 <- printea 123456789 !!!No detecta el 1ra token
-	 * echo te vi." <- espera a que cierre comillas
+	 * echo 123"456" <- printea 123456, si no hay espacios, entonces todo se fusiona en un solo argumento 
+	 * echo 123"456"789 <- printea 123456789 
+	 * echo te vi." <- espera a que cierre comillas !!!
 	 * 1
 	 * 12345
 	 * 1 2 3 (con ' ' al final)
 	 * 1 2 3(sin ' ' al final)
 	 * hola mundo!
-	 * $"jon"`
+	 * $"jon
+	 * 123""hola""tk
+	 * 123""hola''tk
+	 * 11"2222"3333"444"5555
+	 * 11"2222"3333'444'5555
+	 * abc"ddddd"
+	 * "hola mundo"
 	*MALLOC de 1 nodo, 
 	*Verificar si las comillas estan cerradas: 
 	*IDEA: default: bool = 0,
@@ -70,6 +76,8 @@ static const char *quote_to_str(t_quote q)
 			return ("SIMPLE_QUOTE");
 		case DOUBLE_QUOTE:
 			return ("DOUBLE_QUOTE");
+		case MIXED_QUOTE:
+			return ("MIXED_QUOTE");
 		default:
 			return ("UNKNOWN_QUOTE");
 	}
@@ -102,22 +110,38 @@ static const char *type_to_str(t_token_type tt)
 t_list	*lexer(char *cmmd)
 {
 	t_list	*token_list;
-	t_list	*tmp;
+	t_list	**tmp;
+	t_list	*next;
 
 	if (!cmmd)
 		return (NULL);
 	token_list = save_token(cmmd);
 	if (!token_list)
 		return (NULL);
-	tmp = token_list;
-	while (tmp)
+	tmp = &token_list;
+	while (*tmp)
 	{
-		printf("[TOKEN]\n%s\n%i: %s\n%i: %s\n\n", ((t_token *)tmp->content)->token, 
-				((t_token *)(tmp->content))->quote_type,
-				quote_to_str(((t_token *)(tmp->content))->quote_type), 
-				((t_token *)(tmp->content))->type,
-				type_to_str(((t_token *)(tmp->content))->type));
-		tmp = tmp->next;
+		if (ft_strlen(((t_token *)(*tmp)->content)->token) == 2)
+		{	if (ft_strncmp(((t_token *)(*tmp)->content)->token, "\"\"", 2) == 0
+				|| ft_strncmp(((t_token *)(*tmp)->content)->token, "\'\'", 2) == 0)
+			{
+				next = (*tmp)->next;
+				ft_lstunlink(&token_list, *tmp, del_t_token);
+				*tmp = next;
+			}
+		}
+		else
+			tmp = &(*tmp)->next;
+	}
+	tmp = &token_list;
+	while (*tmp)
+	{
+		printf("[TOKEN]\n%s\n%i: %s\n%i: %s\n\n", ((t_token *)(*tmp)->content)->token, 
+				((t_token *)((*tmp)->content))->quote_type,
+				quote_to_str(((t_token *)((*tmp)->content))->quote_type), 
+				((t_token *)((*tmp)->content))->type,
+				type_to_str(((t_token *)((*tmp)->content))->type));
+		tmp = &(*tmp)->next;
 	}
 	return (token_list);
 }

@@ -23,3 +23,9 @@ echo te vi."
 1 2 3
 hola mundo!
 $"jon"
+123""hola""tk
+123""hola''tk
+11"2222"3333"444"5555
+11"2222"3333'444'5555
+abc"ddddd"
+"hola mundo"
