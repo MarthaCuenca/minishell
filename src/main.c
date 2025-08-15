@@ -8,12 +8,12 @@
 #include <readline/history.h>
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
-/*int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	char	*cmmd;
 	t_list	*env_cp;
 	t_list	*lex;
-	void	*pars;
+	t_bool	pars;
 
 	(void)argc;
 	(void)argv;
@@ -41,10 +41,10 @@
 	rl_clear_history();
 	return (0);
 
-}*/
+}
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
-int	main(int argc, char **argv, char **env)
+/*int	main(int argc, char **argv, char **env)
 {
 	char	*cmmd;
 	t_list	*env_cp;
@@ -61,6 +61,7 @@ int	main(int argc, char **argv, char **env)
 		if (!cmmd)
 			break ;
 		lex = lexer(cmmd);
+		print_tokens(lex, TRUE, 0);
 		ft_lstclear(&lex, del_t_token);
 		if (ft_strncmp(cmmd, "exit", 5) == 0)
 			break ;
@@ -73,7 +74,7 @@ int	main(int argc, char **argv, char **env)
 	rl_clear_history();
 	return (0);
 
-}
+}*/
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
 /*int	main(int argc, char **argv, char **env)

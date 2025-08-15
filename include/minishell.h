@@ -28,6 +28,8 @@ typedef enum e_quote
 	NO_QUOTE = 0,
 	SIMPLE_QUOTE,
 	DOUBLE_QUOTE,
+	SIMPLE_QUOTE_IN,
+	DOUBLE_QUOTE_IN,
 	MIXED_QUOTE
 }	t_quote;
 
@@ -52,8 +54,21 @@ typedef struct s_token
 t_list	*lexer(char *cmmd);
 int	count_token(char *cmmd);
 t_list	*save_token(char *cmmd);
+t_list	*split_one_token(t_list	**token_list);
 void	del_t_token(void *token_nd);
+void	print_tokens(t_list *tokens, t_bool all, int n);
+void	is_quote(char *cmmd, int *quote_state, int *end, int *i);
+void	*new_token(t_list **head, char *cmmd, int start, int end);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
+typedef struct	t_cmmd
+{
+	char 	*cmmd;
+	char	**args;
+	void	*input;
+	void	*output;
+}
+
+t_bool	parser(t_list *lex);
 #endif

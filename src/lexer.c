@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/06 19:30:16 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:42:32 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,82 +66,41 @@
 	return ;
 }*/
 
-static const char *quote_to_str(t_quote q)
+t_bool	delete_empty_token(t_list **token_list)
 {
-	switch (q)
-	{
-		case NO_QUOTE:
-			return ("NO_QUOTE");
-		case SIMPLE_QUOTE:
-			return ("SIMPLE_QUOTE");
-		case DOUBLE_QUOTE:
-			return ("DOUBLE_QUOTE");
-		case MIXED_QUOTE:
-			return ("MIXED_QUOTE");
-		default:
-			return ("UNKNOWN_QUOTE");
-	}
-}
+	int		len;
+	t_list	**tmp;
+	t_list	*next;
 
-static const char *type_to_str(t_token_type tt)
-{
-	switch (tt)
+	tmp = token_list;
+	while (*tmp)
 	{
-		case WORD:
-			return ("WORD");
-		case EXP:
-			return ("EXP");
-		case PIPE:
-			return ("PIPE");
-		case DIR_IN:
-			return ("DIR_IN");
-		case DIR_OUT:
-			return ("DIR_OUT");
-		case APPEND:
-			return ("APPEND");
-		case HEREDOC:
-			return ("HEREDOC");
-		default:
-			return ("UNKNOWN_TYPE");
+		len = ft_strlen(((t_token *)(*tmp)->content)->token);
+		if (len == 2
+			&& (ft_strncmp(((t_token *)(*tmp)->content)->token, "\"\"", 2) == 0
+			|| ft_strncmp(((t_token *)(*tmp)->content)->token, "\'\'", 2) == 0))
+		{
+			next = (*tmp)->next;
+			ft_lstunlink(tmp, *tmp, del_t_token);
+			*tmp = next;
+		}
+		else
+			tmp = &(*tmp)->next;
 	}
+	return (TRUE);
 }
-
 
 t_list	*lexer(char *cmmd)
 {
 	t_list	*token_list;
-	t_list	**tmp;
-	t_list	*next;
 
 	if (!cmmd)
 		return (NULL);
 	token_list = save_token(cmmd);
 	if (!token_list)
 		return (NULL);
-	tmp = &token_list;
-	while (*tmp)
-	{
-		if (ft_strlen(((t_token *)(*tmp)->content)->token) == 2)
-		{	if (ft_strncmp(((t_token *)(*tmp)->content)->token, "\"\"", 2) == 0
-				|| ft_strncmp(((t_token *)(*tmp)->content)->token, "\'\'", 2) == 0)
-			{
-				next = (*tmp)->next;
-				ft_lstunlink(&token_list, *tmp, del_t_token);
-				*tmp = next;
-			}
-		}
-		else
-			tmp = &(*tmp)->next;
-	}
-	tmp = &token_list;
-	while (*tmp)
-	{
-		printf("[TOKEN]\n%s\n%i: %s\n%i: %s\n\n", ((t_token *)(*tmp)->content)->token, 
-				((t_token *)((*tmp)->content))->quote_type,
-				quote_to_str(((t_token *)((*tmp)->content))->quote_type), 
-				((t_token *)((*tmp)->content))->type,
-				type_to_str(((t_token *)((*tmp)->content))->type));
-		tmp = &(*tmp)->next;
-	}
+	split_one_token(&token_list);
+	if (!delete_empty_token(&token_list))
+		return (NULL);
 	return (token_list);
 }

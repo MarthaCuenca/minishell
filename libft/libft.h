@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/08/06 19:10:03 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/13 11:34:47 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_printf(char const *str, ...);
 char	*get_next_line(int fd);
+void	ft_lstlink(t_list **anchor, t_list *add);
 void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *));
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strstr(const char *haystack, const char *needle);
+char	*ft_strrstr(const char *haystack, const char *needle);
+int	ft_strrstr_count(const char *haystack, const char *needle);
 
 #endif
