@@ -6,12 +6,22 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:06:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/24 16:59:45 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:50:18 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
+
+void	ft_free_2p(char **array)
+{
+	size_t	i;
+
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
 
 void	del_char_ptr(void *content)
 {

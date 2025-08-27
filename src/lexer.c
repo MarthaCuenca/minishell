@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/13 17:42:32 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/19 13:04:32 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 
 	i = 0;
 	*COMPROBAR SI TENGO COMILLAS ABIERTAS Y CERRADAS
-	split = ft_split(cmmd, ' ');//echo "hola mundo!", aqui hay 3 str pero debe ser 2 tokens
+	split = ft_split(cmmd, ' ');
 	while (split[i])
 		printf("%s\n",split[i++]);
 	return ;
@@ -99,7 +99,8 @@ t_list	*lexer(char *cmmd)
 	token_list = save_token(cmmd);
 	if (!token_list)
 		return (NULL);
-	split_one_token(&token_list);
+	if (!split_one_token(&token_list))
+		return (NULL);
 	if (!delete_empty_token(&token_list))
 		return (NULL);
 	return (token_list);

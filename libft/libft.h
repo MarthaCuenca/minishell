@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/08/13 11:34:47 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/27 17:13:28 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *));
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strrstr(const char *haystack, const char *needle);
-int	ft_strrstr_count(const char *haystack, const char *needle);
+int		ft_strrstr_count(const char *haystack, const char *needle);
+int		count_c_char(const char *s, int c);
 
 #endif

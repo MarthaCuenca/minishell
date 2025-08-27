@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_token_v3.c                                    :+:      :+:    :+:   */
+/*   save_token_v5.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/06 18:39:40 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/27 17:14:06 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,104 @@
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
+/*✅ Obligatorio: $VAR, $?, $ literal.
 
-static int	token_type(t_token *nd)
+❌ Opcional/bonus: $$, $!, $#, $@, ${}, $0, $1...
+
+⚠️ Edge cases: var no existente ($NOEXISTE → ""), $ al final de línea ($ → $).*/
+t_bool is_special_dollar(char *str, int len)
 {
-	if (ft_strncmp(nd->token, "<<", 2) == 0 && nd->quote_type == NO_QUOTE)
+	if (ft_strncmp(str, "$?", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$$", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$!", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$#", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$@", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$0", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "$1", len) == 0)
+		return (TRUE);
+	else if (ft_strncmp(str, "${", 2) == 0 && ft_strrchr(str, '}') == &str[len])
+		return (TRUE);
+	return (FALSE);
+}
+
+static int	token_type(t_token *nd)//y esto casos ";, &, \ "?
+{
+	char	*str;
+	int		quo;
+	int		len;
+
+	str = nd->token;
+	quo = nd->quote_type;
+	len = ft_strlen(str);
+	if (ft_strcmp(str, "<<") == 0 && quo == NO_QUOTE)
 		return (HEREDOC);
-	else if (ft_strncmp(nd->token, ">>", 2) == 0 && nd->quote_type == NO_QUOTE)
+	else if (ft_strcmp(str, ">>") == 0 && quo == NO_QUOTE)
 		return (APPEND);
-	else if (ft_strncmp(nd->token, "<", 1) == 0 && nd->quote_type == NO_QUOTE)
+	else if (ft_strcmp(str, "<") == 0 && quo == NO_QUOTE)
 		return (DIR_IN);
-	else if (ft_strncmp(nd->token, ">", 1) == 0 && nd->quote_type == NO_QUOTE)
+	else if (ft_strcmp(str, ">") == 0 && quo == NO_QUOTE)
 		return (DIR_OUT);
-	else if (ft_strncmp(nd->token, "|", 1) == 0 && nd->quote_type == NO_QUOTE)
+	else if (ft_strcmp(str, "|") == 0 && quo == NO_QUOTE)
 		return (PIPE);
-	else if (ft_strncmp(nd->token, "$", 1) == 0
-		|| (nd->quote_type != SIMPLE_QUOTE && ft_strchr(nd->token, '$')))
+	/*else if ((quo == NO_QUOTE || quo == DOUBLE_QUOTE)
+		&& ((count_char_repeat(str, '$') == 1 && str[0] == '$')
+		|| is_special_dollar(str, len)))*/
+	else if (is_special_dollar(str, len)
+			|| (quo == DOUBLE_QUOTE && ft_strchr(str, '$'))
+			|| (quo == NO_QUOTE 
+			&& (count_c_char(str, '$') == 1 && str[0] == '$')))
 		return (EXP);
-/*Si hay comillas simples: NO se expande nada dentro de ellas
-Si hay comillas dobles: sí se expande si hay $VAR
-Si está fuera de comillas: se expande
-Si hay una mezcla: permite expansión solo fuera de comillas simples*/
 	return (WORD);
+}
+
+t_bool	edge_quotes(char *str, char c)
+{
+	int	i;
+	int	len;
+
+	if (!str || !c)
+		return (FALSE);
+	i = 1;
+	len = ft_strlen(str);
+	if(str[0] != c && str[len] != c)
+		return (FALSE);
+	while (str[i] && i < len - 1)// i <= len - 2
+	{	
+		if (str[i] == c)
+		{
+			if (i > 0 && str[i - 1] != '\\')
+				return (FALSE);
+			i++;
+		}
+		i++;
+	}
+	return (TRUE);
 }
 
 t_bool	between_matchchr(char *str, char match, char avoid)
 {
 	int		i;
+	int		quotes_inside;
 	t_bool	open;
 
 	open = FALSE;
+	quotes_inside = FALSE;
 	i = 0;
 	while (str[i])
 	{
+		if (i > 0 && str[i] == match && str[i - 1] == '\\')
+			i++;	
 		if (str[i] == avoid && open == FALSE)
 			return (FALSE);
 		if (str[i] == match)
 		{
+			quotes_inside = TRUE;
 			if (!open)
 				open = TRUE;
 			else
@@ -57,22 +119,39 @@ t_bool	between_matchchr(char *str, char match, char avoid)
 		}
 		i++;
 	}
+	return (quotes_inside);
+}
+
+t_bool no_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			if (i > 0 && str[i - 1] != '\\')
+				return (FALSE);
+		i++;
+	}
 	return (TRUE);
 }
 
 static t_quote	token_quo_type(t_token *nd)
 {
-	int	len;
+	//int	len;
 
-	len = ft_strlen(nd->token) - 1;
-	if (!ft_strchr(nd->token, '\'') && !ft_strchr(nd->token, '\"'))
+	//len = ft_strlen(nd->token) - 1;
+	if (no_quotes(nd->token))
 		return (NO_QUOTE);
-	else if ((nd->token[0] == '\'' && nd->token[len] == '\'')
-		|| between_matchchr(nd->token, '\'', '\"'))
+	else if (edge_quotes(nd->token, '\''))
 		return (SIMPLE_QUOTE);
-	else if ((nd->token[0] == '\"' && nd->token[len] == '\"')
-		|| between_matchchr(nd->token, '\"', '\''))
+	else if (between_matchchr(nd->token, '\'', '\"'))
+		return (SIMPLE_QUOTE_IN);
+	else if (edge_quotes(nd->token, '\"'))
 		return (DOUBLE_QUOTE);
+	else if (between_matchchr(nd->token, '\"', '\''))
+		return (DOUBLE_QUOTE_IN);
 	return (MIXED_QUOTE);
 }
 
@@ -93,7 +172,7 @@ static t_token	*token_data(char *cmmd, int start, int end)
 	return (new_token);
 }
 
-static void	*new_token(t_list **head, char *cmmd, int start, int end)
+void	*new_token(t_list **head, char *cmmd, int start, int end)
 {
 	t_list	*new_nd;
 	t_token	*nd_data;
@@ -118,38 +197,57 @@ static void	*new_token(t_list **head, char *cmmd, int start, int end)
 	return (*head);
 }
 
-int	double_quo(char *cmmd, int *sq, int *i)
+int	double_quo(char *cmmd, int *qs, int *i)
 {
 	int	tmp;
 
 	tmp = *i + 1;
-	*sq = DOUBLE_QUOTE;
+	*qs = DOUBLE_QUOTE;
 	while (cmmd[tmp] && cmmd[tmp] != '\"')
+	{
+		if (cmmd[tmp] == '\\' && cmmd[tmp + 1] == '\"')
+			tmp++;	
 		tmp++;
+	}
 	if (cmmd[tmp] == '\"')
 	{
-		*sq = NO_QUOTE;
+		*qs = NO_QUOTE;
 		*i = tmp;
 		return (tmp);
 	}
 	return (-1);
 }
 
-int	simple_quo(char *cmmd, int *sq, int *i)
+int	simple_quo(char *cmmd, int *qs, int *i)
 {
 	int	tmp;
 
 	tmp = *i + 1;
-	*sq = SIMPLE_QUOTE;
+	*qs = SIMPLE_QUOTE;
 	while (cmmd[tmp] && cmmd[tmp] != '\'')
+	{
+		if (cmmd[tmp] == '\\' && cmmd[tmp + 1] == '\'')
+			tmp++;	
 		tmp++;
+	}
 	if (cmmd[tmp] == '\'')
 	{
-		*sq = NO_QUOTE;
+		*qs = NO_QUOTE;
 		*i = tmp;
 		return (tmp);
 	}
 	return (-1);
+}
+
+void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
+{
+	if (cmmd[*i - 1] != '\\')
+	{	
+		if (cmmd[*i] == '\'')
+			*end = simple_quo(cmmd, quote_state, i);
+		else if (cmmd[*i] == '\"')
+			*end = double_quo(cmmd, quote_state, i);
+	}
 }
 
 int	std_char(t_list	**head, char *cmmd, int *sd)
@@ -161,10 +259,7 @@ int	std_char(t_list	**head, char *cmmd, int *sd)
 	quote_state = NO_QUOTE;
 	while (cmmd[i] && cmmd[i] != ' ' && quote_state == NO_QUOTE)
 	{
-		if (cmmd[i] == '\'')
-			sd[END] = simple_quo(cmmd, &quote_state, &i);
-		else if (cmmd[i] == '\"')
-			sd[END] = double_quo(cmmd, &quote_state, &i);
+		quote_mng(cmmd, &quote_state, &sd[END], &i);
 		if (sd[END] == -1)
 			return (-1);
 		i++;
@@ -223,7 +318,6 @@ t_list	*save_token(char *cmmd)
 			break ;
 	return (head);
 }
-
 //int main(int argc, char **argv)
 //{
 /*** ***	t_bool	cmmd_loop(t_list **head, char *cmmd, int *i) *** ***/

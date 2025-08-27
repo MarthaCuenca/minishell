@@ -57,18 +57,32 @@ t_list	*save_token(char *cmmd);
 t_list	*split_one_token(t_list	**token_list);
 void	del_t_token(void *token_nd);
 void	print_tokens(t_list *tokens, t_bool all, int n);
-void	is_quote(char *cmmd, int *quote_state, int *end, int *i);
+void	quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void	*new_token(t_list **head, char *cmmd, int start, int end);
+t_bool	is_special_dollar(char *str, int len);
+
+/*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
+
+t_bool expander(t_list **lex, t_list *env);
+void	ft_free_2p(char **array);
+void	print_array_2p(char **array);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
-typedef struct	t_cmmd
+typedef struct	s_cmmd
 {
-	char 	*cmmd;
-	char	**args;
+	t_token *cmmd;
+	t_token	**args;
 	void	*input;
 	void	*output;
-}
+}	t_cmmd;
 
-t_bool	parser(t_list *lex);
+typedef enum s_pr_crr_nx
+{
+	CURR = 0,
+	NEXT,
+	PREV
+}	t_pr_crr_nx;
+
+t_list	*parser(t_list *lex);
 #endif

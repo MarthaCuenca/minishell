@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:16:27 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/12 12:36:58 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:54:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,33 @@ void	print_tokens(t_list *tokens, t_bool all, int n)
 				type_to_str(((t_token *)(tmp->content))->type));
 			tmp = tmp->next;
 		}
+	}
+}
+
+void	print_env(t_list *env)
+{
+	t_list	*tmp;
+
+	if (!env)
+		return ;
+	tmp = env;
+	while (tmp)
+	{
+		printf("%s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+}
+
+void	print_array_2p(char **array)
+{
+	int	j;
+
+	if (!array)
+		return ;
+	j = 0;
+	while (array[j])
+	{
+		printf ("%s\n", array[j]);
+		j++;
 	}
 }

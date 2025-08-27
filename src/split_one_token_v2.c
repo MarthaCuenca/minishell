@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/13 17:49:36 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:26:35 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ void	rm_and_link(t_list **lst, t_list *nd_rm,
 	if (!*lst && !nd_rm && !del)
 		return ;
 	anchor = *lst;
-	while (anchor->next && anchor->next != nd_rm)
-		anchor = anchor->next;
+	if (*lst == nd_rm)
+		anchor = nd_rm;
+	else
+		while (anchor && anchor->next != nd_rm)
+			anchor = anchor->next;
 	ft_lstlink(&anchor, add);
 	if (nd_rm == *lst)
 	{
@@ -33,25 +36,66 @@ void	rm_and_link(t_list **lst, t_list *nd_rm,
 		ft_lstunlink(lst, nd_rm, del);
 }
 
-void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
+static void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 {
 	char	*tmp;
 
 	tmp = 0;
 	if (*quote_state != NO_QUOTE)
 		return ;
-	if (ft_strstr(&str[*i], "<<<"))
+	if (ft_strstr(&str[*i], "<<<") || ft_strstr(&str[*i], ">>>"))
 		*end = -1;
 	else
 	{
-		if (ft_strrstr(&str[*i], "<<"))
+		if (ft_strrstr(&str[*i], "<<") || ft_strstr(&str[*i], ">>"))
 			(*i)++;
 		(*i)++;
 		*end = *i - 1;
 	}
 }
 
+static t_bool	is_c_symbol(char c, char *symbols)
+{
+	int	i;
+
+	if (!symbols)
+		return (TRUE);
+	i = 0;
+	while (symbols[i] && c != symbols[i])
+		i++;
+	if (c == symbols[i])
+		return (FALSE);
+	return (TRUE);
+}
+
 void	is_underscore_dolar(char *str, int *end, int *i)
+{
+	char	symbols[7];
+
+	symbols[0] = '<';
+	symbols[1] = '>';
+	symbols[2] = '\'';
+	symbols[3] = '\"';
+	symbols[4] = '|';
+	symbols[5] = '\\';
+	symbols[6] = '$';
+	if (str[*i] == '|')
+		(*i)++;
+	else if (str[*i] == '$')
+	{
+		if (is_special_dollar(&str[*i], 2))
+			(*i) += 2;
+		else 
+		{
+			(*i)++;
+			while (str[*i] && is_c_symbol(str[*i], symbols))
+				(*i)++;
+		}
+	}
+	*end = *i - 1;
+}
+
+/*void	is_underscore_dolar(char *str, int *end, int *i)
 {
 	if (str[*i] == '|')
 	{
@@ -60,12 +104,21 @@ void	is_underscore_dolar(char *str, int *end, int *i)
 	}
 	else if (str[*i] == '$')
 	{
-		while (str[*i] && str[*i] != '\'' && str[*i] != '\"' && str[*i] != '<'
-			&& str[*i] != '>' && str[*i] != '|')
+		if (is_special_dollar(&str[*i], 2))
+			(*i) += 2;
+		else 
+		{
 			(*i)++;
+			while (str[*i] && str[*i] != '<' && str[*i] != '>'
+			&& str[*i] != '\'' && str[*i] != '\"'
+			&& str[*i] != '|' && str[*i] != '\\'
+			&& str[*i] == '$')
+				(*i)++;
+			}
+		}
 		*end = *i - 1;
 	}
-}
+}*/
 
 void	is_other(char *str, int *end, int *i)
 {
@@ -85,7 +138,7 @@ int	start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
 	sd[START] = *i;
 	if (str[*i] == '\'' || str[*i] == '\"')
 	{
-		is_quote(str, quote_state, &sd[END], i);
+		quote_mng(str, quote_state, &sd[END], i);
 		(*i)++;
 	}
 	else if (str[*i] == '<' || str[*i] == '>')
@@ -99,39 +152,6 @@ int	start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
 	return (1);
 }
 
-/*int start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
-{
-	sd[START] = *i;
-	if (str[*i] == '\'' || str[*i] == '\"')
-	{
-		is_quote(str, quote_state, &sd[END], i);
-		(*i)++;
-	}
-	else if (str[*i] == '<' || str[*i] == '>')
-		is_inequality_symbols(str, quote_state, &sd[END], i);
-	else if (str[*i] == '|')
-	{	
-		sd[END] = *i;
-		(*i)++;
-	}
-	else if (str[*i] == '$')
-	{
-		while (str[*i] && str[*i] != '\'' && str[*i] != '\"' && str[*i] != '<'
-			&& str[*i] != '>' && str[*i] != '|')
-			(*i)++;
-		sd[END] = *i - 1;	
-	}
-	else
-	{
-		while (str[*i] && str[*i] != '\'' && str[*i] != '\"' && str[*i] != '<'
-			&& str[*i] != '>' && str[*i] != '|' && str[*i] != '$')
-			(*i)++;
-		sd[END] = *i - 1;
-	}
-	if (sd[END] == -1)
-		return (-1);
-	return (1);
-}*/
 t_list	*split_amalgam(t_list *tk)
 {
 	int		i;
@@ -178,12 +198,6 @@ t_bool	is_amalgam(t_token *tk)
 			return (TRUE);
 		else if (tk->quote_type != NO_QUOTE)
 			return (TRUE);
-		/*else if (tk->quote_type == SIMPLE_QUOTE_IN
-			|| tk->quote_type == DOUBLE_QUOTE_IN
-			|| tk->quote_type == MIXED_QUOTE)
-			return (TRUE);*/
-		//else if (ft_strstr(tk->token, "\\\"") && tk->quote_type != NO_QUOTE)
-		//	return (FALSE);
 	}
 	return (FALSE);
 }
