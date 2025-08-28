@@ -60,21 +60,23 @@ void	print_tokens(t_list *tokens, t_bool all, int n);
 void	quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void	*new_token(t_list **head, char *cmmd, int start, int end);
 t_bool	is_special_dollar(char *str, int len);
-
-/*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
-
-t_bool expander(t_list **lex, t_list *env);
-void	ft_free_2p(char **array);
-void	print_array_2p(char **array);
+t_bool	is_c_symbol(char c, char *symbols);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
+typedef struct s_redir
+{
+	char			*file;
+	t_token_type	type;
+}	t_redir;
 
 typedef struct	s_cmmd
 {
-	t_token *cmmd;
-	t_token	**args;
-	void	*input;
-	void	*output;
+	char *cmmd;
+	char	**args;
+	t_redir	*infile;
+	t_redir	*outfile;
+	char	*env;
+	int		r;
 }	t_cmmd;
 
 typedef enum s_pr_crr_nx
@@ -85,4 +87,12 @@ typedef enum s_pr_crr_nx
 }	t_pr_crr_nx;
 
 t_list	*parser(t_list *lex);
+
+/*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
+
+t_bool expander(t_list **lex, t_list *env, t_cmmd *return_value);
+void	ft_free_2p(char **array);
+void	print_array_2p(char **array);
+void	del_t_cmmd(void *cmmd_nd);
+
 #endif

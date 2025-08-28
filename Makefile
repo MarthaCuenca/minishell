@@ -15,10 +15,9 @@ SRCS := src/main.c \
 		src/env_v3.c \
 		src/lexer.c \
 		src/del_function.c \
-		src/count_token.c \
 		src/save_token_v5.c \
-		src/split_one_token.c \
-		src/expander.c \
+		src/split_one_token_v2.c \
+		src/expander_v1.c \
 		src/parser.c \
 		src/print_util.c
 

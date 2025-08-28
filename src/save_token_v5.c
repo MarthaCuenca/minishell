@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/27 17:14:06 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:52:50 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
-/*✅ Obligatorio: $VAR, $?, $ literal.
 
-❌ Opcional/bonus: $$, $!, $#, $@, ${}, $0, $1...
-
-⚠️ Edge cases: var no existente ($NOEXISTE → ""), $ al final de línea ($ → $).*/
-t_bool is_special_dollar(char *str, int len)
+t_bool	is_special_dollar(char *str, int len)
 {
 	if (ft_strncmp(str, "$?", len) == 0)
 		return (TRUE);
@@ -59,13 +55,9 @@ static int	token_type(t_token *nd)//y esto casos ";, &, \ "?
 		return (DIR_OUT);
 	else if (ft_strcmp(str, "|") == 0 && quo == NO_QUOTE)
 		return (PIPE);
-	/*else if ((quo == NO_QUOTE || quo == DOUBLE_QUOTE)
-		&& ((count_char_repeat(str, '$') == 1 && str[0] == '$')
-		|| is_special_dollar(str, len)))*/
 	else if (is_special_dollar(str, len)
-			|| (quo == DOUBLE_QUOTE && ft_strchr(str, '$'))
-			|| (quo == NO_QUOTE 
-			&& (count_c_char(str, '$') == 1 && str[0] == '$')))
+		|| (quo == DOUBLE_QUOTE && ft_strchr(str, '$'))
+		|| (quo == NO_QUOTE && (count_c_char(str, '$') == 1 && str[0] == '$')))
 		return (EXP);
 	return (WORD);
 }
@@ -79,10 +71,10 @@ t_bool	edge_quotes(char *str, char c)
 		return (FALSE);
 	i = 1;
 	len = ft_strlen(str);
-	if(str[0] != c && str[len] != c)
+	if (str[0] != c && str[len] != c)
 		return (FALSE);
-	while (str[i] && i < len - 1)// i <= len - 2
-	{	
+	while (str[i] && i < len - 1)
+	{
 		if (str[i] == c)
 		{
 			if (i > 0 && str[i - 1] != '\\')
@@ -106,7 +98,7 @@ t_bool	between_matchchr(char *str, char match, char avoid)
 	while (str[i])
 	{
 		if (i > 0 && str[i] == match && str[i - 1] == '\\')
-			i++;	
+			i++;
 		if (str[i] == avoid && open == FALSE)
 			return (FALSE);
 		if (str[i] == match)
@@ -122,7 +114,7 @@ t_bool	between_matchchr(char *str, char match, char avoid)
 	return (quotes_inside);
 }
 
-t_bool no_quotes(char *str)
+t_bool	no_quotes(char *str)
 {
 	int	i;
 
@@ -139,9 +131,6 @@ t_bool no_quotes(char *str)
 
 static t_quote	token_quo_type(t_token *nd)
 {
-	//int	len;
-
-	//len = ft_strlen(nd->token) - 1;
 	if (no_quotes(nd->token))
 		return (NO_QUOTE);
 	else if (edge_quotes(nd->token, '\''))
@@ -206,7 +195,7 @@ int	double_quo(char *cmmd, int *qs, int *i)
 	while (cmmd[tmp] && cmmd[tmp] != '\"')
 	{
 		if (cmmd[tmp] == '\\' && cmmd[tmp + 1] == '\"')
-			tmp++;	
+			tmp++;
 		tmp++;
 	}
 	if (cmmd[tmp] == '\"')
@@ -227,7 +216,7 @@ int	simple_quo(char *cmmd, int *qs, int *i)
 	while (cmmd[tmp] && cmmd[tmp] != '\'')
 	{
 		if (cmmd[tmp] == '\\' && cmmd[tmp + 1] == '\'')
-			tmp++;	
+			tmp++;
 		tmp++;
 	}
 	if (cmmd[tmp] == '\'')
@@ -242,7 +231,7 @@ int	simple_quo(char *cmmd, int *qs, int *i)
 void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
 {
 	if (cmmd[*i - 1] != '\\')
-	{	
+	{
 		if (cmmd[*i] == '\'')
 			*end = simple_quo(cmmd, quote_state, i);
 		else if (cmmd[*i] == '\"')
@@ -335,7 +324,7 @@ t_list	*save_token(char *cmmd)
 			break ;
 	}*/
 
-/*** ***	static void *token(t_list **head, char *cmmd, int start, int end)	*** ***/
+/*** static void *token(t_list **head, char *cmmd, int start, int end) ***/
 /***		static t_token  *token_data(char *cmmd, int start, int end)	***/
 
 	/*t_list	*token;

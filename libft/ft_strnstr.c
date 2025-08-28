@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 11:35:05 by faguirre          #+#    #+#             */
-/*   Updated: 2025/08/18 14:26:02 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:24:33 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	while ((big[j]) && (j < len))
 	{
 		i = 0;
-		while (little[i] && big[i + j] && (big[i + j] == little[i]) \
-				&& (i + j < len))
-		{
+		while (little[i] && big[i + j] && (big[i + j] == little[i])
+			&& (i + j < len))
 			i++;
-		}
 		if (!little[i])
 			return ((char *)(&big[j]));
 		j++;
@@ -46,7 +44,7 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	while (haystack[i])
 	{
 		j = 0;
-		while(haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
+		while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
 			j++;
 		if (!needle[j])
 			return ((char *)(&haystack[i]));
@@ -66,7 +64,7 @@ char	*ft_strrstr(const char *haystack, const char *needle)
 	while (haystack[i])
 	{
 		j = 0;
-		while(haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
+		while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
 			j++;
 		if (!needle[j])
 			return ((char *)(&haystack[i + j - 1]));
@@ -74,7 +72,6 @@ char	*ft_strrstr(const char *haystack, const char *needle)
 	}
 	return (NULL);
 }
-
 
 int	ft_strrstr_count(const char *haystack, const char *needle)
 {

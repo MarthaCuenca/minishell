@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_one_token.c                                  :+:      :+:    :+:   */
+/*   split_one_token_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/26 14:26:35 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:47:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,21 @@ static void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 	}
 }
 
-static t_bool	is_c_symbol(char c, char *symbols)
+t_bool	is_c_symbol(char c, char *symbols)
 {
 	int	i;
 
 	if (!symbols)
-		return (TRUE);
+		//return (TRUE);
+		return (FALSE);
 	i = 0;
 	while (symbols[i] && c != symbols[i])
 		i++;
 	if (c == symbols[i])
-		return (FALSE);
-	return (TRUE);
+		//return (FALSE);
+		return (TRUE);
+	//return (TRUE);
+	return (FALSE);
 }
 
 void	is_underscore_dolar(char *str, int *end, int *i)
@@ -88,7 +91,7 @@ void	is_underscore_dolar(char *str, int *end, int *i)
 		else 
 		{
 			(*i)++;
-			while (str[*i] && is_c_symbol(str[*i], symbols))
+			while (str[*i] && !is_c_symbol(str[*i], symbols))
 				(*i)++;
 		}
 	}

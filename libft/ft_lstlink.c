@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 10:57:05 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/13 11:50:08 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:25:34 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	ft_lstlink(t_list **anchor, t_list *add)
 
 void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *))
 {
-	t_list *prev;	
-	t_list *next;	
+	t_list	*prev;	
+	t_list	*next;	
 
-	if (!*lst || !nd_rm) 
+	if (!*lst || !nd_rm)
 		return ;
 	if (ft_lstsize(*lst) <= 2)
 	{
@@ -42,7 +42,7 @@ void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *))
 	}
 	next = nd_rm->next;
 	if (*lst != nd_rm)
-	{	
+	{
 		prev = *lst;
 		while (prev->next && prev->next != nd_rm)
 			prev = prev->next;
