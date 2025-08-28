@@ -12,7 +12,7 @@
    		- [x] Gestion comillas dobles y comillas simples
      		- [x] Simbolo dolar
 	- [ ] Parser 04/09/25 (M)
-	- [ ] Expander 28/08/25 (M)
+	- [x] Expander
   
 - [ ] Ejecutables: 01/09/25  (F)
 	- [ ] Ejecutar ejecutable
