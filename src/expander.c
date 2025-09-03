@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 14:56:20 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/27 16:40:34 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:49:29 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,51 +14,6 @@
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-
-/*int	expansion_len(t_token *token)
-{
-	int		len;
-	int		quote;
-	char	*exp_var_name;
-	char	*sd[2];
-
-	if (!token)
-		return (0);
-	quote = (int)token->quote_type;
-	exp_var_name = (char *)token->token;
-	if (quote == NO_QUOTE)
-		len = ft_strlen(exp_var_name) - 1;
-	else
-	{
-		sd[START] = ft_strchr(exp_var_name, '$') + 1;
-		sd[END] = ft_strchr(sd[START], ' ');
-		if (!sd[END])
-			sd[END] = ft_strchr(sd[START], '\"');
-		sd[END] -= 1;
-		len = sd[END] - sd[START] + 1;
-	}
-	return (len);
-}*/
-
-/*int	expansion_len(char *dollar, char **sd)
-{
-	int		len;
-
-	if (!dollar || !sd)
-		return (0);
-	sd[START] = ft_strchr(dollar, '$') + 1;
-	sd[END] = ft_strchr(sd[START], ' ');
-	if (!sd[END])
-		sd[END] = ft_strchr(sd[START], '\"');
-	if (!sd[END])
-		sd[END] = ft_strchr(sd[START], '$');
-	if (!sd[END])
-		sd[END] = ft_strchr(sd[START], '\0');
-	sd[END] -= 1;
-	len = sd[END] - sd[START] + 1;
-	return (len);
-}*/
 
 int	expansion_len(char *start)
 {
@@ -84,29 +39,31 @@ t_bool	is_dollar_valid(char *dollar)
 	if (!dollar)
 		return (FALSE);
 	else if (!dollar[1])
-			return (FALSE);
+		return (FALSE);
 	else if (dollar[1] == ' ' || dollar[1] == '\t' || dollar[1] == '\n')
-			return (FALSE);
+		return (FALSE);
 	return (TRUE);
 }
 
-void	exp_no_quote(t_token **tk, char **values)//AQUI 2
+void	exp_no_quote(t_token **tk, char **values)
 {
 	char	*value;
 
 	if (!*tk || !values)
 		return ;
-
 	free((*tk)->token);
 	value = ft_strdup(values[0]);
 	(*tk)->token = value;
 }
 
+/*i dest
+ * j values
+ * k token*/
 void	fill_new_exp_double_quote(char *dest, char *tk, char **values)
 {
-	int	i;//dest
-	int	j;//values
-	int	k;//token
+	int	i;
+	int	j;
+	int	k;
 	int	value_len;
 
 	i = 0;
@@ -134,6 +91,7 @@ void	exp_double_quote(t_token **tk, char **values)
 	int		j;
 	int		len;
 	char	*large_str;
+
 	if (!*tk || !values)
 		return ;
 	j = 0;
@@ -146,43 +104,52 @@ void	exp_double_quote(t_token **tk, char **values)
 	fill_new_exp_double_quote(large_str, (*tk)->token, values);
 	free((*tk)->token);
 	(*tk)->token = large_str;
-//	printf("%d\n", len);
 }
 
-char	*get_env_value_v2(char *env_match, int env_var_len)
+char	*get_env_value_v2(t_list *env_match, int env_var_len)
 {
 	int		value_len;
 	int		start;
+	char	*tmp;
 	char	*value;
 
-	if (!env_match || !env_var_len)
-		return (NULL);
-	start = env_var_len + 1;
-	value_len = ft_strlen(&env_match[start]);
-	value = ft_substr(env_match, start, value_len);
+	if (env_match)
+	{
+		tmp = (char *)env_match->content;
+		start = env_var_len + 1;
+		value_len = ft_strlen(&tmp[start]);
+		value = ft_substr(tmp, start, value_len);
+	}
+	else
+		value = (char *)ft_calloc(1, sizeof(char));
 	if (!value)
 		return (NULL);
 	return (value);
 }
 
-char	*get_env_value_v1(char *env_match)
+/*char	*get_env_value_v1(t_list *env_match)
 {
 	char	*equal;
 	char	*start;
 	char	*value;
+	char	*tmp;
 
-	if (!env_match )
-		return (NULL);
-	equal = ft_strchr(env_match, '=');
-	if (!equal)
-		return (NULL);
-	if (equal[1])//Un '=' puede forma parte de nombre de la variable?
-		start = &equal[1];
-	value = ft_strdup(start);
+	if (env_match)
+	{
+		tmp = (char *)match->content;
+		equal = ft_strchr(env_match, '=');
+		if (!equal)
+			return (NULL);
+		if (equal[1])
+			start = &equal[1];
+		value = ft_strdup(start);
+	}
+	else
+		value = (char *)ft_calloc(1, sizeof(char));
 	if (!value)
 		return (NULL);
 	return (value);
-}
+}*/
 
 int	var_len(char *str)
 {
@@ -207,7 +174,7 @@ t_list	*check_env_var(char *str, int tk_len, t_list *env)
 	char	*var;
 	t_list	*tmp;
 
-	if(!str || !tk_len || !env )
+	if (!str || !tk_len || !env)
 		return (NULL);
 	check = 0;
 	tmp = env;
@@ -223,9 +190,13 @@ t_list	*check_env_var(char *str, int tk_len, t_list *env)
 	return (tmp);
 }
 
-char		*obtain_env_var_value(char *dollar, t_list *env)
+/*
+ * env_value = get_env_value_v1(match);
+ * env_value = get_env_value_v2(match, len);
+ * */
+char	*obtain_env_var_value(char *dollar, t_list *env)
 {
-	unsigned int	len;
+	int		len;
 	char	*sd[2];
 	char	*env_value;
 	t_list	*match;
@@ -234,34 +205,11 @@ char		*obtain_env_var_value(char *dollar, t_list *env)
 	len = expansion_len(sd[START]);
 	sd[END] = dollar + len;
 	match = check_env_var(sd[START], len, env);
-	env_value = NULL;
-	if (!match)	
-		return (NULL);
-	//env_value = get_env_value_v1((char *)match->content);OJO! usa el que mas te guste, ambos funcionan
-	env_value = get_env_value_v2((char *)match->content, len);
+	env_value = get_env_value_v2(match, len);
 	if (!env_value)
 		return (NULL);
 	return (env_value);
 }
-
-/*char		*obtain_env_var_value(char *dollar, t_list *env)
-{
-	unsigned int	len;
-	char	*sd[2];
-	char	*env_value;
-	t_list	*match;
-
-	len = expansion_len(dollar, sd);
-	match = check_env_var(sd[START], len, env);
-	env_value = NULL;
-	if (!match)	
-		return (NULL);
-	//env_value = get_env_value_v1((char *)match->content);OJO! usa el que mas te guste, ambos funcionan
-	env_value = get_env_value_v2((char *)match->content, len);
-	if (!env_value)
-		return (NULL);
-	return (env_value);
-}*/
 
 int	count_dollar(char *exp_tk)
 {
@@ -282,7 +230,7 @@ int	count_dollar(char *exp_tk)
 	return (count);
 }
 
-char **exp_values(t_token *tk, t_list *env)
+char	**exp_values(t_token *tk, t_list *env)
 {
 	int		j;
 	int		n;
@@ -310,7 +258,7 @@ char **exp_values(t_token *tk, t_list *env)
 	return (exp_str);
 }
 
-t_bool exp_mng(t_token **tk, t_list *env)
+t_bool	exp_mng(t_token **tk, t_list *env)
 {
 	char	**values;
 
@@ -321,17 +269,15 @@ t_bool exp_mng(t_token **tk, t_list *env)
 		return (FALSE);
 	if (!*values)
 		return (ft_free_2p(values), FALSE);
-	/* si es DOUBLE_QUOTE todo va a 1 token
-	 * si es NO_QUOTE van separados*/
 	if ((*tk)->quote_type == NO_QUOTE)
-		exp_no_quote(tk, values);//AQUI, FALTA HACER TODO ESTO
+		exp_no_quote(tk, values);
 	else if ((*tk)->quote_type == DOUBLE_QUOTE)
-		exp_double_quote(tk, values);//AQUI 3, cino en tamano o lo dejo grande?
+		exp_double_quote(tk, values);
 	ft_free_2p(values);
 	return (TRUE);
 }
 
-t_bool expander(t_list **lex, t_list *env)
+t_bool	expander(t_list **lex, t_list *env)
 {
 	t_token	*tk;
 	t_list	*tmp;
@@ -344,8 +290,7 @@ t_bool expander(t_list **lex, t_list *env)
 		tk = ((t_token *)tmp->content);
 		if (tk->type == EXP)
 			if (!exp_mng(&tk, env))
-				return (FALSE);/*Puede fallar el mng?*/
-			//env_var = check_env_var((t_token *)tmp->content, env);
+				return (FALSE);
 		tmp = tmp->next;
 	}
 	print_tokens(*lex, TRUE, 0);

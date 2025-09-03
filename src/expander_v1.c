@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 14:56:20 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:48:33 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/02 16:18:25 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	exp_double_quote(t_token **tk, char **values)
 	(*tk)->token = large_str;
 }
 
-char	*get_env_value_v2(t_list *env_match, int env_var_len)
+char	*get_env_value(t_list *env_match, int env_var_len)
 {
 	int		value_len;
 	int		start;
@@ -205,7 +205,7 @@ t_list	*check_env_var(char *str, int tk_len, t_list *env)
 
 /*
  * env_value = get_env_value_v1(match);
- * env_value = get_env_value_v2(match, len);
+ * env_value = get_env_value(match, len);
  * */
 char	*obtain_env_var_value(char *dollar, t_list *env, t_cmmd *return_value)
 {
@@ -228,7 +228,7 @@ char	*obtain_env_var_value(char *dollar, t_list *env, t_cmmd *return_value)
 	len = expansion_len(sd[START]);
 	sd[END] = dollar + len;
 	match = check_env_var(sd[START], len, env);
-	env_value = get_env_value_v2(match, len);
+	env_value = get_env_value(match, len);
 	if (!env_value)
 		return (NULL);
 	return (env_value);
@@ -304,19 +304,26 @@ t_bool	exp_mng(t_token **tk, t_list *env, t_cmmd *return_value)
 t_bool	expander(t_list **lex, t_list *env, t_cmmd *return_value)
 {
 	t_token	*tk;
+	t_token	*prev_tk;
 	t_list	*tmp;
 
-	tmp = *lex;
 	if (!env || !*lex)
 		return (FALSE);
+	tmp = *lex;
+	prev_tk = 0;
 	while (tmp)
 	{
 		tk = ((t_token *)tmp->content);
-		if (tk->type == EXP)
+		if (tk->type == EXP && prev_tk->type != HEREDOC)
+		{
 			if (!exp_mng(&tk, env, return_value))
 				return (FALSE);
+			tk->type = WORD;
+		}
+		else if (tk->type == EXP && prev_tk->type == HEREDOC)
+			tk->type = WORD;
+		prev_tk = ((t_token *)tmp->content);
 		tmp = tmp->next;
 	}
-	print_tokens(*lex, TRUE, 0);
 	return (TRUE);
 }

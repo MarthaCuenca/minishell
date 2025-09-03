@@ -63,7 +63,7 @@ t_bool	is_special_dollar(char *str, int len);
 t_bool	is_c_symbol(char c, char *symbols);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
-typedef struct s_redir
+/*typedef struct s_redir
 {
 	char			*file;
 	t_token_type	type;
@@ -71,22 +71,46 @@ typedef struct s_redir
 
 typedef struct	s_cmmd
 {
-	char *cmmd;
-	char	**args;
+	char	**cmmd;
+	char	***args;
 	t_redir	*infile;
 	t_redir	*outfile;
-	char	*env;
+	char	**env;
 	int		r;
-}	t_cmmd;
+}	t_cmmd;*/
+
+
+/*typedef struct	s_env
+{
+	t_list	*env;
+	int		r;
+}	t_env;
+
+typedef struct s_redir
+{
+	char			*file;
+	t_token_type	type;
+	int				fd_heredoc;
+	t_redir			*next;
+}	t_redir;
+
+typedef struct	s_cmmd
+{
+	char	**cmmd;
+	t_redir	*dir;
+	t_env	*env;
+	int		r;
+}	t_cmmd;*/
 
 typedef enum s_pr_crr_nx
 {
-	CURR = 0,
+	PREV = 0,
+	CURR,
 	NEXT,
-	PREV
 }	t_pr_crr_nx;
 
-t_list	*parser(t_list *lex);
+t_list	*parser(t_list **lex);
+t_list	*save_cmmd(t_list **lex);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
 
