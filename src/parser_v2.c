@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:19:06 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/13 13:57:38 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/13 18:24:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_bool	is_double_word_after_ineq_symbol(t_list *lex)
 		tk_ty[CURR] = ((t_token *)tmp->content)->type;
 		tk_ty[NEXT] = ((t_token *)tmp->next->content)->type;
 		if (tk_ty[CURR] == REDIR)
-			if (tk_ty[NEXT] != WORD)
+			if (tk_ty[NEXT] != WORD && tk_ty[NEXT] != EXP)
 				return (TRUE);
 		tmp = tmp->next;
 	}
