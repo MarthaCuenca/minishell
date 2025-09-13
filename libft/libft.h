@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/08/27 17:13:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:47:58 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strrstr(const char *haystack, const char *needle);
 int		ft_strrstr_count(const char *haystack, const char *needle);
 int		count_c_char(const char *s, int c);
+void	ft_free_2p(char **array);
 
 #endif

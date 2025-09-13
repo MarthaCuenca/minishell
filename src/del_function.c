@@ -6,11 +6,12 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:06:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/28 18:20:44 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:47:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 #include <stdlib.h>
 
 void	del_char_ptr(void *str)
@@ -23,16 +24,14 @@ void	del_char_ptr(void *str)
 	free(str);
 }
 
-void	ft_free_2p(char **array)
+void	del_t_env(void	*minishell_env)
 {
-	size_t	i;
+	t_env	*tmp;
 
-	if (!array)
+	if (!minishell_env)
 		return ;
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
+	tmp = (t_env *)minishell_env;
+	ft_lstclear(&tmp->vars, &del_char_ptr);
 }
 
 void	del_t_token(void *tk_nd)
@@ -46,15 +45,20 @@ void	del_t_token(void *tk_nd)
 	free(tk_nd);
 }
 
-void	del_t_redir(void *dir_nd)
+void	del_t_redir(void *dir_array)
 {
+	int		i;
 	t_redir	*tmp;
 
-	if (!dir_nd)
+	if (!dir_array)
 		return ;
-	tmp = (t_redir *)dir_nd;
-	if (tmp->file)
-		free(tmp->file);
+	i = 0;
+	tmp = (t_redir *)dir_array;
+	while (tmp[i].file)
+	{
+		del_char_ptr(tmp[i].file);
+		i++;
+	}
 	free(tmp);
 }
 
@@ -65,9 +69,7 @@ void	del_t_cmmd(void *cmmd_nd)
 	if (!cmmd_nd)
 		return ;
 	tmp = (t_cmmd *)cmmd_nd;
-	del_char_ptr(tmp->cmmd);
-	ft_free_2p(tmp->args);
-	del_t_redir(tmp->infile);
-	del_t_redir(tmp->outfile);
+	ft_free_2p(tmp->cmmd);
+	del_t_redir(tmp->dir);
 	free(tmp);
 }

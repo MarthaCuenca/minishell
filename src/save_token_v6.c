@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_token_v5.c                                    :+:      :+:    :+:   */
+/*   save_token_v6.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:52:50 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:59:30 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_bool	is_special_dollar(char *str, int len)
 	return (FALSE);
 }
 
-static int	token_type(t_token *nd)//y esto casos ";, &, \ "?
+static t_token_type	token_type(t_token *nd)//y esto casos ";, &, \ "?
 {
 	char	*str;
 	int		quo;
@@ -46,18 +46,17 @@ static int	token_type(t_token *nd)//y esto casos ";, &, \ "?
 	quo = nd->quote_type;
 	len = ft_strlen(str);
 	if (ft_strcmp(str, "<<") == 0 && quo == NO_QUOTE)
-		return (HEREDOC);
+		return (REDIR);
 	else if (ft_strcmp(str, ">>") == 0 && quo == NO_QUOTE)
-		return (APPEND);
+		return (REDIR);
 	else if (ft_strcmp(str, "<") == 0 && quo == NO_QUOTE)
-		return (DIR_IN);
+		return (REDIR);
 	else if (ft_strcmp(str, ">") == 0 && quo == NO_QUOTE)
-		return (DIR_OUT);
+		return (REDIR);
 	else if (ft_strcmp(str, "|") == 0 && quo == NO_QUOTE)
 		return (PIPE);
-	else if (is_special_dollar(str, len)
-		|| (quo == DOUBLE_QUOTE && ft_strchr(str, '$'))
-		|| (quo == NO_QUOTE && (count_c_char(str, '$') == 1 && str[0] == '$')))
+	else if (quo != SIMPLE_QUOTE && quo != SIMPLE_QUOTE_IN
+		&& ft_strchr(str, '$'))
 		return (EXP);
 	return (WORD);
 }
@@ -228,15 +227,25 @@ int	simple_quo(char *cmmd, int *qs, int *i)
 	return (-1);
 }
 
-void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
+/*void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
 {
-	if (cmmd[*i - 1] != '\\')
+	if  (cmmd[*i - 1] && cmmd[*i - 1] != '\\')//(cmmd[*i - 1] != '\\')
 	{
 		if (cmmd[*i] == '\'')
 			*end = simple_quo(cmmd, quote_state, i);
 		else if (cmmd[*i] == '\"')
 			*end = double_quo(cmmd, quote_state, i);
 	}
+}*/
+
+void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
+{
+	if (*i != 0 && cmmd[*i - 1] && cmmd[*i - 1] != '\\')
+		return ;
+	else if (cmmd[*i] == '\'')
+		*end = simple_quo(cmmd, quote_state, i);
+	else if (cmmd[*i] == '\"')
+		*end = double_quo(cmmd, quote_state, i);
 }
 
 int	std_char(t_list	**head, char *cmmd, int *sd)
@@ -249,7 +258,7 @@ int	std_char(t_list	**head, char *cmmd, int *sd)
 	while (cmmd[i] && cmmd[i] != ' ' && quote_state == NO_QUOTE)
 	{
 		quote_mng(cmmd, &quote_state, &sd[END], &i);
-		if (sd[END] == -1)
+		if (sd[END] == -1 || cmmd[i] == ';' || cmmd[i] == '&')
 			return (-1);
 		i++;
 	}

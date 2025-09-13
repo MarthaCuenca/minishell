@@ -12,6 +12,7 @@ typedef enum e_bool
 }	t_bool;
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
+
 t_list	*env_dup(char **env);
 void	del_char_ptr(void *content);
 
@@ -33,15 +34,20 @@ typedef enum e_quote
 	MIXED_QUOTE
 }	t_quote;
 
+typedef enum e_redir_type
+{
+	DIR_IN = 0,
+	DIR_OUT,
+	APPEND,
+	HEREDOC
+}	t_redir_type;
+
 typedef enum e_token_type
 {
 	WORD = 0,
 	EXP,
 	PIPE,
-	DIR_IN,
-	DIR_OUT,
-	APPEND,
-	HEREDOC
+	REDIR
 }	t_token_type;
 
 typedef struct s_token
@@ -63,44 +69,25 @@ t_bool	is_special_dollar(char *str, int len);
 t_bool	is_c_symbol(char c, char *symbols);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
-/*typedef struct s_redir
-{
-	char			*file;
-	t_token_type	type;
-}	t_redir;
 
-typedef struct	s_cmmd
+typedef struct	s_env
 {
-	char	**cmmd;
-	char	***args;
-	t_redir	*infile;
-	t_redir	*outfile;
-	char	**env;
-	int		r;
-}	t_cmmd;*/
-
-
-/*typedef struct	s_env
-{
-	t_list	*env;
+	t_list	*vars;
 	int		r;
 }	t_env;
 
 typedef struct s_redir
 {
 	char			*file;
-	t_token_type	type;
+	t_redir_type	type;
 	int				fd_heredoc;
-	t_redir			*next;
 }	t_redir;
 
 typedef struct	s_cmmd
 {
 	char	**cmmd;
-	t_redir	*dir;
-	t_env	*env;
-	int		r;
-}	t_cmmd;*/
+	t_redir	*dir;//array
+}	t_cmmd;
 
 typedef enum s_pr_crr_nx
 {
@@ -111,12 +98,11 @@ typedef enum s_pr_crr_nx
 
 t_list	*parser(t_list **lex);
 t_list	*save_cmmd(t_list **lex);
+void	del_t_env(void  *env_struct);
+void	print_cmmds(t_list *cmmds, t_bool all, int n);//
+void	del_t_redir(void *dir_array);
+void	del_t_cmmd(void *cmmd_nd);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
-
-t_bool expander(t_list **lex, t_list *env, t_cmmd *return_value);
-void	ft_free_2p(char **array);
-void	print_array_2p(char **array);
-void	del_t_cmmd(void *cmmd_nd);
 
 #endif

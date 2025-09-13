@@ -15,11 +15,12 @@ SRCS := src/main.c \
 		src/env_v3.c \
 		src/lexer.c \
 		src/del_function.c \
-		src/save_token_v5.c \
-		src/split_one_token_v2.c \
-		src/expander_v1.c \
-		src/parser.c \
+		src/save_token_v6.c \
+		src/split_one_token_v3.c \
+		src/parser_v2.c \
+		src/save_cmmd_v1.c \
 		src/print_util.c
+		#src/expander_v2.c \
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

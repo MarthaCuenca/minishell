@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/07/28 16:51:12 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:40:58 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	count_token(char *cmmd)
 		i++;
 	while (cmmd[i])
 	{
-		if (quote_state == SIMPLE_QUOTE)//si abro ' da igual cualquier otra comilla, espero a cerrarla con '//
+		if (quote_state == SIMPLE_QUOTE)
 			i += sim_quote(&cmmd[i], &quote_state, &count_tk, &bool_tk);
 		else if (quote_state == DOUBLE_QUOTE)
 			i += dou_quote(&cmmd[i], &quote_state, &count_tk, &bool_tk);

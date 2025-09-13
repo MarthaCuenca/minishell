@@ -6,12 +6,29 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:16:27 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:12:51 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:38:34 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
+
+const char	*redir_type_to_str(t_token_type rt)
+{
+	switch (rt)
+	{
+		case DIR_IN:
+			return ("DIR_IN");
+		case DIR_OUT:
+			return ("DIR_OUT");
+		case APPEND:
+			return ("APPEND");
+		case HEREDOC:
+			return ("HEREDOC");
+		default :
+			return ("UNKNOWN_TYPE");
+	}
+}
 
 const char	*quote_to_str(t_quote q)
 {
@@ -34,7 +51,7 @@ const char	*quote_to_str(t_quote q)
 	}
 }
 
-const char	*type_to_str(t_token_type tt)
+const char	*token_type_to_str(t_token_type tt)
 {
 	switch (tt)
 	{
@@ -44,14 +61,8 @@ const char	*type_to_str(t_token_type tt)
 			return ("EXP");
 		case PIPE:
 			return ("PIPE");
-		case DIR_IN:
-			return ("DIR_IN");
-		case DIR_OUT:
-			return ("DIR_OUT");
-		case APPEND:
-			return ("APPEND");
-		case HEREDOC:
-			return ("HEREDOC");
+		case REDIR:
+			return ("REDIR");
 		default :
 			return ("UNKNOWN_TYPE");
 	}
@@ -72,7 +83,7 @@ void	print_tokens(t_list *tokens, t_bool all, int n)
 				((t_token *)(tmp->content))->quote_type,
 				quote_to_str(((t_token *)tmp->content)->quote_type),
 				((t_token *)(tmp->content))->type,
-				type_to_str(((t_token *)(tmp->content))->type));
+				token_type_to_str(((t_token *)(tmp->content))->type));
 			tmp = tmp->next;
 			i++;
 		}
@@ -85,7 +96,7 @@ void	print_tokens(t_list *tokens, t_bool all, int n)
 				((t_token *)(tmp->content))->quote_type,
 				quote_to_str(((t_token *)tmp->content)->quote_type),
 				((t_token *)(tmp->content))->type,
-				type_to_str(((t_token *)(tmp->content))->type));
+				token_type_to_str(((t_token *)(tmp->content))->type));
 			tmp = tmp->next;
 		}
 	}
@@ -112,9 +123,60 @@ void	print_array_2p(char **array)
 	if (!array)
 		return ;
 	j = 0;
-	while (array[j])
+	while (array[j] != NULL)
 	{
 		printf ("%s\n", array[j]);
 		j++;
 	}
+}
+
+void	print_redir(t_redir *array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	printf("---[REDIR]:\n");
+	while (array[i].file)
+	{
+		printf("---%s\n", array[i].file);
+		i++;
+	}
+}
+
+void	print_cmmds(t_list *cmmds, t_bool all, int n)
+{
+	int		i;
+	t_list	*tmp;
+	t_cmmd	*nd;
+
+	if (!cmmds)
+		return ;
+	i = 0;
+	tmp = cmmds;
+	if (all == FALSE && n)
+	{
+		while (tmp && n > i)
+		{
+			nd = (t_cmmd *)tmp->content;
+			printf("[CMMD]:\n");
+			print_array_2p(nd->cmmd);
+			print_redir(nd->dir);
+			i++;
+			tmp = tmp->next;
+		}
+	}
+	else if (all == TRUE)
+	{
+		while (tmp)
+		{
+			nd = (t_cmmd *)tmp->content;
+			printf("\n[CMMD]:\n");
+			print_array_2p(nd->cmmd);
+			print_redir(nd->dir);
+			tmp = tmp->next;
+		}
+	}
+	printf("\n/* ************************************************************************** */\n");
 }
