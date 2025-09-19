@@ -1,4 +1,14 @@
-//42header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/19 14:25:27 by mcuenca-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -13,8 +23,14 @@ typedef enum e_bool
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
 
+typedef struct s_env
+{
+	t_list	*vars;
+	int		r;
+}	t_env;
+
 t_list	*env_dup(char **env);
-void	del_char_ptr(void *content);
+char	**env_to_array(t_env *mini_env);
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
 
@@ -58,23 +74,14 @@ typedef struct s_token
 }	t_token;
 
 t_list	*lexer(char *cmmd);
-int	count_token(char *cmmd);
 t_list	*save_token(char *cmmd);
-t_list	*split_one_token(t_list	**token_list);
-void	del_t_token(void *token_nd);
-void	print_tokens(t_list *tokens, t_bool all, int n);
 void	quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void	*new_token(t_list **head, char *cmmd, int start, int end);
+t_list	*split_one_token(t_list	**token_list);
+t_quote	token_quo_type(char *str);
 t_bool	is_special_dollar(char *str, int len);
-t_bool	is_c_symbol(char c, char *symbols);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
-
-typedef struct	s_env
-{
-	t_list	*vars;
-	int		r;
-}	t_env;
 
 typedef struct s_redir
 {
@@ -83,10 +90,10 @@ typedef struct s_redir
 	int				fd_heredoc;
 }	t_redir;
 
-typedef struct	s_cmmd
+typedef struct s_cmmd
 {
 	char	**cmmd;
-	t_redir	*dir;//array
+	t_redir	*dir;
 }	t_cmmd;
 
 typedef enum s_pr_crr_nx
@@ -98,11 +105,26 @@ typedef enum s_pr_crr_nx
 
 t_list	*parser(t_list **lex);
 t_list	*save_cmmd(t_list **lex);
-void	del_t_env(void  *env_struct);
-void	print_cmmds(t_list *cmmds, t_bool all, int n);//
-void	del_t_redir(void *dir_array);
-void	del_t_cmmd(void *cmmd_nd);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
+
+t_bool	expander(t_env *mini_env, t_list **pars);
+t_bool	quote_removal(t_list **pars);
+
+/*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
+
+void	del_char_ptr(void *content);
+void	del_t_token(void *token_nd);
+void	del_t_cmmd(void *cmmd_nd);
+void	del_t_env(void *env_struct);
+void	del_t_redir(void *dir_array);
+void	print_tokens(t_list *tokens, t_bool all, int n);//
+void	print_cmmds(t_list *cmmds, t_bool all, int n);//
+void	print_array_2p(char **array);
+t_bool	starter_err(int argc, char **envp);
+void	malloc_err(void);
+void	arg_err(void);
+int		count_token(char *cmmd);
+t_bool	is_c_symbol(char c, char *symbols);
 
 #endif

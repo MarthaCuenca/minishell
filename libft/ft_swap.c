@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   ft_swap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 13:45:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:35:45 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/13 18:37:16 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/13 18:42:02 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-void	ft_free_2p(char **array)
+void	ft_swap_str(char **a, char **b)
 {
-	size_t	i;
+	char	*c;
 
-	if (!array || !*array)
-		return ;
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
+	c = *a;
+	*a = *b;
+	*b = c;
 }

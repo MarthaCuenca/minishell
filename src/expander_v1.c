@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 14:56:20 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/02 16:18:25 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/19 14:14:25 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_bool	is_dollar_valid(char *dollar)
 		return (FALSE);
 	else if (dollar[1]
 		&& is_c_symbol(dollar[1], symbols))
-		//&& (dollar[1] == ' ' || dollar[1] == '\t' || dollar[1] == '\n' || dollar[1] == '\"'))
 		return (FALSE);
 	return (TRUE);
 }

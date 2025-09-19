@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:16:27 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/12 12:38:34 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/19 14:14:56 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-const char	*redir_type_to_str(t_token_type rt)
+const char	*redir_type_to_str(t_redir_type rt)
 {
 	switch (rt)
 	{
@@ -139,8 +139,8 @@ void	print_redir(t_redir *array)
 	i = 0;
 	printf("---[REDIR]:\n");
 	while (array[i].file)
-	{
-		printf("---%s\n", array[i].file);
+	{	
+		printf("---%s  %s\n", redir_type_to_str(array[i].type), array[i].file);
 		i++;
 	}
 }

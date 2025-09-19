@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:54:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/13 18:09:42 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:21:25 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_cmmd	*create_cmmd_node(char **arg_arr, t_redir *dir_arr)
 
 	new_nd = (t_cmmd *)malloc(sizeof(t_cmmd));
 	if (!new_nd)
-		return (NULL);
+		return (malloc_err(), NULL);
 	new_nd->cmmd = arg_arr;
 	new_nd->dir = dir_arr;
 	return (new_nd);
@@ -63,15 +63,6 @@ static int	redir_type(t_token *nd)
 	return (0);
 }
 
-void	ft_swap_char(char **a, char **b)
-{
-	char	*c;
-
-	c = *a;
-	*a = *b;
-	*b = c;
-}
-
 void	fill_dir_array(t_list *lex, t_redir	*array)
 {
 	int		j;
@@ -88,7 +79,7 @@ void	fill_dir_array(t_list *lex, t_redir	*array)
 			array[j].type = redir_type(tk);
 			tmp = tmp->next;
 			tk = (t_token *)tmp->content;
-			ft_swap_char(&array[j].file, &tk->token);
+			ft_swap_str(&array[j].file, &tk->token);
 			j++;
 		}
 		if (tmp)
@@ -101,7 +92,7 @@ t_bool	create_dir_array(t_list *lex, t_redir **dir_array, int n_dir)
 {
 	*dir_array = (t_redir *)ft_calloc((n_dir + 1), sizeof(t_redir));
 	if (!dir_array)
-		return (FALSE);
+		return (malloc_err(), FALSE);
 	fill_dir_array(lex, *dir_array);
 	return (TRUE);
 }
@@ -121,11 +112,11 @@ void	fill_arg_array(t_list *lex, char **array)
 			tmp = tmp->next->next;
 		else if (tk->type == WORD || tk->type == EXP)
 		{
-			array[j] = tk->token;
-			tk->token = NULL;
+			ft_swap_str(&array[j], &tk->token);
 			j++;
+			tmp = tmp->next;
 		}
-		if (tmp)
+		else
 			tmp = tmp->next;
 	}
 	array[j] = NULL;
@@ -135,7 +126,7 @@ t_bool	create_arg_array(t_list *lex, char ***arg_arr, int n_arg)
 {
 	*arg_arr = (char **)ft_calloc((n_arg + 1), sizeof(char *));
 	if (!arg_arr)
-		return (FALSE);
+		return (malloc_err(), FALSE);
 	fill_arg_array(lex, *arg_arr);
 	return (TRUE);
 }
@@ -159,7 +150,7 @@ t_cmmd	*get_cmmd_data(t_list *lex, int n_dir, int n_arg)
 	{
 		ft_free_2p(arg_arr);
 		del_t_redir(dir_arr);
-		return (NULL);
+		return (malloc_err(), NULL);
 	}
 	return (nd);
 }
@@ -179,7 +170,10 @@ t_cmmd	*token_to_cmmd(t_list **head, t_list *lex)
 		return (NULL);
 	new_nd = ft_lstnew(data);
 	if (!new_nd)
-		return (NULL);
+	{
+		del_t_cmmd(data);
+		return (malloc_err(), NULL);
+	}
 	if (!*head)
 		*head = new_nd;
 	else

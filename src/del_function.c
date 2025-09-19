@@ -6,13 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:06:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/13 13:47:21 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:39:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void	del_char_ptr(void *str)
 {

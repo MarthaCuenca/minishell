@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   error_mng.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 13:45:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:35:45 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/09 14:25:01 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/19 14:05:43 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "minishell.h"
+#include <stdio.h>
 
-void	ft_free_2p(char **array)
+t_bool	starter_err(int argc, char **envp)
 {
-	size_t	i;
+	if (argc != 1)
+		return (printf("Error: only 1 argument.\n"), TRUE);
+	if (!envp)
+		return (printf("Error: environment was not founded.\n"), TRUE);
+	return (FALSE);
+}
 
-	if (!array || !*array)
-		return ;
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
+void	malloc_err(void)
+{
+	printf("Error: malloc faied.\n");
+}
+
+void	arg_err(void)
+{
+	printf("Error: expected arguments are missing.\n");
 }

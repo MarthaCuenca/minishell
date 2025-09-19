@@ -6,11 +6,12 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:19:06 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/13 18:24:21 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:13:40 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 t_bool	is_x_symbol(int x, int *symbols, int len)
 {
@@ -26,7 +27,7 @@ t_bool	is_x_symbol(int x, int *symbols, int len)
 	return (FALSE);
 }
 
-t_bool	is_double_word_after_ineq_symbol(t_list *lex)
+t_bool	is_word_after_redir(t_list *lex)
 {
 	int		tk_ty[3];
 	t_list	*tmp;
@@ -38,7 +39,7 @@ t_bool	is_double_word_after_ineq_symbol(t_list *lex)
 		tk_ty[NEXT] = ((t_token *)tmp->next->content)->type;
 		if (tk_ty[CURR] == REDIR)
 			if (tk_ty[NEXT] != WORD && tk_ty[NEXT] != EXP)
-				return (TRUE);
+				return (printf("Syntax error: no word after redir."), TRUE);
 		tmp = tmp->next;
 	}
 	return (FALSE);
@@ -50,7 +51,7 @@ t_bool	is_ineq_symbol_at_end(t_list *lex)
 
 	last_nd = ((t_token *)ft_lstlast(lex)->content)->type;
 	if (last_nd == REDIR)
-		return (TRUE);
+		return (printf("Syntax error: redir at last position."), TRUE);
 	return (FALSE);
 }
 
@@ -65,7 +66,7 @@ t_bool	inequality_symbols_syntax(t_list *lex)
 	tmp = lex;
 	if (is_ineq_symbol_at_end(lex))
 		return (FALSE);
-	if (is_double_word_after_ineq_symbol(lex))
+	if (is_word_after_redir(lex))
 		return (FALSE);
 	return (TRUE);
 }
@@ -83,7 +84,7 @@ t_bool	is_pipe_misplaced(t_list *lex)
 		if (tk_ty[CURR] == PIPE)
 			if ((tk_ty[NEXT] != REDIR && tk_ty[NEXT] != WORD)
 				&& tk_ty[PREV] != WORD)
-				return (TRUE);
+				return (printf("Syntax error: misplaced pipe."), TRUE);
 		tk_ty[PREV] = tk_ty[CURR];
 		tmp = tmp->next;
 	}
@@ -100,9 +101,9 @@ t_bool	is_pipe_at_start_or_end(t_list *lex)
 	first_nd = ((t_token *)lex->content)->type;
 	last_nd = ((t_token *)ft_lstlast(lex)->content)->type;
 	if (first_nd == PIPE)
-		return (TRUE);
+		return (printf("Syntax error: pipe at first position."), TRUE);
 	else if (last_nd == PIPE)
-		return (TRUE);
+		return (printf("Syntax error: pipe at last position."), TRUE);
 	return (FALSE);
 }
 
