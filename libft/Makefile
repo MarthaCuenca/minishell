@@ -6,7 +6,7 @@
 #    By: faguirre <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 10:47:10 by faguirre          #+#    #+#              #
-#    Updated: 2024/10/09 13:17:43 by faguirre         ###   ########.fr        #
+#    Updated: 2025/09/13 18:37:41 by mcuenca-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,8 @@ SRCS = ft_isalpha.c \
        ft_strtrim.c \
        ft_split.c \
        ft_itoa.c \
+	   ft_free.c \
+	   ft_swap.c \
        ft_strmapi.c \
        ft_striteri.c \
        ft_putchar_fd.c \
@@ -58,6 +60,7 @@ SRCS = ft_isalpha.c \
        ft_lstclear_bonus.c \
        ft_lstiter_bonus.c \
        ft_lstmap_bonus.c \
+	   ft_lstlink.c \
        printf.c \
        printf_utils.c \
        printf_cs.c \

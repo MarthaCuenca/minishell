@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   ft_swap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 13:20:41 by faguirre          #+#    #+#             */
-/*   Updated: 2025/08/13 10:57:14 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/13 18:37:16 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/13 18:42:02 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+void	ft_swap_str(char **a, char **b)
 {
-	if (!lst)
-		return ;
-	del(lst->content);
-	free(lst);
+	char	*c;
+
+	c = *a;
+	*a = *b;
+	*b = c;
 }
