@@ -1,38 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_mng.c                                        :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 14:25:01 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/26 16:36:18 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/26 10:45:36 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/27 10:38:15 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 #include <stdio.h>
 
-t_bool	starter_err(int argc, char **envp)
+int	builtin_pwd(t_env *mini_env)
 {
-	if (argc != 1)
-		return (printf("Error: only 1 argument.\n"), TRUE);
-	if (!envp)
-		return (printf("Error: environment was not founded.\n"), TRUE);
-	return (FALSE);
-}
+	t_list	*tmp;
+	char	*value;
 
-void	malloc_err(void)
-{
-	printf("Error: malloc falied.\n");
-}
-
-void	arg_err(void)
-{
-	printf("Error: expected arguments are missing.\n");
-}
-
-void	export_bi_err(char *str)
-{
-	printf("Error: export: `%s': not a valid identifier\n", str);
+	tmp = check_env_var("PWD", 3, mini_env->vars);
+	value = ft_strchr((char *)tmp->content, '=') + 1;
+	printf("%s\n", value);
+	return (0);
 }

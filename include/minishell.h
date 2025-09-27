@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:25:27 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:52:24 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ typedef enum e_bool
 	FALSE = 0,
 	TRUE = 1
 }	t_bool;
+
+typedef enum e_state
+{
+	ST_ERR = -1,
+	ST_INVALID = 0,
+	ST_VALID = 1
+}	t_state;
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
 
@@ -110,6 +117,17 @@ t_list	*save_cmmd(t_list **lex);
 
 t_bool	expander(t_env *mini_env, t_list **pars);
 t_bool	quote_removal(t_list **pars);
+t_list	*check_env_var(char *str, int in_len, t_list *env);
+
+/*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
+
+void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
+int		builtin_mng(t_env *mini_env, t_list **pars, t_cmmd *nd);
+int		builtin_echo(t_cmmd *nd);
+int		builtin_pwd(t_env *mini_env);
+int		builtin_export(t_env *mini_env, char **cmmd);
+int		builtin_env(t_env *mini_env);
+void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
 
 /*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
 
@@ -124,6 +142,7 @@ void	print_array_2p(char **array);
 t_bool	starter_err(int argc, char **envp);
 void	malloc_err(void);
 void	arg_err(void);
+void	export_bi_err(char *str);
 int		count_token(char *cmmd);
 t_bool	is_c_symbol(char c, char *symbols);
 
