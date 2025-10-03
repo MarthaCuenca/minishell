@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:02:10 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/27 10:46:27 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:04:27 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ int	builtin_echo(t_cmmd *nd)
 	tmp = nd->cmmd;
 	new_line = is_less_n(tmp);
 	j = new_line;
+	printf("%s", tmp[j++]);
 	while (tmp[j])
-		printf("%s", tmp[j++]);
+		printf(" %s", tmp[j++]);
 	if (!(new_line - 1))
 		printf("\n");
 	return (0);

@@ -25,11 +25,13 @@ SRCS := src/main.c \
 		src/error_mng.c \
 		src/builtin_mng.c \
 		src/builtin_echo.c \
+		src/builtin_cd.c \
+		src/builtin_export.c \
+		src/builtin_unset.c \
 		src/builtin_pwd.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
 		src/print_util.c
-		#src/builtin_export.c \
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

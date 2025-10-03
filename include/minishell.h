@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/27 10:52:24 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/01 15:52:58 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,23 +118,28 @@ t_list	*save_cmmd(t_list **lex);
 t_bool	expander(t_env *mini_env, t_list **pars);
 t_bool	quote_removal(t_list **pars);
 t_list	*check_env_var(char *str, int in_len, t_list *env);
+char	*get_env_value(t_list *match, int var_len);;
+//int		varname_len_in_str(char *start);
+int		env_key_len(char *str, int c);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 
 void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
 int		builtin_mng(t_env *mini_env, t_list **pars, t_cmmd *nd);
 int		builtin_echo(t_cmmd *nd);
+int		builtin_cd(t_env *mini_env, char **cmmd);
 int		builtin_pwd(t_env *mini_env);
 int		builtin_export(t_env *mini_env, char **cmmd);
+int		builtin_unset(t_env *mini_env, char **cmmd);
 int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
 
 /*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
 
-void	del_char_ptr(void *content);
+void	del_char_ptr(void *str);
 void	del_t_token(void *token_nd);
 void	del_t_cmmd(void *cmmd_nd);
-void	del_t_env(void *env_struct);
+void	del_t_env(void *mini_env);
 void	del_t_redir(void *dir_array);
 void	print_tokens(t_list *tokens, t_bool all, int n);//
 void	print_cmmds(t_list *cmmds, t_bool all, int n);//

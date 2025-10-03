@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/27 10:41:41 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 11:58:53 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 int	fake_exec(t_env *mini_env, t_list **pars)
 {
 	int		bi_value;
-	char	**mini_env_arr;
+	//char	**mini_env_arr;
 	t_list	*tmp;
 
 	bi_value = 0;
@@ -29,9 +29,10 @@ int	fake_exec(t_env *mini_env, t_list **pars)
 		return (-1);
 	if (!quote_removal(pars))
 		return (-1);
-	mini_env_arr = env_to_array(mini_env);
+	/*mini_env_arr = env_to_array(mini_env);
 	if (!mini_env_arr)
 		return (-1);
+	ft_free_2p(mini_env_arr);*/
 	while (tmp)
 	{
 		bi_value = builtin_mng(mini_env, pars, ((t_cmmd *)tmp->content));
@@ -39,7 +40,6 @@ int	fake_exec(t_env *mini_env, t_list **pars)
 			return (-1);
 		tmp = tmp->next;
 	}
-	ft_free_2p(mini_env_arr);
 	return (bi_value);
 }
 
@@ -47,7 +47,6 @@ void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	if (mini_env)
 		ft_lstclear(&mini_env->vars, del_char_ptr);
-		//del_(mini_env->vars);
 	if (lex && *lex)
 		ft_lstclear(lex, &del_t_token);
 	if (pars && *pars)
@@ -65,7 +64,7 @@ void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 	{
 		*line = readline("minishell-");
 		if (!*line)
-			//return ;
+			return ;
 		add_history(*line);
 		*lex = lexer(*line);
 		if (!*lex)
@@ -77,8 +76,6 @@ void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 		mini_env->r = fake_exec(mini_env, pars);
 		if (mini_env->r < 0)
 			return ;
-		//if (ft_strncmp(*line, "exit", 5) == 0)//
-		//	return ;//
 		clean_mng(NULL, NULL, NULL, pars);
 	}
 }
