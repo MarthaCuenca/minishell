@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:01:33 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:51:14 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	**obtain_quote_values(char *str)
 
 	values = ft_calloc((how_many_quote(str) + 1), sizeof(char *));
 	if (!values)
-		return (arg_err(), NULL);
+		return (malloc_err(), NULL);
 	j = 0;
 	tmp = str;
 	while (tmp)
@@ -153,7 +153,7 @@ char	*delete_quote(char *str)
 		return (arg_err(), NULL);
 	values = obtain_quote_values(str);
 	if (!values)
-		return (NULL);
+		return (free(dest), NULL);
 	fill_dest(dest, values, str);
 	ft_free_2p(values);
 	return (dest);

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 12:26:49 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/17 16:50:17 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:42:35 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ char	**fill_env_array(t_list *og, int len)
 
 	j = 0;
 	new_env = (char **)ft_calloc(len + 1, sizeof(char *));
-	tmp = og;
 	if (!new_env)
 		return (NULL);
+	tmp = og;
 	while (tmp)
 	{
 		dup = ft_strdup((char *)tmp->content);

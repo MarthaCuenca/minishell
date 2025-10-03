@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/22 11:15:40 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:41:41 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,67 @@
 
 int	fake_exec(t_env *mini_env, t_list **pars)
 {
+	int		bi_value;
 	char	**mini_env_arr;
+	t_list	*tmp;
 
+	bi_value = 0;
+	tmp = *pars;
 	if (!expander(mini_env, pars))
-		return (0);
+		return (-1);
 	if (!quote_removal(pars))
-		return (0);
+		return (-1);
 	mini_env_arr = env_to_array(mini_env);
 	if (!mini_env_arr)
-		return (0);
+		return (-1);
+	while (tmp)
+	{
+		bi_value = builtin_mng(mini_env, pars, ((t_cmmd *)tmp->content));
+		if (bi_value < 0)
+			return (-1);
+		tmp = tmp->next;
+	}
 	ft_free_2p(mini_env_arr);
-	return (1);
+	return (bi_value);
 }
 
-void	clean_mng(char **cmmd, t_list **lex, t_list **pars)
+void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
-	if (*lex)
+	if (mini_env)
+		ft_lstclear(&mini_env->vars, del_char_ptr);
+		//del_(mini_env->vars);
+	if (lex && *lex)
 		ft_lstclear(lex, &del_t_token);
-	if (*pars)
+	if (pars && *pars)
 		ft_lstclear(pars, &del_t_cmmd);
-	if (*cmmd)
-		free(*cmmd);
+	if (line && *line)
+	{
+		free(*line);
+		*line = NULL;
+	}
 }
 
-void	init_minishell(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars)
+void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	while (1)
 	{
-		*cmmd = readline("minishell-");
-		if (!*cmmd)
-			return ;
-		add_history(*cmmd);
-		*lex = lexer(*cmmd);
+		*line = readline("minishell-");
+		if (!*line)
+			//return ;
+		add_history(*line);
+		*lex = lexer(*line);
 		if (!*lex)
 			return ;
 		*pars = parser(lex);
 		if (!*pars)
 			return ;
+		clean_mng(NULL, line, lex, NULL);
 		mini_env->r = fake_exec(mini_env, pars);
-		if (!mini_env->r)
+		if (mini_env->r < 0)
 			return ;
-		if (ft_strncmp(*cmmd, "exit", 5) == 0)//
-			break ;//
-		clean_mng(cmmd, lex, pars);
+		//if (ft_strncmp(*line, "exit", 5) == 0)//
+		//	return ;//
+		clean_mng(NULL, NULL, NULL, pars);
 	}
 }
 
@@ -78,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_list	*lex;
 	t_list	*pars;
-	char	*cmmd;
+	char	*line;
 	t_env	mini_env;
 
 	(void)argv;
@@ -88,9 +106,9 @@ int	main(int argc, char **argv, char **envp)
 	pars = NULL;
 	if (!env_mng(&mini_env, envp))
 		return (1);
-	init_minishell(&mini_env, &cmmd, &lex, &pars);
-	clean_mng(&cmmd, &lex, &pars);//
-	ft_lstclear(&mini_env.vars, del_char_ptr);
+	init_minishell(&mini_env, &line, &lex, &pars);
+	clean_mng(&mini_env, &line, &lex, &pars);//
+	//ft_lstclear(&mini_env.vars, del_char_ptr);
 	rl_clear_history();
 	return (0);
 }

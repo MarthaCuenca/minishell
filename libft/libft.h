@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/09/13 18:41:50 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:37:24 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 # define LIBFT_H
 
 # include <stddef.h>
+
+# define MAX_INT_CHAR "2147483647"
+# define MIN_INT_CHAR "2147483648"
+# define MAX_INT 2147483647
+# define MIN_INT 2147483648
 
 typedef struct s_list
 {
@@ -76,5 +81,7 @@ int		ft_strrstr_count(const char *haystack, const char *needle);
 int		count_c_char(const char *s, int c);
 void	ft_free_2p(char **array);
 void	ft_swap_str(char **a, char **b);
+int		is_overflow(char *str);
+int		ft_str_isdigit(const char *str);
 
 #endif

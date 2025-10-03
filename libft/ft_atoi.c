@@ -6,9 +6,39 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 12:33:22 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/16 08:46:24 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:39:29 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
+
+int	is_overflow(char *str)
+{
+	int		sign;
+	int		len;
+	char	*start;
+
+	sign = 1;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	start = str;
+	while (ft_isdigit(*str))
+		str++;
+	len = str - start;
+	if (len > 10)
+		return (1);
+	if (len == 10
+		&& ((sign == 1 && ft_strcmp(start, MAX_INT_CHAR) > 0)
+			|| (sign == -1 && ft_strcmp(start, MIN_INT_CHAR) > 0)))
+		return (1);
+	return (0);
+}
 
 static const char	*calculate_sign(const char *str, long *sign)
 {

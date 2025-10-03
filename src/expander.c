@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 13:35:20 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:59:04 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char	*exchange_exp_var(char **values, char *str)
 	len = ft_strlen(str);
 	while (values[j])
 		len += ft_strlen(values[j++]);
-	new_str = (char *)ft_calloc((len + 1), sizeof(char));
+	new_str = (char *)ft_calloc((len + 1), sizeof(char));//AQUI
 	if (!new_str)
 		return (malloc_err(), NULL);
 	fill_new_str(new_str, values, str);
@@ -281,7 +281,7 @@ t_bool	exp_mng(t_env *env, char **str)
 		return (FALSE);
 	new_str = exchange_exp_var(values, *str);
 	if (!new_str)
-		return (FALSE);
+		return (ft_free_2p(values), FALSE);
 	ft_swap_str(&new_str, str);
 	free(new_str);
 	ft_free_2p(values);

@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:15:17 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/13 12:16:52 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:38:00 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,3 +18,22 @@ int	ft_isdigit(int c)
 	}
 	return (0);
 }
+
+int	ft_str_isdigit(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] != '\0')
+	{
+		if (!(ft_isdigit(str[i])))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+

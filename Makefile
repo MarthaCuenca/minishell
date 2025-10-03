@@ -23,7 +23,13 @@ SRCS := src/main.c \
 		src/quote_removal.c \
 		src/list_to_array.c \
 		src/error_mng.c \
+		src/builtin_mng.c \
+		src/builtin_echo.c \
+		src/builtin_pwd.c \
+		src/builtin_env.c \
+		src/builtin_exit.c \
 		src/print_util.c
+		#src/builtin_export.c \
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_mng.c                                        :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 14:25:01 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/26 16:36:18 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/25 14:25:45 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/27 10:56:11 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-t_bool	starter_err(int argc, char **envp)
+int	builtin_env(t_env *mini_env)
 {
-	if (argc != 1)
-		return (printf("Error: only 1 argument.\n"), TRUE);
-	if (!envp)
-		return (printf("Error: environment was not founded.\n"), TRUE);
-	return (FALSE);
-}
+	t_list	*tmp;
 
-void	malloc_err(void)
-{
-	printf("Error: malloc falied.\n");
-}
-
-void	arg_err(void)
-{
-	printf("Error: expected arguments are missing.\n");
-}
-
-void	export_bi_err(char *str)
-{
-	printf("Error: export: `%s': not a valid identifier\n", str);
+	if (!mini_env && mini_env->vars)
+		return (1);
+	tmp = mini_env->vars;
+	while (tmp)
+	{
+		if (ft_strchr((char *)tmp->content, '='))
+			printf("%s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+	return (0);
 }
