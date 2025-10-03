@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/09/25 14:37:24 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 17:04:35 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,8 @@ void	ft_free_2p(char **array);
 void	ft_swap_str(char **a, char **b);
 int		is_overflow(char *str);
 int		ft_str_isdigit(const char *str);
+int		*ft_count_split_by_start(char **split, char *starts);
+void	ft_free_split(char **split);
+char	*ft_join_path(char *str1, char *str2);
 
 #endif

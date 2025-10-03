@@ -21,9 +21,14 @@ SRCS := src/main.c \
 		src/save_cmmd.c \
 		src/expander.c \
 		src/quote_removal.c \
+		src/excecutor.c \
+		src/cmmd.c \
+		src/cmmd_transform_namepath.c \
+		src/cmmd_utils.c \
+		src/heredoc.c \
 		src/list_to_array.c \
 		src/error_mng.c \
-		src/builtin_mng.c \
+		src/cmmd_builtin.c \
 		src/builtin_echo.c \
 		src/builtin_cd.c \
 		src/builtin_export.c \
@@ -31,6 +36,7 @@ SRCS := src/main.c \
 		src/builtin_pwd.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
+		src/utils.c \
 		src/print_util.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)

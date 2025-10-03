@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:06:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/16 18:39:17 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:57:28 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ void	del_t_cmmd(void *cmmd_nd)
 		return ;
 	tmp = (t_cmmd *)cmmd_nd;
 	ft_free_2p(tmp->cmmd);
-	del_t_redir(tmp->dir);
+	del_t_redir(tmp->redir);
 	free(tmp);
 }

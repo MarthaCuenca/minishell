@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 11:58:53 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 18:20:41 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int	fake_exec(t_env *mini_env, t_list **pars)
+/*int	fake_exec(t_env *mini_env, t_list **pars)
 {
 	int		bi_value;
 	//char	**mini_env_arr;
@@ -29,10 +29,10 @@ int	fake_exec(t_env *mini_env, t_list **pars)
 		return (-1);
 	if (!quote_removal(pars))
 		return (-1);
-	/*mini_env_arr = env_to_array(mini_env);
+	mini_env_arr = env_to_array(mini_env);
 	if (!mini_env_arr)
 		return (-1);
-	ft_free_2p(mini_env_arr);*/
+	ft_free_2p(mini_env_arr);
 	while (tmp)
 	{
 		bi_value = builtin_mng(mini_env, pars, ((t_cmmd *)tmp->content));
@@ -41,7 +41,7 @@ int	fake_exec(t_env *mini_env, t_list **pars)
 		tmp = tmp->next;
 	}
 	return (bi_value);
-}
+}*/
 
 void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
@@ -73,9 +73,14 @@ void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 		if (!*pars)
 			return ;
 		clean_mng(NULL, line, lex, NULL);
-		mini_env->r = fake_exec(mini_env, pars);
-		if (mini_env->r < 0)
+		if (!expander(mini_env, pars))
 			return ;
+		if (!quote_removal(pars))
+			return ;
+		/*mini_env->r = fake_exec(mini_env, pars);
+		if (mini_env->r < 0)
+			return ;*/
+		excecutor(*pars, mini_env);
 		clean_mng(NULL, NULL, NULL, pars);
 	}
 }

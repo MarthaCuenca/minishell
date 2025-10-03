@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_v2.c                                      :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/23 11:59:04 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:58:11 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,7 @@ t_bool	expander(t_env *env, t_list **pars)
 	{
 		curr_cmmd = (t_cmmd *)tmp->content;
 		arg = curr_cmmd->cmmd;
-		dir = (t_redir *)curr_cmmd->dir;
+		dir = (t_redir *)curr_cmmd->redir;
 		if (!arg_loop(env, arg))
 			return (FALSE);
 		if (!dir_loop(env, dir))

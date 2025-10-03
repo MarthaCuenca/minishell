@@ -6,7 +6,7 @@
 #    By: faguirre <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 10:47:10 by faguirre          #+#    #+#              #
-#    Updated: 2025/09/13 18:37:41 by mcuenca-         ###   ########.fr        #
+#    Updated: 2025/10/03 17:00:02 by faguirre         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,8 +43,8 @@ SRCS = ft_isalpha.c \
        ft_strtrim.c \
        ft_split.c \
        ft_itoa.c \
-	   ft_free.c \
-	   ft_swap.c \
+       ft_free.c \
+       ft_swap.c \
        ft_strmapi.c \
        ft_striteri.c \
        ft_putchar_fd.c \
@@ -60,7 +60,7 @@ SRCS = ft_isalpha.c \
        ft_lstclear_bonus.c \
        ft_lstiter_bonus.c \
        ft_lstmap_bonus.c \
-	   ft_lstlink.c \
+       ft_lstlink.c \
        printf.c \
        printf_utils.c \
        printf_cs.c \
@@ -70,7 +70,10 @@ SRCS = ft_isalpha.c \
        printf_cs_print_x.c \
        printf_cs_print_utils.c \
        get_next_line.c \
-       get_next_line_utils.c
+       get_next_line_utils.c \
+       ft_count_split_by_start.c \
+       ft_free_split.c \
+       ft_join_path.c
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)

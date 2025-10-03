@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/01 15:52:58 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 17:26:31 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <stddef.h>
+# include <sys/types.h>
+
 
 typedef enum e_bool
 {
@@ -100,7 +103,7 @@ typedef struct s_redir
 typedef struct s_cmmd
 {
 	char	**cmmd;
-	t_redir	*dir;
+	t_redir	*redir; //merge: redir
 }	t_cmmd;
 
 typedef enum s_pr_crr_nx
@@ -124,8 +127,40 @@ int		env_key_len(char *str, int c);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 
+typedef struct s_pipe_data
+{
+	int	pid;
+	int	last_pid;
+	int	pipefd[2];
+	int	fd_prev;
+	int	count;
+}	t_pipe_data;
+
 void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
-int		builtin_mng(t_env *mini_env, t_list **pars, t_cmmd *nd);
+int	excecutor(t_list *lst_cmmd, t_env *tenv);
+
+// CMMD
+void	manage_infile(t_cmmd *cmmd);
+void	manage_outfile(t_cmmd *cmmd);
+int		exec_cmmd(t_list *lst_cmmd, t_env *env);
+int		is_builtin(char *str);
+void	choose_builtin(t_cmmd *cmmd, t_env *env);
+int		exec_if_1builtin(t_list *lst_cmmd, t_env *env);
+int		pipe_e(int pipefd[2], t_env *env);
+void	execve_e(t_cmmd *cmmd, t_env *env);
+int		fork_e(pid_t pid, t_env *env);
+int		count_files(t_redir *redir, int type);
+void	process_exit_status(t_pipe_data *pipe_data, t_env *env);
+// Init
+t_list	*init_lst_cmmd(char **argv);
+void	free_cmmd_node(void *ptr);
+int		correct_cmmd_namepath(t_list *lst_cmmd);
+int		create_heredocs(t_list *lst_cmmd);
+void	close_heredocs(t_list *lst_cmmd);
+
+// Utils
+void	print_lst_cmmd(t_list *lst_cmmd);
+
 int		builtin_echo(t_cmmd *nd);
 int		builtin_cd(t_env *mini_env, char **cmmd);
 int		builtin_pwd(t_env *mini_env);

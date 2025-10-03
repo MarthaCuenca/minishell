@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:16:27 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:14:56 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:59:01 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void	print_cmmds(t_list *cmmds, t_bool all, int n)
 			nd = (t_cmmd *)tmp->content;
 			printf("[CMMD]:\n");
 			print_array_2p(nd->cmmd);
-			print_redir(nd->dir);
+			print_redir(nd->redir);
 			i++;
 			tmp = tmp->next;
 		}
@@ -174,7 +174,7 @@ void	print_cmmds(t_list *cmmds, t_bool all, int n)
 			nd = (t_cmmd *)tmp->content;
 			printf("\n[CMMD]:\n");
 			print_array_2p(nd->cmmd);
-			print_redir(nd->dir);
+			print_redir(nd->redir);
 			tmp = tmp->next;
 		}
 	}
