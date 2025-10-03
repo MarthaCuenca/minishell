@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:39:02 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/27 12:16:19 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/01 11:21:40 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ int	builtin_mng(t_env *mini_env, t_list **pars, t_cmmd *nd)
 	re_val = 0;
 	str = (char *)nd->cmmd[0];
 	if (ft_strcmp(str, "echo") == 0)
-		re_val = builtin_echo(nd);
-	/*else if (ft_strcmp(str, "cd") == 0)
-		re_val = builtin_cd(str);*/
+		re_val = builtin_echo(nd);//con redireciones y otra cosa que no me acuerdo
+	else if (ft_strcmp(str, "cd") == 0)
+		re_val = builtin_cd(mini_env, nd->cmmd);
 	else if (ft_strcmp(str, "pwd") == 0)
 		re_val = builtin_pwd(mini_env);
-	/*else if (ft_strcmp(str, "export") == 0)//COMPROBAR QUE ESTO FUNCIONA
-		re_val = builtin_export(mini_env, nd->cmmd);*/
-	/*else if (ft_strcmp(str, "unset"))
-		re_val = builtin_unset(str);*/
+	else if (ft_strcmp(str, "export") == 0)
+		re_val = builtin_export(mini_env, nd->cmmd);
+	else if (ft_strcmp(str, "unset") == 0)
+		re_val = builtin_unset(mini_env, nd->cmmd);
 	else if (ft_strcmp(str, "env") == 0)
 		re_val = builtin_env(mini_env);
 	else if (ft_strcmp(str, "exit") == 0)

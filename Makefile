@@ -12,24 +12,26 @@ OBJ_PATH := obj
 HEAD := include/minishell.h \
 
 SRCS := src/main.c \
-		src/env_v3.c \
+		src/env.c \
 		src/lexer.c \
 		src/del_function.c \
-		src/save_token_v7.c \
-		src/split_one_token_v3.c \
-		src/parser_v2.c \
-		src/save_cmmd_v1.c \
-		src/expander_v2.c \
+		src/save_token.c \
+		src/split_one_token.c \
+		src/parser.c \
+		src/save_cmmd.c \
+		src/expander.c \
 		src/quote_removal.c \
 		src/list_to_array.c \
 		src/error_mng.c \
 		src/builtin_mng.c \
 		src/builtin_echo.c \
+		src/builtin_cd.c \
+		src/builtin_export.c \
+		src/builtin_unset.c \
 		src/builtin_pwd.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
 		src/print_util.c
-		#src/builtin_export.c \
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

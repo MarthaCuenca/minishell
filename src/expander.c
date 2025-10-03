@@ -1,65 +1,132 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   expander_v2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 14:56:20 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/02 14:49:29 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/09/23 11:59:04 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-int	expansion_len(char *start)
+int	varname_len_in_str(char *start)
 {
-	int		len;
+	int		i;
 	char	*end;
+	char	*symbols[6];
 
+	i = 0;
+	end = NULL;
+	symbols[0] = ft_strchr(start, ' ');
+	symbols[1] = ft_strchr(start, '?');
+	symbols[2] = ft_strchr(start, '\'');
+	symbols[3] = ft_strchr(start, '\"');
+	symbols[4] = ft_strchr(start, '$');
+	symbols[5] = ft_strchr(start, '\0');
 	if (!start)
 		return (0);
-	end = ft_strchr(start, ' ');
+	while (i < 7)
+	{
+		if (symbols[i] && (!end || symbols[i] < end))
+			end = symbols[i];
+		i++;
+	}
 	if (!end)
-		end = ft_strchr(start, '\"');
-	if (!end)
-		end = ft_strchr(start, '$');
-	if (!end)
-		end = ft_strchr(start, '\0');
+		return (0);
 	end -= 1;
-	len = end - start + 1;
-	return (len);
+	return (end - start + 1);
 }
 
-t_bool	is_dollar_valid(char *dollar)
+int	env_key_len(char *str, int c)
 {
+	int		i;
+	char	*key;
+
+	if (!str)
+		return (0);
+	i = 0;
+	key = ft_strchr(str, c);
+	if (!key)
+		return (ft_strlen(str));
+	while (str[i] && str[i] != *key)
+		i++;
+	return (i);
+}
+
+void	check_state(char *str, char *dollar, t_quote *quote_state)
+{
+	int		i;
+
+	i = 0;
+	while (&str[i] != dollar)
+	{
+		if (str[i] == '\\')
+			i += 2;
+		if (str[i] == '\'')
+		{
+			if (*quote_state == NO_QUOTE)
+				*quote_state = SIMPLE_QUOTE;
+			else if (*quote_state == SIMPLE_QUOTE)
+				*quote_state = NO_QUOTE;
+		}
+		else if (str[i] == '\"')
+		{
+			if (*quote_state == NO_QUOTE)
+				*quote_state = DOUBLE_QUOTE;
+			else if (*quote_state == DOUBLE_QUOTE)
+				*quote_state = NO_QUOTE;
+		}
+		i++;
+	}
+}
+
+t_bool	is_dollar_valid(char *str, char *dollar)
+{
+	char	symbols[4];
+	t_quote	quote_state;
+
 	if (!dollar)
+		return (FALSE);
+	symbols[0] = ' ';
+	symbols[1] = '\t';
+	symbols[2] = '\n';
+	symbols[3] = '\"';
+	quote_state = NO_QUOTE;
+	check_state(str, dollar, &quote_state);
+	if (quote_state == SIMPLE_QUOTE)
 		return (FALSE);
 	else if (!dollar[1])
 		return (FALSE);
-	else if (dollar[1] == ' ' || dollar[1] == '\t' || dollar[1] == '\n')
+	else if (dollar[1] && is_c_symbol(dollar[1], symbols))
 		return (FALSE);
 	return (TRUE);
 }
 
-void	exp_no_quote(t_token **tk, char **values)
+int	count_dollar(char *str)
 {
-	char	*value;
+	int		count;
+	char	*check_point;
 
-	if (!*tk || !values)
-		return ;
-	free((*tk)->token);
-	value = ft_strdup(values[0]);
-	(*tk)->token = value;
+	count = 0;
+	check_point = str;
+	while (check_point)
+	{
+		check_point = ft_strchr(check_point, '$');
+		if (!check_point)
+			break ;
+		if (is_dollar_valid(str, check_point))
+			count++;
+		check_point++;
+	}
+	return (count);
 }
 
-/*i dest
- * j values
- * k token*/
-void	fill_new_exp_double_quote(char *dest, char *tk, char **values)
+void	fill_new_str(char *dest, char **values, char *str)
 {
 	int	i;
 	int	j;
@@ -69,230 +136,210 @@ void	fill_new_exp_double_quote(char *dest, char *tk, char **values)
 	i = 0;
 	j = 0;
 	k = 0;
-	while (tk[k])
+	while (str[i])
 	{
-		if (tk[k] == '$' && is_dollar_valid(&tk[k]))
+		if (str[i] == '$' && is_dollar_valid(str, &str[i]))
 		{
-			k += expansion_len(&tk[k]);
+			i += varname_len_in_str(&str[i] + 1) + 1;
 			value_len = ft_strlen(values[j]);
-			ft_memcpy(&dest[i], values[j], value_len);
-			i += value_len;
+			ft_memcpy(&dest[k], values[j], value_len);
+			k += value_len;
 			j++;
 		}
-		dest[i] = tk[k];
-		i++;
-		k++;
+		else
+			dest[k++] = str[i++];
 	}
-	dest[i] = '\0';
+	dest[k] = '\0';
 }
 
-void	exp_double_quote(t_token **tk, char **values)
+char	*exchange_exp_var(char **values, char *str)
 {
 	int		j;
 	int		len;
-	char	*large_str;
+	char	*new_str;
 
-	if (!*tk || !values)
-		return ;
 	j = 0;
-	len = ft_strlen((*tk)->token);
+	len = ft_strlen(str);
 	while (values[j])
 		len += ft_strlen(values[j++]);
-	large_str = (char *)malloc((len + 1) * sizeof(char));
-	if (!large_str)
-		return ;
-	fill_new_exp_double_quote(large_str, (*tk)->token, values);
-	free((*tk)->token);
-	(*tk)->token = large_str;
+	new_str = (char *)ft_calloc((len + 1), sizeof(char));//AQUI
+	if (!new_str)
+		return (malloc_err(), NULL);
+	fill_new_str(new_str, values, str);
+	return (new_str);
 }
 
-char	*get_env_value_v2(t_list *env_match, int env_var_len)
+char	*get_env_value(t_list *match, int var_len)
 {
 	int		value_len;
 	int		start;
 	char	*tmp;
 	char	*value;
 
-	if (env_match)
+	if (match)
 	{
-		tmp = (char *)env_match->content;
-		start = env_var_len + 1;
+		tmp = (char *)match->content;
+		start = var_len + 1;
 		value_len = ft_strlen(&tmp[start]);
 		value = ft_substr(tmp, start, value_len);
 	}
 	else
 		value = (char *)ft_calloc(1, sizeof(char));
 	if (!value)
-		return (NULL);
+		return (malloc_err(), NULL);
 	return (value);
 }
 
-/*char	*get_env_value_v1(t_list *env_match)
+t_list	*check_env_var(char *str, int in_len, t_list *env)
 {
-	char	*equal;
-	char	*start;
-	char	*value;
-	char	*tmp;
-
-	if (env_match)
-	{
-		tmp = (char *)match->content;
-		equal = ft_strchr(env_match, '=');
-		if (!equal)
-			return (NULL);
-		if (equal[1])
-			start = &equal[1];
-		value = ft_strdup(start);
-	}
-	else
-		value = (char *)ft_calloc(1, sizeof(char));
-	if (!value)
-		return (NULL);
-	return (value);
-}*/
-
-int	var_len(char *str)
-{
-	int		i;
-	char	*equal;
-
-	if (!str)
-		return (0);
-	i = 0;
-	equal = ft_strchr(str, '=');
-	if (!equal)
-		return (ft_strlen(str));
-	while (str[i] && str[i] != *equal)
-		i++;
-	return (i);
-}
-
-t_list	*check_env_var(char *str, int tk_len, t_list *env)
-{
-	int		env_var_len;
+	int		env_varname_len;
 	int		check;
 	char	*var;
 	t_list	*tmp;
 
-	if (!str || !tk_len || !env)
-		return (NULL);
+	if (!str || !in_len || !env)
+		return (arg_err(), NULL);
 	check = 0;
 	tmp = env;
 	while (tmp)
 	{
 		var = (char *)tmp->content;
-		env_var_len = var_len(var);
-		check = ft_strncmp(str, var, tk_len);
-		if (check == 0 && tk_len == env_var_len)
+		env_varname_len = env_key_len(var, '=');
+		check = ft_strncmp(str, var, in_len);
+		if (check == 0 && in_len == env_varname_len)
 			break ;
 		tmp = tmp->next;
 	}
 	return (tmp);
 }
 
-/*
- * env_value = get_env_value_v1(match);
- * env_value = get_env_value_v2(match, len);
- * */
-char	*obtain_env_var_value(char *dollar, t_list *env)
+char	*obtain_env_var_value(t_env *env, char *dollar)
 {
-	int		len;
+	int		in_len;
 	char	*sd[2];
 	char	*env_value;
 	t_list	*match;
 
+	if (dollar[1] && dollar[1] == '?')
+	{
+		if (env->r)
+			env_value = ft_itoa(env->r);
+		else
+			env_value = ft_strdup("0");
+		if (!env_value)
+			return (malloc_err(), NULL);
+		return (env_value);
+	}
 	sd[START] = dollar + 1;
-	len = expansion_len(sd[START]);
-	sd[END] = dollar + len;
-	match = check_env_var(sd[START], len, env);
-	env_value = get_env_value_v2(match, len);
+	in_len = varname_len_in_str(sd[START]);
+	sd[END] = dollar + in_len;
+	match = check_env_var(sd[START], in_len, (t_list *)env->vars);
+	env_value = get_env_value(match, in_len);
 	if (!env_value)
 		return (NULL);
 	return (env_value);
 }
 
-int	count_dollar(char *exp_tk)
-{
-	int		count;
-	char	*check_point;
-
-	count = 0;
-	check_point = exp_tk;
-	while (check_point)
-	{
-		check_point = ft_strchr(check_point, '$');
-		if (!check_point)
-			break ;
-		if (is_dollar_valid(check_point))
-			count++;
-		check_point++;
-	}
-	return (count);
-}
-
-char	**exp_values(t_token *tk, t_list *env)
+char	**exp_values(t_env *env, char *str, int n_dollar)
 {
 	int		j;
-	int		n;
 	char	**exp_str;
 	char	*check_point;
 
 	j = 0;
-	n = count_dollar(tk->token);
-	exp_str = (char **)ft_calloc(n + 1, sizeof(char *));
+	exp_str = (char **)ft_calloc(n_dollar + 1, sizeof(char *));
 	if (!exp_str)
-		return (NULL);
-	check_point = tk->token;
-	while (j < n)
+		return (malloc_err(), NULL);
+	check_point = str;
+	while (j < n_dollar)
 	{
 		check_point = ft_strchr(check_point, '$');
-		if (check_point && is_dollar_valid(check_point))
+		if (check_point && is_dollar_valid(str, check_point))
 		{
-			exp_str[j] = obtain_env_var_value(check_point, env);
+			exp_str[j] = obtain_env_var_value(env, check_point);
 			if (!exp_str[j])
-				return (ft_free_2p(exp_str), NULL);
+				return (malloc_err(), ft_free_2p(exp_str), NULL);
 		}
 		check_point++;
 		j++;
 	}
+	exp_str[j] = NULL;
 	return (exp_str);
 }
 
-t_bool	exp_mng(t_token **tk, t_list *env)
+t_bool	exp_mng(t_env *env, char **str)
 {
+	int		n_dollar;
 	char	**values;
+	char	*new_str;
 
-	if (!*tk || !env)
-		return (FALSE);
-	values = exp_values(*tk, env);
+	n_dollar = count_dollar(*str);
+	if (n_dollar == 0)
+		return (TRUE);
+	values = exp_values(env, *str, n_dollar);
 	if (!values)
 		return (FALSE);
-	if (!*values)
+	new_str = exchange_exp_var(values, *str);
+	if (!new_str)
 		return (ft_free_2p(values), FALSE);
-	if ((*tk)->quote_type == NO_QUOTE)
-		exp_no_quote(tk, values);
-	else if ((*tk)->quote_type == DOUBLE_QUOTE)
-		exp_double_quote(tk, values);
+	ft_swap_str(&new_str, str);
+	free(new_str);
 	ft_free_2p(values);
 	return (TRUE);
 }
 
-t_bool	expander(t_list **lex, t_list *env)
+t_bool	dir_loop(t_env *env, t_redir *dir)
 {
-	t_token	*tk;
-	t_list	*tmp;
+	int	j;
 
-	tmp = *lex;
-	if (!env || !*lex)
-		return (FALSE);
+	j = 0;
+	if (!dir)
+		return (TRUE);
+	while (dir[j].file)
+	{
+		if (!exp_mng(env, &dir[j].file))
+			return (FALSE);
+		j++;
+	}
+	return (TRUE);
+}
+
+t_bool	arg_loop(t_env *env, char **arg)
+{
+	int	j;
+
+	j = 0;
+	if (!arg)
+		return (TRUE);
+	while (arg[j])
+	{
+		if (!exp_mng(env, &arg[j]))
+			return (FALSE);
+		j++;
+	}
+	return (TRUE);
+}
+
+t_bool	expander(t_env *env, t_list **pars)
+{
+	t_list	*tmp;
+	t_cmmd	*curr_cmmd;
+	t_redir	*dir;
+	char	**arg;
+
+	if (!pars || !env)
+		return (arg_err(), FALSE);
+	tmp = *pars;
 	while (tmp)
 	{
-		tk = ((t_token *)tmp->content);
-		if (tk->type == EXP)
-			if (!exp_mng(&tk, env))
-				return (FALSE);
+		curr_cmmd = (t_cmmd *)tmp->content;
+		arg = curr_cmmd->cmmd;
+		dir = (t_redir *)curr_cmmd->dir;
+		if (!arg_loop(env, arg))
+			return (FALSE);
+		if (!dir_loop(env, dir))
+			return (FALSE);
 		tmp = tmp->next;
 	}
-	print_tokens(*lex, TRUE, 0);
 	return (TRUE);
 }
