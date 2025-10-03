@@ -12,31 +12,29 @@
    		- [x] Gestion comillas dobles y comillas simples
      		- [x] Simbolo dolar
 	- [x] Parser 04/09/25 (M)
-	- [ ] Expander
+	- [x] Expander
   
 - [ ] Ejecutables: 01/09/25  (F)
-	- [ ] Ejecutar ejecutable
-	- [ ] Pipex: | (Info interesante: [link](https://www.cs.toronto.edu/~rupert/209/lec09.pdf))
-	- [ ] Redirecciones: <, <<, >, >>
+	- [x] Ejecutar ejecutable
+	- [x] Pipex: | (Info interesante: [link](https://www.cs.toronto.edu/~rupert/209/lec09.pdf))
+	- [x] Redirecciones: <, <<, >, >>
    
 - [ ] Built-ins:
 	- [ ] ctrl-C, ctrl-D, ctrl-\
-	- [ ] echo
-	- [ ] cd
-	- [ ] pwd
-	- [ ] export
-	- [ ] unset
-	- [ ] env
-	- [ ] exit
+	- [x] echo
+	- [x] cd
+	- [x] pwd
+	- [x] export
+	- [x] unset
+	- [x] env
+	- [x] exit
    
- - [ ] HEREDOC
+ - [x] HEREDOC
  - [ ] Gestor de señales 08/09/25 (F)
- - [ ] Historial (11/09/25)
+ - [x] Historial (11/09/25)
 
 - [ ] TESTS (extra)
 
 
 ## Casos extra
-
-- ls | > hola
-- > hola | ls
+- cat | cat | ls
