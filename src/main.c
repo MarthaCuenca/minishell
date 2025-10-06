@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 18:20:41 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:53:40 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,11 @@ void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 		/*mini_env->r = fake_exec(mini_env, pars);
 		if (mini_env->r < 0)
 			return ;*/
-		excecutor(*pars, mini_env);
+		if (!excecutor(*pars, mini_env))
+		{
+			clean_mng(NULL, NULL, NULL, pars);
+			return ;
+		}
 		clean_mng(NULL, NULL, NULL, pars);
 	}
 }

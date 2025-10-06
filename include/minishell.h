@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/06 14:38:28 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:24:45 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
 int	excecutor(t_list *lst_cmmd, t_env *tenv);
 
 // CMMD
-void	manage_infile(t_cmmd *cmmd);
-void	manage_outfile(t_cmmd *cmmd);
+int		manage_infile(t_cmmd *cmmd, t_env *env);
+int		manage_outfile(t_cmmd *cmmd, t_env *env);
 int		exec_cmmd(t_list *lst_cmmd, t_env *env);
 int		is_builtin(char *str);
 void	choose_builtin(t_cmmd *cmmd, t_env *env);

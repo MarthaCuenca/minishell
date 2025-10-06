@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:20:50 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:34:30 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	pipe_e(int pipefd[2], t_env *env)
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
-		env->r = 1;
+		env->r = -4;
 		return (0);
 	}
 	return (1);
@@ -49,16 +49,17 @@ void	execve_e(t_cmmd *cmmd, t_env *env)
 
 	arr_env = env_to_array(env);
 	if (!arr_env)
-		exit(1);
-	if (cmmd->cmmd[0])
+		env->r = -1;
+	else if (cmmd->cmmd[0])
 	{
 		execve(cmmd->cmmd[0], cmmd->cmmd, arr_env);
-		ft_free_split(arr_env);
 		perror(cmmd->cmmd[0]);
-		exit(127);
+		env->r = 127;
 	}
-	ft_free_split(arr_env);
-	exit(0);
+	else
+		env->r = 0;
+	if (arr_env)
+		ft_free_split(arr_env);
 }
 
 int	fork_e(pid_t pid, t_env *env)
@@ -66,7 +67,7 @@ int	fork_e(pid_t pid, t_env *env)
 	if (pid < 0)
 	{
 		perror("fork");
-		env->r = 1;
+		env->r = -4;
 		return (0);
 	}
 	return (1);

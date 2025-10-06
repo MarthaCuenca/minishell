@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:56:16 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:35:47 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
 	cmmd = (t_cmmd *)lst_cmmd->content;
 	if (!lst_cmmd->next && is_builtin(cmmd->cmmd[0]))
 	{
-		manage_infile(cmmd);
-		manage_outfile(cmmd);
+		manage_infile(cmmd, env);
+		manage_outfile(cmmd, env);
 		choose_builtin(cmmd, env);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:02:57 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:41:23 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	manage_pipes(t_pipe_data *pipe_data, int is_last)
 		pipe_data->last_pid = pipe_data->pid;
 }
 
-void	manage_infile(t_cmmd *cmmd)
+int	manage_infile(t_cmmd *cmmd, t_env *env)
 {
 	int	fd;
 	int	i;
@@ -61,16 +61,18 @@ void	manage_infile(t_cmmd *cmmd)
 			if (fd < 0)
 			{
 				perror("open infile");
-				exit(1);
+				env->r = -4;
+				return (0);
 			}
 			if (n == 0)
 				dup2(fd, 0);
 			close(fd);
 		}
 	}
+	return (1);
 }
 
-void	manage_outfile(t_cmmd *cmmd)
+int	manage_outfile(t_cmmd *cmmd, t_env *env)
 {
 	int	fd;
 	int	i;
@@ -89,12 +91,14 @@ void	manage_outfile(t_cmmd *cmmd)
 		if (fd < 0)
 		{
 			perror("open outfile");
-			exit(1);
+			env->r = -4;
+			return (0);
 		}
 		if (n == 0)
 			dup2(fd, 1);
 		close(fd);
 	}
+	return (1);
 }
 
 int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
@@ -111,14 +115,14 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 	if (pipe_data->pid == 0)
 	{
 		manage_pipes(pipe_data, lst_cmmd->next == NULL);
-		manage_infile(cmmd);
-		manage_outfile(cmmd);
+		if (!manage_infile(cmmd, env) || !manage_outfile(cmmd, env))
+			return (0);
 		if (is_builtin(cmmd->cmmd[0]))
-		{
 			choose_builtin(cmmd, env);
-			exit(env->r);
-		}
-		execve_e(cmmd, env);
+		else
+			execve_e(cmmd, env);
+		clean_mng(env, NULL, NULL, &lst_cmmd);
+		exit(env->r);
 	}
 	else
 		manage_pipes(pipe_data, lst_cmmd->next == NULL);
@@ -136,7 +140,7 @@ int	exec_cmmd(t_list *lst_cmmd, t_env *env)
 	while (lst_cmmd)
 	{
 		if (!exec_cmmd_node(lst_cmmd, &pipe_data, env))
-			return (1);
+			return (0);
 		lst_cmmd = lst_cmmd->next;
 	}
 	process_exit_status(&pipe_data, env);
