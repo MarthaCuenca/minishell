@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 15:23:37 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:44:43 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_state	update_curr(t_list **curr, char *new_pwd)
 		return (ST_ERR);
 	free((*curr)->content);
 	(*curr)->content = result;
-	return (ST_VALID);
+	return (0);
 }
 
 t_state	update_old(t_list **old, char *curr_pwd)
@@ -41,7 +41,7 @@ t_state	update_old(t_list **old, char *curr_pwd)
 		return (ST_ERR);
 	free((*old)->content);
 	(*old)->content = result;
-	return (ST_VALID);
+	return (0);
 }
 
 t_state	update_path(t_env **mini_env, char *new_pwd)
@@ -57,7 +57,7 @@ t_state	update_path(t_env **mini_env, char *new_pwd)
 		return (free(new_pwd), ST_ERR);
 	if (update_curr(&curr, new_pwd) == ST_ERR)
 		return (free(new_pwd), ST_ERR);
-	return (ST_VALID);
+	return (0);
 }
 
 /*char	*obtain_abs_path(void)

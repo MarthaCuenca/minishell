@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:21:29 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:43:21 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static char	*create_filename(char *str_name, int counter)
+static char	*create_filename(char *str_name, int counter, t_env *env)
 {
 	char	*filename;
 	char	*str_num;
 
 	str_num = ft_itoa(counter);
 	if (!str_num)
-		return (NULL);
+		return (get_error_chr(env, ST_ERR_MALLOC, NULL));
 	filename = ft_strjoin(str_name, str_num);
+	if (!filename)
+		return (get_error_chr(env, ST_ERR_MALLOC, NULL));
 	free(str_num);
 	return (filename);
 }
@@ -46,7 +48,7 @@ void	close_heredocs(t_list *lst_cmmd)
 	}
 }
 
-static void	write_heredoc(char *str_stop, int fd)
+static int	write_heredoc(char *str_stop, int fd, t_env *env)
 {
 	char	*next_line;
 	int		n;
@@ -60,31 +62,37 @@ static void	write_heredoc(char *str_stop, int fd)
 		if (!ft_strncmp(next_line, str_stop, n) && next_line[n] == '\n')
 			break ;
 		ft_putstr_fd("heredoc> ", 1);
-		ft_putstr_fd(next_line, fd);
+		if (ft_putstr_fd(next_line, fd) == 0)
+			{
+				free(next_line);
+			return (get_error(env, ST_ERR_FD, NULL));
+		}
 		free(next_line);
 		next_line = NULL;
 		next_line = get_next_line(0);
 	}
 	if (next_line)
 		free(next_line);
+	return (1);
 }
 
-static int	create_heredoc(t_redir *redir, int *counter)
+static int	create_heredoc(t_redir *redir, int *counter, t_env *env)
 {
 	int		fd;
 	char	*filename;
 
-	filename = create_filename("heredoc", *counter);
+	filename = create_filename("heredoc", *counter, env);
 	if (!filename)
 		return (0);
 	fd = open(\
 		filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (!fd)
+	if (!fd || !write_heredoc(redir->file, fd, env))
 	{
 		free(filename);
+		env->r = -2;
+		close(fd);
 		return (0);
 	}
-	write_heredoc(redir->file, fd);
 	close(fd);
 	free(redir->file);
 	redir->file = filename;
@@ -92,7 +100,7 @@ static int	create_heredoc(t_redir *redir, int *counter)
 	return (1);
 }
 
-int	create_heredocs(t_list *lst_cmmd)
+int	create_heredocs(t_list *lst_cmmd, t_env *env)
 {
 	int		i;
 	int		count_heredoc;
@@ -105,7 +113,7 @@ int	create_heredocs(t_list *lst_cmmd)
 		i = -1;
 		while (cmmd->redir[++i].file)
 			if (cmmd->redir[i].type == HEREDOC)
-				if (!create_heredoc(cmmd->redir + i, &count_heredoc))
+				if (!create_heredoc(cmmd->redir + i, &count_heredoc, env))
 					return (0);
 		lst_cmmd = lst_cmmd->next;
 	}

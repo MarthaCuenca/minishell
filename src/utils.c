@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:22:19 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:48:19 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,36 @@
 #include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+int	get_error(t_env *env, t_state state, char *msg)
+{
+	if (state == ST_OK)
+		return (1);
+	else if (state == ST_ERR_MALLOC && !msg)
+		ft_putstr_fd("Error: memory allocation\n", 2);
+	else if (state == ST_ERR_FD && !msg)
+		ft_putstr_fd("Error: file descriptor\n", 2);
+	else if (!msg)
+		ft_putstr_fd("Error!", 2);
+	if (msg)
+		ft_putendl_fd(msg, 2);
+	env->r = state;
+	return (0);
+}
+
+char	*get_error_chr(t_env *env, t_state state, char *msg)
+{
+	if (state == ST_ERR_MALLOC && !msg)
+		ft_putstr_fd("Error: memory allocation\n", 2);
+	else if (state == ST_ERR_FD && !msg)
+		ft_putstr_fd("Error: file descriptor\n", 2);
+	else if (!msg)
+		ft_putstr_fd("Error!", 2);
+	if (msg)
+		ft_putendl_fd(msg, 2);
+	env->r = state;
+	return (NULL);
+}
 
 void	free_cmmd_node(void *ptr)
 {

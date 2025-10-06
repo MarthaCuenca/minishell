@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:58 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:03:13 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:28:00 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,56 +15,62 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	free_return(char **split, int result)
+static int	free_return(char **split, int result, t_env *env)
 {
+	if (result == 0)
+		get_error(env, ST_ERR_MALLOC, NULL);
 	ft_free_split(split);
 	return (result);
 }
 
-static char	**split_envpath(void)
+static char	**split_envpath(t_env *env)
 {
 	char	*path_str;
 	char	**path_split;
 
 	path_str = getenv("PATH");
 	if (!path_str)
+	{
+		ft_putstr_fd("Error: env $PATH\n", 2);
+		env->r = -4;
 		return (NULL);
+	}
 	path_split = ft_split(path_str, ':');
 	if (!path_split)
-		return (NULL);
+	{
+		ft_putstr_fd("Error: memory allocation\n", 2);
+		env->r = -1;
+	}
 	return (path_split);
 }
 
-static int	correct_namepath(char **cmmd_2ptr)
+static int	correct_namepath(char **cmmd_2ptr, t_env *env)
 {
 	char	**path_split;
 	char	*cmmd_joined;
-	char	*cmmd_name;
 	int		i;
 
-	cmmd_name = *cmmd_2ptr;
-	path_split = split_envpath();
+	path_split = split_envpath(env);
 	if (!path_split)
 		return (0);
 	i = -1;
 	while (path_split[++i])
 	{
-		cmmd_joined = ft_join_path(path_split[i], cmmd_name);
+		cmmd_joined = ft_join_path(path_split[i], *cmmd_2ptr);
 		if (!cmmd_joined)
-			return (free_return(path_split, 0));
+			return (free_return(path_split, 0, env));
 		if (access(cmmd_joined, F_OK) == 0)
 		{
-			free(cmmd_name);
+			free(*cmmd_2ptr);
 			*cmmd_2ptr = cmmd_joined;
-			return (free_return(path_split, 1));
+			return (free_return(path_split, 1, env));
 		}
 		free(cmmd_joined);
 	}
-	free(path_split);
-	return (1);
+	return (free_return(path_split, 1, env));
 }
 
-int	correct_cmmd_namepath(t_list *lst_cmmd)
+int	correct_cmmd_namepath(t_list *lst_cmmd, t_env *env)
 {
 	t_cmmd	*cmmd;
 
@@ -75,7 +81,7 @@ int	correct_cmmd_namepath(t_list *lst_cmmd)
 		{
 			if (is_builtin(cmmd->cmmd[0]) || ft_strchr(cmmd->cmmd[0], '/'))
 				;
-			else if (!correct_namepath(cmmd->cmmd))
+			else if (!correct_namepath(cmmd->cmmd, env))
 				return (0);
 		}
 		lst_cmmd = lst_cmmd->next;

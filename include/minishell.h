@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 17:26:31 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:38:28 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ typedef enum e_bool
 
 typedef enum e_state
 {
-	ST_ERR = -1,
-	ST_INVALID = 0,
-	ST_VALID = 1
+	ST_OK = 0,
+	ST_ERR_MALLOC = -1,
+	ST_ERR_FD = -2,
+	ST_ERR = -4,
 }	t_state;
 
 /*** *** *** *** *** *** *** *** *** ENV *** *** *** *** *** *** *** *** ***/
@@ -154,13 +155,14 @@ void	process_exit_status(t_pipe_data *pipe_data, t_env *env);
 // Init
 t_list	*init_lst_cmmd(char **argv);
 void	free_cmmd_node(void *ptr);
-int		correct_cmmd_namepath(t_list *lst_cmmd);
-int		create_heredocs(t_list *lst_cmmd);
+int		correct_cmmd_namepath(t_list *lst_cmmd, t_env *env);
+int		create_heredocs(t_list *lst_cmmd, t_env *env);
 void	close_heredocs(t_list *lst_cmmd);
 
 // Utils
 void	print_lst_cmmd(t_list *lst_cmmd);
-
+int		get_error(t_env *env, t_state state, char *msg);
+char	*get_error_chr(t_env *env, t_state state, char *msg);
 int		builtin_echo(t_cmmd *nd);
 int		builtin_cd(t_env *mini_env, char **cmmd);
 int		builtin_pwd(t_env *mini_env);

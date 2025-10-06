@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/29 15:19:20 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/06 14:46:32 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_state	new_env_var_value_bi_export(t_list **node, char *str)
 		return (ST_ERR);
 	ft_swap_str(&tmp, &dup);
 	free(tmp);
-	return (ST_VALID);
+	return (0);
 }
 
 t_state	new_var_bi_export(t_list **vars, char *str)
@@ -89,7 +89,7 @@ t_state	new_var_bi_export(t_list **vars, char *str)
 	if (!new_node)
 		return (malloc_err(), ST_ERR);
 	ft_lstadd_back(vars, new_node);
-	return (ST_VALID);
+	return (0);
 }
 
 t_bool	valid_env_varname_syntax(char *str, int len)
@@ -113,14 +113,14 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 	t_state	state;
 	t_list	*tmp;
 
-	state = ST_VALID;
+	state = 0;
 	tmp = check_env_var(str, len, *vars);
 	if (!tmp)
 	{
 		if (valid_env_varname_syntax(str, len))
 			state = new_var_bi_export(vars, str);
 		else
-			return (ST_INVALID);
+			return (-1);
 	}
 	else
 		state = new_env_var_value_bi_export(&tmp, str);
@@ -144,7 +144,7 @@ int	builtin_export(t_env *mini_env, char **cmmd)
 		state = bi_export_loop(&mini_env->vars, cmmd[j], len);
 		if (state == ST_ERR)
 			return (malloc_err(), -1);
-		else if (state == ST_INVALID)
+		else if (state == -1)
 			rt_val = 1;
 		j++;
 	}
