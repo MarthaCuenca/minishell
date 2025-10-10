@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/06 14:46:32 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 17:47:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int	declare_print(char **env_arr)
+void	declare_print(char **env_arr)
 {
 	int		j;
 	char	**tmp;
 
-	if (!env_arr)
-		return (1);
 	j = 0;
 	tmp = env_arr;
 	while (env_arr[j])
 		printf("declare -x %s\n", tmp[j++]);
-	return (0);
 }
 
 void	ft_sort_ascii(char **env_arr, int count)
 {
 	int	i;
 	int	j;
+	int	len;
 
 	j = 0;
 	while (j < count)
 	{
 		i = j + 1;
+		len = env_key_len(env_arr[j], '=');
 		while (i < count)
 		{
-			if (ft_strcmp(env_arr[j], env_arr[i]) > 0)
+			if (ft_strncmp(env_arr[j], env_arr[i], len) > 0)
 				ft_swap_str(&env_arr[j], &env_arr[i]);
 			i++;
 		}
@@ -48,7 +47,7 @@ void	ft_sort_ascii(char **env_arr, int count)
 	}
 }
 
-int	builtin_export_print(t_env	*mini_env)
+t_state	builtin_export_print(t_env	*mini_env)
 {
 	int		count;
 	char	**tmp;
@@ -56,11 +55,11 @@ int	builtin_export_print(t_env	*mini_env)
 	count = ft_lstsize(mini_env->vars);
 	tmp = env_to_array(mini_env);
 	if (!tmp)
-		return (-1);
+		return (ST_ERR_MALLOC);//return (-1);
 	ft_sort_ascii(tmp, count);
 	declare_print(tmp);
 	ft_free_2p(tmp);
-	return (0);
+	return (ST_OK);
 }
 
 t_state	new_env_var_value_bi_export(t_list **node, char *str)
@@ -72,33 +71,38 @@ t_state	new_env_var_value_bi_export(t_list **node, char *str)
 	dup = ft_strdup(str);
 	if (!dup)
 		return (ST_ERR);
-	ft_swap_str(&tmp, &dup);
+	(*node)->content = dup;
 	free(tmp);
-	return (0);
+	return (ST_OK);//return (ST_VALID);
 }
 
 t_state	new_var_bi_export(t_list **vars, char *str)
 {
-	char	*dup;
+	char	*equal_char;
+	char	*new_str;
 	t_list	*new_node;
 
-	dup = ft_strdup(str);
-	if (!dup)
+	equal_char = ft_strchr(str, '=');
+	if (equal_char && !equal_char[1])
+		new_str = ft_strjoin(str, "\"\"");
+	else
+		new_str = ft_strdup(str);
+	if (!new_str)
 		return (ST_ERR);
-	new_node = ft_lstnew(dup);
+	new_node = ft_lstnew(new_str);
 	if (!new_node)
-		return (malloc_err(), ST_ERR);
+		return (ST_ERR_MALLOC);//return (malloc_err(), ST_ERR);
 	ft_lstadd_back(vars, new_node);
-	return (0);
+	return (ST_OK);//return (ST_VALID);
 }
 
 t_bool	valid_env_varname_syntax(char *str, int len)
 {
 	int	i;
 
-	if (!ft_isalpha(str[0]))
+	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (FALSE);
-	i = 0;
+	i = 1;
 	while (str[i] && i < len)
 	{
 		if (!ft_isalnum(str[i]) || str[i] == '_')
@@ -113,14 +117,14 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 	t_state	state;
 	t_list	*tmp;
 
-	state = 0;
+	state = ST_OK;//state = ST_VALID;
 	tmp = check_env_var(str, len, *vars);
 	if (!tmp)
 	{
 		if (valid_env_varname_syntax(str, len))
 			state = new_var_bi_export(vars, str);
 		else
-			return (-1);
+			return (ST_ERR);//return (-1);//return (ST_INVALID);
 	}
 	else
 		state = new_env_var_value_bi_export(&tmp, str);
@@ -135,17 +139,17 @@ int	builtin_export(t_env *mini_env, char **cmmd)
 	t_state	state;
 
 	j = 1;
-	rt_val = 0;
+	rt_val = ST_OK;//rt_val = 0;
 	if (!cmmd[1])
 		return (builtin_export_print(mini_env));
 	while (cmmd[j])
 	{
 		len = env_key_len(cmmd[j], '=');
 		state = bi_export_loop(&mini_env->vars, cmmd[j], len);
-		if (state == ST_ERR)
-			return (malloc_err(), -1);
-		else if (state == -1)
-			rt_val = 1;
+		if (state == ST_ERR_MALLOC)
+			return (ST_ERR_MALLOC);//return (malloc_err(), -1);
+		else if (state == ST_ERR)//else if(state = ST_INVALID)
+			rt_val = ST_ERR;
 		j++;
 	}
 	return (rt_val);

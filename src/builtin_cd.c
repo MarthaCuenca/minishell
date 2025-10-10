@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/06 14:44:43 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 18:10:50 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ t_state	update_curr(t_list **curr, char *new_pwd)
 
 	result = ft_strjoin("PWD=", new_pwd);
 	if (!result)
-		return (ST_ERR);
+		return (ST_ERR_MALLOC);
 	free((*curr)->content);
 	(*curr)->content = result;
-	return (0);
+	return (ST_OK);
 }
 
 t_state	update_old(t_list **old, char *curr_pwd)
@@ -38,13 +38,13 @@ t_state	update_old(t_list **old, char *curr_pwd)
 	up_old = ft_strchr(curr_pwd, '=') + 1;
 	result = ft_strjoin("OLDPWD=", up_old);
 	if (!result)
-		return (ST_ERR);
+		return (ST_ERR_MALLOC);
 	free((*old)->content);
 	(*old)->content = result;
-	return (0);
+	return (ST_OK);
 }
 
-t_state	update_path(t_env **mini_env, char *new_pwd)
+t_state	update_path(t_env **mini_env, char *new_pwd, char *cmmd)
 {
 	t_list	*tmp;
 	t_list	*old;
@@ -53,22 +53,14 @@ t_state	update_path(t_env **mini_env, char *new_pwd)
 	tmp = (t_list *)(*mini_env)->vars;
 	old = check_env_var("OLDPWD", 6, (*mini_env)->vars);
 	curr = check_env_var("PWD", 3, (*mini_env)->vars);
-	if (update_old(&old, (char *)curr->content) == ST_ERR)
-		return (free(new_pwd), ST_ERR);
-	if (update_curr(&curr, new_pwd) == ST_ERR)
-		return (free(new_pwd), ST_ERR);
-	return (0);
+	if (update_old(&old, (char *)curr->content) == ST_ERR_MALLOC)
+		return (free(new_pwd), ST_ERR_MALLOC);
+	if (update_curr(&curr, new_pwd) == ST_ERR_MALLOC)
+		return (free(new_pwd), ST_ERR_MALLOC);
+	if (cmmd && cmmd[0] == '-' && !cmmd[1])
+		printf("%s\n", ft_strchr((char *)curr->content, '=') + 1);
+	return (ST_OK);//return (0);
 }
-
-/*char	*obtain_abs_path(void)
-{
-	char	*new_path;
-
-	new_path = getcwd(NULL, 0);
-	if (!new_path)
-		return (NULL);
-	return (new_path);
-}*/
 
 char	*relative_path(t_env *mini_env, char *cmmd)
 {
@@ -161,46 +153,39 @@ char	*check_path(t_env *mini_env, char *cmmd)
 	return (result);
 }
 
-int	bi_cd(t_env **mini_env, char *cmmd)
+t_state	bi_cd(t_env **mini_env, char *cmmd)
 {
 	char	*new_pwd;
 	char	*tmp;
 
 	tmp = check_path(*mini_env, cmmd);
 	if (!tmp)
-		return (-1);
+		return (ST_ERR_MALLOC);
 	if (access(tmp, F_OK) != 0)
-		return (printf("bash: cd: %s: No such file or directory.\n", tmp), 1);
+		return (ST_ERR);//return (printf("bash: cd: %s: No such file or directory.\n", tmp), 1);
 	else if (chdir(tmp) != 0)
-		return (printf("bash: cd: %s: Permission denied.\n", tmp), 1);
+		return (ST_ERR);//return (printf("bash: cd: %s: Permission denied.\n", tmp), 1);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
-		return (-1);
-	if (update_path(mini_env, new_pwd) == ST_ERR)
-		return (-1);
+		return (ST_ERR_MALLOC);
+	if (update_path(mini_env, new_pwd, cmmd) == ST_ERR_MALLOC)
+		return (ST_ERR_MALLOC);
 	free(new_pwd);
 	free(tmp);
-	return (0);
+	return (ST_OK);
 }
 
-int	builtin_cd(t_env *mini_env, char **cmmd)//AQUI, PROBAR
+int	builtin_cd(t_env *mini_env, char **cmmd) 
 {
-	//access para los permisos
-	//chdir
-	//closedir
-	//opendir
-	//flags: - (no es una flag, es una ruta al OLDPWD)
-	//flags: ~
-	//cd sin argmentos (?)
 	int	state;
 
 	state = 0;
 	if (cmmd[1])
 	{
 		if (cmmd[2])
-			return (printf("bash: cd: too many arguments.\n"), 1);
+			return (ST_ERR);//return (printf("bash: cd: too many arguments.\n"), 1);
 		else
-			state = bi_cd(&mini_env, cmmd[1]);//printf("🎊MORE🎊\n");
+			state = bi_cd(&mini_env, cmmd[1]);
 	}
 	else
 		state = bi_cd(&mini_env, NULL);

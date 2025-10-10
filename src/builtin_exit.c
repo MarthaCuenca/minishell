@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/29 15:36:06 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:44:04 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -31,59 +31,6 @@ int	check_arg_bi_exit(char **cmmd)
 	return (num);
 }
 
-/*int	dir_in(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-	{
-		perror(file);
-		printf("Error: %s: No such file or directory\n", file);
-		return (1);
-	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	return (0);
-}
-
-int	append_dir_out(char *file, t_redir_type type)
-{
-	int	fd;
-
-	if (type == APPEND)
-		fd = open(file, O_WRONLY | O_CREAT | APPEND, 0644);
-	else
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror(file);
-		return (1);
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	return (0);
-}
-
-int	check_redir_bi_exit(t_redir *dir)
-{
-	int		i;
-	int		status;
-	t_redir	*tmp;
-
-	i = 0;
-	tmp = dir;
-	while (tmp[i].file)
-	{
-		if (tmp[i].type == APPEND || tmp[i].type == DIR_OUT)
-			status = append_dir_out(tmp[i].file, tmp[i].type);
-		else if (tmp[i].type == DIR_IN)
-			status = dir_in(tmp[i].file);
-		i++;
-	}
-	return (status);
-}*/
-
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 {
 	int		status;
@@ -92,13 +39,6 @@ void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 	status = 0;
 	tmp = nd;
 	//cambiar por la funcion de Cesc
-	/*if (tmp->dir)
-		status = check_redir_bi_exit(tmp->dir);
-	if (status == 1)
-	{
-		mini_env->r = status;
-		return ;
-	}*/
 	if (tmp->cmmd[1])
 		status = check_arg_bi_exit(tmp->cmmd);
 	clean_mng(mini_env, NULL, NULL, pars);

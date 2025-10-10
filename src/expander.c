@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 15:58:11 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 17:00:55 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	varname_len_in_str(char *start)
 {
 	int		i;
 	char	*end;
-	char	*symbols[6];
+	char	*symbols[7];
 
 	i = 0;
 	end = NULL;
@@ -27,19 +27,21 @@ int	varname_len_in_str(char *start)
 	symbols[2] = ft_strchr(start, '\'');
 	symbols[3] = ft_strchr(start, '\"');
 	symbols[4] = ft_strchr(start, '$');
-	symbols[5] = ft_strchr(start, '\0');
-	if (!start)
-		return (0);
+	symbols[5] = ft_strchr(start, '\n');
+	symbols[6] = ft_strchr(start, '\0');
+	//if (!start)
+	//	return (0);
 	while (i < 7)
 	{
 		if (symbols[i] && (!end || symbols[i] < end))
 			end = symbols[i];
 		i++;
 	}
-	if (!end)
-		return (0);
-	end -= 1;
-	return (end - start + 1);
+	//if (!end)
+	//	return (0);
+	if ((end - start) == 0)
+		return (1);
+	return (end - start);
 }
 
 int	env_key_len(char *str, int c)
@@ -222,10 +224,7 @@ char	*obtain_env_var_value(t_env *env, char *dollar)
 
 	if (dollar[1] && dollar[1] == '?')
 	{
-		if (env->r)
-			env_value = ft_itoa(env->r);
-		else
-			env_value = ft_strdup("0");
+		env_value = ft_itoa(env->r);
 		if (!env_value)
 			return (malloc_err(), NULL);
 		return (env_value);

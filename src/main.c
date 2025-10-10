@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/06 18:53:40 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:42:06 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ int	main(int argc, char **argv, char **envp)
 	clean_mng(&mini_env, &line, &lex, &pars);//
 	//ft_lstclear(&mini_env.vars, del_char_ptr);
 	rl_clear_history();
-	return (0);
+	return (1);//Si llego hasta aqui es que fue un error de malloc
+	//return (0);
 }
