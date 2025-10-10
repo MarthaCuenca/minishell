@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:00 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/06 18:50:47 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 19:03:54 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	excecutor(t_list *lst_cmmd, t_env *tenv)
 	if (create_heredocs(lst_cmmd, tenv))
 		if (correct_cmmd_namepath(lst_cmmd, tenv))
 			exec_cmmd(lst_cmmd, tenv);
+	close_heredocs(lst_cmmd);
 	if (tenv->r == -1)
 		return (0);
+	
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/06 14:43:21 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/10 19:02:35 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ static int	write_heredoc(char *str_stop, int fd, t_env *env)
 	{
 		if (!ft_strncmp(next_line, str_stop, n) && next_line[n] == '\n')
 			break ;
+		if (!exp_mng(env, &next_line))
+		{
+			free(next_line);
+			return (get_error(env, ST_ERR_MALLOC, NULL));
+		}
 		ft_putstr_fd("heredoc> ", 1);
 		if (ft_putstr_fd(next_line, fd) == 0)
 			{
