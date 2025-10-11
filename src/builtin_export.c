@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 17:47:17 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:35:45 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_state	builtin_export_print(t_env	*mini_env)
 	count = ft_lstsize(mini_env->vars);
 	tmp = env_to_array(mini_env);
 	if (!tmp)
-		return (ST_ERR_MALLOC);//return (-1);
+		return (ST_ERR_MALLOC);
 	ft_sort_ascii(tmp, count);
 	declare_print(tmp);
 	ft_free_2p(tmp);
@@ -73,7 +73,7 @@ t_state	new_env_var_value_bi_export(t_list **node, char *str)
 		return (ST_ERR);
 	(*node)->content = dup;
 	free(tmp);
-	return (ST_OK);//return (ST_VALID);
+	return (ST_OK);
 }
 
 t_state	new_var_bi_export(t_list **vars, char *str)
@@ -91,9 +91,9 @@ t_state	new_var_bi_export(t_list **vars, char *str)
 		return (ST_ERR);
 	new_node = ft_lstnew(new_str);
 	if (!new_node)
-		return (ST_ERR_MALLOC);//return (malloc_err(), ST_ERR);
+		return (ST_ERR_MALLOC);
 	ft_lstadd_back(vars, new_node);
-	return (ST_OK);//return (ST_VALID);
+	return (ST_OK);
 }
 
 t_bool	valid_env_varname_syntax(char *str, int len)
@@ -117,14 +117,14 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 	t_state	state;
 	t_list	*tmp;
 
-	state = ST_OK;//state = ST_VALID;
+	state = ST_OK;
 	tmp = check_env_var(str, len, *vars);
 	if (!tmp)
 	{
 		if (valid_env_varname_syntax(str, len))
 			state = new_var_bi_export(vars, str);
 		else
-			return (ST_ERR);//return (-1);//return (ST_INVALID);
+			return (ST_ERR);
 	}
 	else
 		state = new_env_var_value_bi_export(&tmp, str);
@@ -139,7 +139,7 @@ int	builtin_export(t_env *mini_env, char **cmmd)
 	t_state	state;
 
 	j = 1;
-	rt_val = ST_OK;//rt_val = 0;
+	rt_val = ST_OK;
 	if (!cmmd[1])
 		return (builtin_export_print(mini_env));
 	while (cmmd[j])
@@ -147,8 +147,8 @@ int	builtin_export(t_env *mini_env, char **cmmd)
 		len = env_key_len(cmmd[j], '=');
 		state = bi_export_loop(&mini_env->vars, cmmd[j], len);
 		if (state == ST_ERR_MALLOC)
-			return (ST_ERR_MALLOC);//return (malloc_err(), -1);
-		else if (state == ST_ERR)//else if(state = ST_INVALID)
+			return (ST_ERR_MALLOC);
+		else if (state == ST_ERR)
 			rt_val = ST_ERR;
 		j++;
 	}

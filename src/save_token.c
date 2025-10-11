@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_token_v7.c                                    :+:      :+:    :+:   */
+/*   save_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:33:13 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/23 11:52:13 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:46:29 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_bool	is_special_dollar(char *str, int len)
 	return (FALSE);
 }
 
-static t_token_type	token_type(t_token *nd)//y esto casos ";, &, \ "?
+static t_token_type	token_type(t_token *nd)
 {
 	char	*str;
 	int		quo;
@@ -55,9 +55,6 @@ static t_token_type	token_type(t_token *nd)//y esto casos ";, &, \ "?
 		return (REDIR);
 	else if (ft_strcmp(str, "|") == 0 && quo == NO_QUOTE)
 		return (PIPE);
-	else if (quo != SIMPLE_QUOTE && quo != SIMPLE_QUOTE_IN
-		&& ft_strchr(str, '$'))
-		return (EXP);
 	return (WORD);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:02:10 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 12:34:53 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:34:23 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_less_n(char **cmmd)
 		if (cmmd[j][0] && cmmd[j][0] == '-' && cmmd[j][1] && cmmd[j][1] == 'n')
 		{
 			i = 2;
-			while(cmmd[j][i] && cmmd[j][i] == 'n')
+			while (cmmd[j][i] && cmmd[j][i] == 'n')
 				i++;
 			if (cmmd[j][i] && cmmd[j][i] != 'n')
 				return (j);

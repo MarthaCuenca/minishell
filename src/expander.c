@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 17:00:55 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:44:43 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	check_state(char *str, char *dollar, t_quote *quote_state)
 	}
 }
 
-t_bool	is_dollar_valid(char *str, char *dollar)
+t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 {
 	char	symbols[4];
 	t_quote	quote_state;
@@ -100,7 +100,7 @@ t_bool	is_dollar_valid(char *str, char *dollar)
 	symbols[3] = '\"';
 	quote_state = NO_QUOTE;
 	check_state(str, dollar, &quote_state);
-	if (quote_state == SIMPLE_QUOTE)
+	if (quote_state == SIMPLE_QUOTE && is_heredoc == FALSE)
 		return (FALSE);
 	else if (!dollar[1])
 		return (FALSE);
@@ -109,7 +109,7 @@ t_bool	is_dollar_valid(char *str, char *dollar)
 	return (TRUE);
 }
 
-int	count_dollar(char *str)
+int	count_dollar(char *str, t_bool is_heredoc)
 {
 	int		count;
 	char	*check_point;
@@ -121,14 +121,14 @@ int	count_dollar(char *str)
 		check_point = ft_strchr(check_point, '$');
 		if (!check_point)
 			break ;
-		if (is_dollar_valid(str, check_point))
+		if (is_dollar_valid(str, check_point, is_heredoc))
 			count++;
 		check_point++;
 	}
 	return (count);
 }
 
-void	fill_new_str(char *dest, char **values, char *str)
+void	fill_new_str(char *dest, char **values, char *str, t_bool is_heredoc)
 {
 	int	i;
 	int	j;
@@ -140,7 +140,7 @@ void	fill_new_str(char *dest, char **values, char *str)
 	k = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && is_dollar_valid(str, &str[i]))
+		if (str[i] == '$' && is_dollar_valid(str, &str[i], is_heredoc))
 		{
 			i += varname_len_in_str(&str[i] + 1) + 1;
 			value_len = ft_strlen(values[j]);
@@ -154,7 +154,7 @@ void	fill_new_str(char *dest, char **values, char *str)
 	dest[k] = '\0';
 }
 
-char	*exchange_exp_var(char **values, char *str)
+char	*exchange_exp_var(char **values, char *str, t_bool is_heredoc)
 {
 	int		j;
 	int		len;
@@ -164,10 +164,10 @@ char	*exchange_exp_var(char **values, char *str)
 	len = ft_strlen(str);
 	while (values[j])
 		len += ft_strlen(values[j++]);
-	new_str = (char *)ft_calloc((len + 1), sizeof(char));//AQUI
+	new_str = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!new_str)
 		return (malloc_err(), NULL);
-	fill_new_str(new_str, values, str);
+	fill_new_str(new_str, values, str, is_heredoc);
 	return (new_str);
 }
 
@@ -239,7 +239,7 @@ char	*obtain_env_var_value(t_env *env, char *dollar)
 	return (env_value);
 }
 
-char	**exp_values(t_env *env, char *str, int n_dollar)
+char	**exp_values(t_env *env, char *str, int n_dollar, t_bool is_heredoc)
 {
 	int		j;
 	char	**exp_str;
@@ -253,7 +253,7 @@ char	**exp_values(t_env *env, char *str, int n_dollar)
 	while (j < n_dollar)
 	{
 		check_point = ft_strchr(check_point, '$');
-		if (check_point && is_dollar_valid(str, check_point))
+		if (check_point && is_dollar_valid(str, check_point, is_heredoc))
 		{
 			exp_str[j] = obtain_env_var_value(env, check_point);
 			if (!exp_str[j])
@@ -266,19 +266,19 @@ char	**exp_values(t_env *env, char *str, int n_dollar)
 	return (exp_str);
 }
 
-t_bool	exp_mng(t_env *env, char **str)
+t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc)
 {
 	int		n_dollar;
 	char	**values;
 	char	*new_str;
 
-	n_dollar = count_dollar(*str);
+	n_dollar = count_dollar(*str, is_heredoc);
 	if (n_dollar == 0)
 		return (TRUE);
-	values = exp_values(env, *str, n_dollar);
+	values = exp_values(env, *str, n_dollar, is_heredoc);
 	if (!values)
 		return (FALSE);
-	new_str = exchange_exp_var(values, *str);
+	new_str = exchange_exp_var(values, *str, is_heredoc);
 	if (!new_str)
 		return (ft_free_2p(values), FALSE);
 	ft_swap_str(&new_str, str);
@@ -296,8 +296,9 @@ t_bool	dir_loop(t_env *env, t_redir *dir)
 		return (TRUE);
 	while (dir[j].file)
 	{
-		if (!exp_mng(env, &dir[j].file))
-			return (FALSE);
+		if (dir[j].type != HEREDOC)
+			if (!exp_mng(env, &dir[j].file, FALSE))
+				return (FALSE);
 		j++;
 	}
 	return (TRUE);
@@ -312,7 +313,7 @@ t_bool	arg_loop(t_env *env, char **arg)
 		return (TRUE);
 	while (arg[j])
 	{
-		if (!exp_mng(env, &arg[j]))
+		if (!exp_mng(env, &arg[j], FALSE))
 			return (FALSE);
 		j++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:54:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 17:37:11 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:45:28 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,8 @@ t_cmmd	*get_cmmd_data(t_list *lex, int n_dir, int n_arg)
 	t_redir	*dir_arr;
 	t_cmmd	*nd;
 
-	//arg_arr = NULL;
-	//if (n_arg > 0)
 	if (!create_arg_array(lex, &arg_arr, n_arg))
 		return (NULL);
-	//dir_arr = NULL;
-	//if (n_dir > 0)
 	if (!create_dir_array(lex, &dir_arr, n_dir))
 		return (ft_free_2p(arg_arr), NULL);
 	nd = create_cmmd_node(arg_arr, dir_arr);

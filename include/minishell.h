@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 19:03:06 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/11 16:47:59 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "libft.h"
 # include <stddef.h>
 # include <sys/types.h>
-
 
 typedef enum e_bool
 {
@@ -125,7 +124,7 @@ t_list	*check_env_var(char *str, int in_len, t_list *env);
 char	*get_env_value(t_list *match, int var_len);;
 //int		varname_len_in_str(char *start);
 int		env_key_len(char *str, int c);
-t_bool	exp_mng(t_env *env, char **str);
+t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 
@@ -139,8 +138,7 @@ typedef struct s_pipe_data
 }	t_pipe_data;
 
 void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
-int	excecutor(t_list *lst_cmmd, t_env *tenv);
-
+int		excecutor(t_list *lst_cmmd, t_env *tenv);
 // CMMD
 int		manage_infile(t_cmmd *cmmd, t_env *env);
 int		manage_outfile(t_cmmd *cmmd, t_env *env);
