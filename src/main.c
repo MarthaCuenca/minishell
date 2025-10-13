@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 11:42:06 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/13 07:30:58 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	while (1)
 	{
+		setup_signal_prompt();
 		*line = readline("minishell-");
+		update_r(mini_env);
 		if (!*line)
 			return ;
 		add_history(*line);

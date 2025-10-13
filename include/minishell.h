@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 19:03:06 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/13 07:42:52 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include "libft.h"
 # include <stddef.h>
 # include <sys/types.h>
+# include <signal.h>
 
+extern volatile sig_atomic_t	g_signal;
 
 typedef enum e_bool
 {
@@ -171,6 +173,10 @@ int		builtin_export(t_env *mini_env, char **cmmd);
 int		builtin_unset(t_env *mini_env, char **cmmd);
 int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
+
+void    setup_signal_prompt(void);
+void	update_r(t_env *env);
+void	setup_signal_parent(void);
 
 /*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
 

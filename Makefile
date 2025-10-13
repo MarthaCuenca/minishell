@@ -37,7 +37,8 @@ SRCS := src/main.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
 		src/utils.c \
-		src/print_util.c
+		src/print_util.c \
+		src/signal.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

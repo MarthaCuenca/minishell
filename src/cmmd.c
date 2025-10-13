@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/06 18:41:23 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/13 07:52:40 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 static void	manage_pipes(t_pipe_data *pipe_data, int is_last)
 {
@@ -114,6 +115,8 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 		return (0);
 	if (pipe_data->pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		manage_pipes(pipe_data, lst_cmmd->next == NULL);
 		if (!manage_infile(cmmd, env) || !manage_outfile(cmmd, env))
 			return (0);
