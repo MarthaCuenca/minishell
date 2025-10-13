@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:00 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/13 07:44:54 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/13 10:10:02 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Return 1 if not malloc fail.
 int	excecutor(t_list *lst_cmmd, t_env *tenv)
 {
+	setup_signal_heredoc();
 	if (create_heredocs(lst_cmmd, tenv))
 		if (correct_cmmd_namepath(lst_cmmd, tenv))
 		{

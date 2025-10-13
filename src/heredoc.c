@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/10 19:02:35 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/13 10:28:56 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void	close_heredocs(t_list *lst_cmmd)
 		i = -1;
 		while (cmmd->redir[++i].file)
 			if (cmmd->redir[i].type == HEREDOC)
-				unlink(cmmd->redir->file);
+				if (access(cmmd->redir[i].file, F_OK) == 0)
+					unlink(cmmd->redir[i].file);
 		lst_cmmd = lst_cmmd->next;
 	}
 }
@@ -55,7 +56,7 @@ static int	write_heredoc(char *str_stop, int fd, t_env *env)
 
 	n = ft_strlen(str_stop);
 	next_line = NULL;
-	ft_putstr_fd("heredoc> ", 1);
+	ft_putstr_fd("> ", 1);
 	next_line = get_next_line(0);
 	while (next_line)
 	{
@@ -66,10 +67,10 @@ static int	write_heredoc(char *str_stop, int fd, t_env *env)
 			free(next_line);
 			return (get_error(env, ST_ERR_MALLOC, NULL));
 		}
-		ft_putstr_fd("heredoc> ", 1);
+		ft_putstr_fd("> ", 1);
 		if (ft_putstr_fd(next_line, fd) == 0)
-			{
-				free(next_line);
+		{
+			free(next_line);
 			return (get_error(env, ST_ERR_FD, NULL));
 		}
 		free(next_line);
@@ -94,7 +95,6 @@ static int	create_heredoc(t_redir *redir, int *counter, t_env *env)
 	if (!fd || !write_heredoc(redir->file, fd, env))
 	{
 		free(filename);
-		env->r = -2;
 		close(fd);
 		return (0);
 	}
@@ -118,8 +118,12 @@ int	create_heredocs(t_list *lst_cmmd, t_env *env)
 		i = -1;
 		while (cmmd->redir[++i].file)
 			if (cmmd->redir[i].type == HEREDOC)
+			{
 				if (!create_heredoc(cmmd->redir + i, &count_heredoc, env))
 					return (0);
+				if (!update_heredoc(env, lst_cmmd))
+					return (0);
+			}
 		lst_cmmd = lst_cmmd->next;
 	}
 	return (1);

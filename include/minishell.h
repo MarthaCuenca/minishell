@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/13 07:42:52 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/13 09:51:47 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,9 +175,10 @@ int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
 
 void    setup_signal_prompt(void);
-void	update_r(t_env *env);
 void	setup_signal_parent(void);
-
+void	setup_signal_heredoc(void);
+int		update_heredoc(t_env *env, t_list *lst_cmmd);
+void	update_r(t_env *env);
 /*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
 
 void	del_char_ptr(void *str);
