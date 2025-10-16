@@ -34,29 +34,20 @@ void	setup_signal_prompt(void)
 	
 }
 
-static void	handler_parent(int signo)
+void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int))
 {
-	g_signal = signo;
-	if (signo == SIGINT)
-	{
-		ft_putstr_fd("\n", 1);
-	}
-	else if (signo == SIGQUIT)
-	{
-		ft_putstr_fd("Quit (core dumped)\n", 1);
-	}
-}
-
-void	setup_signal_parent(void)
-{
-	struct sigaction	sa;
+	struct sigaction	sa1;
+	struct sigaction	sa2;
 
 	g_signal = 0;
-	sa.sa_handler = handler_parent;
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	sa1.sa_handler = fsigint;
+	sa1.sa_flags = 0;
+	sigemptyset(&sa1.sa_mask);
+	sa2.sa_handler = fsigquit;
+	sa2.sa_flags = 0;
+	sigemptyset(&sa2.sa_mask);
+	sigaction(SIGINT, &sa1, NULL);
+	sigaction(SIGQUIT, &sa2, NULL);
 }
 
 static void	handler_heredoc(int signo)

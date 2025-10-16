@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/13 07:52:40 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 10:31:27 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,7 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 		return (0);
 	if (pipe_data->pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		setup_signal_standard(SIG_DFL, SIG_DFL);
 		manage_pipes(pipe_data, lst_cmmd->next == NULL);
 		if (!manage_infile(cmmd, env) || !manage_outfile(cmmd, env))
 			return (0);
@@ -146,6 +145,6 @@ int	exec_cmmd(t_list *lst_cmmd, t_env *env)
 			return (0);
 		lst_cmmd = lst_cmmd->next;
 	}
-	process_exit_status(&pipe_data, env);
+	env->r = process_exit_status(&pipe_data);
 	return (1);
 }

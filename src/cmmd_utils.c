@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/06 18:34:30 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 11:21:05 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,37 @@ int	fork_e(pid_t pid, t_env *env)
 	return (1);
 }
 
-void	process_exit_status(t_pipe_data *pipe_data, t_env *env)
+static void	print_signal_output(int sig_return)
+{
+	if (sig_return)
+	{
+		if (sig_return == 131)
+			ft_putstr_fd("Quit (core dumped)", 1);
+		ft_putstr_fd("\n", 1);
+	}
+}
+int	process_exit_status(t_pipe_data *pipe_data)
 {
 	int	status;
 	int	wait_pid;
+	int	last_return;
+	int	sig_return;
 
 	wait_pid = 1;
+	sig_return = 0;
 	while (wait_pid > 0)
 	{
 		wait_pid = wait(&status);
+		if (!WIFEXITED(status))
+			sig_return = 128 + WTERMSIG(status);
 		if (wait_pid == pipe_data->last_pid)
 		{
-			if (WIFEXITED(status))
-				env->r = WEXITSTATUS(status);
+			if (!WIFEXITED(status))
+				last_return = sig_return;
 			else
-				env->r = 128 + WTERMSIG(status);
+				last_return = WEXITSTATUS(status);
 		}
 	}
+	print_signal_output(sig_return);
+	return (last_return);
 }

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/13 09:51:47 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 10:52:07 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int		pipe_e(int pipefd[2], t_env *env);
 void	execve_e(t_cmmd *cmmd, t_env *env);
 int		fork_e(pid_t pid, t_env *env);
 int		count_files(t_redir *redir, int type);
-void	process_exit_status(t_pipe_data *pipe_data, t_env *env);
+int	process_exit_status(t_pipe_data *pipe_data);
 // Init
 t_list	*init_lst_cmmd(char **argv);
 void	free_cmmd_node(void *ptr);
@@ -174,9 +174,10 @@ int		builtin_unset(t_env *mini_env, char **cmmd);
 int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
 
+// Signals
 void    setup_signal_prompt(void);
-void	setup_signal_parent(void);
 void	setup_signal_heredoc(void);
+void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int));
 int		update_heredoc(t_env *env, t_list *lst_cmmd);
 void	update_r(t_env *env);
 /*** *** *** *** *** *** *** *** * UTILS * *** *** *** *** *** *** *** *** ***/
