@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 12:36:24 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 12:36:27 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 17:03:52 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,16 @@ void	execve_e(t_cmmd *cmmd, t_env *env)
 		env->r = -1;
 	else if (cmmd->cmmd[0])
 	{
-		execve(cmmd->cmmd[0], cmmd->cmmd, arr_env);
-		perror(cmmd->cmmd[0]);
+		if (ft_strchr(cmmd->cmmd[0], '/'))
+		{
+			execve(cmmd->cmmd[0], cmmd->cmmd, arr_env);
+			perror(cmmd->cmmd[0]);
+		}
+		else
+		{
+			ft_putstr_fd(cmmd->cmmd[0], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 		env->r = 127;
 	}
 	else

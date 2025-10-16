@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:58 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 16:30:36 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 17:02:40 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	split_envpath(t_env *env, char ***path_split)
 	if (!path_str)
 		get_error(env, ST_ERR, "Error: env $PATH not found");
 	*path_split = ft_split(path_str, ':');
+	free(path_str);
 	if (!path_split)
 		return (get_error(env, ST_ERR_MALLOC, NULL));
 	return (1);
