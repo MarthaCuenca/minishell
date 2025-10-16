@@ -25,7 +25,9 @@ SRCS := src/main.c \
 		src/cmmd.c \
 		src/cmmd_transform_namepath.c \
 		src/cmmd_utils.c \
+		src/cmmd_utils_error.c \
 		src/heredoc.c \
+		src/heredoc_utils.c \
 		src/list_to_array.c \
 		src/error_mng.c \
 		src/cmmd_builtin.c \
@@ -38,7 +40,8 @@ SRCS := src/main.c \
 		src/builtin_exit.c \
 		src/utils.c \
 		src/print_util.c \
-		src/signal.c
+		src/signal.c \
+		src/signal_updater.c
 
 OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 DEPS := $(OBJS:.o=.d)

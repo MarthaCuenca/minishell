@@ -1,9 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/16 12:26:45 by faguirre          #+#    #+#             */
+/*   Updated: 2025/10/16 12:34:44 by faguirre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "libft.h"
 #include <signal.h>
 #include <readline/readline.h>
 
 volatile sig_atomic_t	g_signal = 0;
+
+void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int))
+{
+	struct sigaction	sa1;
+	struct sigaction	sa2;
+
+	g_signal = 0;
+	sa1.sa_handler = fsigint;
+	sa1.sa_flags = 0;
+	sigemptyset(&sa1.sa_mask);
+	sa2.sa_handler = fsigquit;
+	sa2.sa_flags = 0;
+	sigemptyset(&sa2.sa_mask);
+	sigaction(SIGINT, &sa1, NULL);
+	sigaction(SIGQUIT, &sa2, NULL);
+}
 
 static void	handler_prompt(int signo)
 {
@@ -31,23 +59,6 @@ void	setup_signal_prompt(void)
 	sa_quit.sa_flags = SA_RESTART;
 	sigemptyset(&sa_quit.sa_mask);
 	sigaction(SIGQUIT, &sa_quit, NULL);
-	
-}
-
-void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int))
-{
-	struct sigaction	sa1;
-	struct sigaction	sa2;
-
-	g_signal = 0;
-	sa1.sa_handler = fsigint;
-	sa1.sa_flags = 0;
-	sigemptyset(&sa1.sa_mask);
-	sa2.sa_handler = fsigquit;
-	sa2.sa_flags = 0;
-	sigemptyset(&sa2.sa_mask);
-	sigaction(SIGINT, &sa1, NULL);
-	sigaction(SIGQUIT, &sa2, NULL);
 }
 
 static void	handler_heredoc(int signo)
@@ -73,21 +84,4 @@ void	setup_signal_heredoc(void)
 	sa_quit.sa_flags = SA_RESTART;
 	sigemptyset(&sa_quit.sa_mask);
 	sigaction(SIGQUIT, &sa_quit, NULL);
-}
-
-int	update_heredoc(t_env *env, t_list *lst_cmmd)
-{
-	if (g_signal == SIGINT)
-	{
-		env->r = 128 + g_signal;
-		close_heredocs(lst_cmmd);
-		return (0);
-	}
-	return (1);
-}
-
-void	update_r(t_env *env)
-{
-	if (g_signal == SIGINT || g_signal == SIGQUIT)
-		env->r = 128 + g_signal;
 }

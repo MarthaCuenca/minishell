@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 11:52:07 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 14:07:56 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,68 +17,38 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static char	*create_filename(char *str_name, int counter, t_env *env)
+static int	write_line(char **line, t_env *env, int fd)
 {
-	char	*filename;
-	char	*str_num;
-
-	str_num = ft_itoa(counter);
-	if (!str_num)
-		return (get_error_chr(env, ST_ERR_MALLOC, NULL));
-	filename = ft_strjoin(str_name, str_num);
-	if (!filename)
-		return (get_error_chr(env, ST_ERR_MALLOC, NULL));
-	free(str_num);
-	return (filename);
-}
-
-void	close_heredocs(t_list *lst_cmmd)
-{
-	int		i;
-	t_cmmd	*cmmd;
-
-	while (lst_cmmd)
-	{
-		cmmd = (t_cmmd *)lst_cmmd->content;
-		i = -1;
-		while (cmmd->redir[++i].file)
-			if (cmmd->redir[i].type == HEREDOC)
-				if (access(cmmd->redir[i].file, F_OK) == 0)
-					unlink(cmmd->redir[i].file);
-		lst_cmmd = lst_cmmd->next;
-	}
+	if (!exp_mng(env, line))
+		return (get_error(env, ST_ERR_MALLOC, NULL));
+	if (ft_putstr_fd(*line, fd) == 0)
+		return (get_error(env, ST_ERR_FD, NULL));
+	return (0);
 }
 
 static int	write_heredoc(char *str_stop, int fd, t_env *env)
 {
 	char	*next_line;
 	int		n;
+	int		res_write_line;
 
 	n = ft_strlen(str_stop);
 	next_line = NULL;
 	ft_putstr_fd("> ", 1);
 	next_line = get_next_line(0);
-	while (next_line)
+	while (next_line && \
+		!(!ft_strncmp(next_line, str_stop, n) && next_line[n] == '\n'))
 	{
-		if (!ft_strncmp(next_line, str_stop, n) && next_line[n] == '\n')
-			break ;
-		if (!exp_mng(env, &next_line))
-		{
-			free(next_line);
-			return (get_error(env, ST_ERR_MALLOC, NULL));
-		}
-		ft_putstr_fd("> ", 1);
-		if (ft_putstr_fd(next_line, fd) == 0)
-		{
-			free(next_line);
-			return (get_error(env, ST_ERR_FD, NULL));
-		}
+		res_write_line = write_line(&next_line, env, fd);
 		free(next_line);
 		next_line = NULL;
+		if (res_write_line != 0)
+			return (res_write_line);
+		ft_putstr_fd("> ", 1);
 		next_line = get_next_line(0);
 	}
-	if (!next_line)
-		ft_putstr_fd("warning: ended heredoc because Ctrl + D\n", 2);
+	if (!next_line && g_signal == 0)
+		ft_putstr_fd("\nwarning: heredoc end because Ctrl+D\n", 2);
 	else
 		free(next_line);
 	return (1);
@@ -119,6 +89,7 @@ int	create_heredocs(t_list *lst_cmmd, t_env *env)
 		cmmd = (t_cmmd *)lst_cmmd->content;
 		i = -1;
 		while (cmmd->redir[++i].file)
+		{
 			if (cmmd->redir[i].type == HEREDOC)
 			{
 				if (!create_heredoc(cmmd->redir + i, &count_heredoc, env))
@@ -126,7 +97,8 @@ int	create_heredocs(t_list *lst_cmmd, t_env *env)
 				if (!update_heredoc(env, lst_cmmd))
 					return (0);
 			}
-		lst_cmmd = lst_cmmd->next;
+			lst_cmmd = lst_cmmd->next;
+		}
 	}
 	return (1);
 }

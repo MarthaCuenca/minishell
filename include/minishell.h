@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/16 10:52:07 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 13:59:00 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ typedef struct s_pipe_data
 }	t_pipe_data;
 
 void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);
-int	excecutor(t_list *lst_cmmd, t_env *tenv);
+int		excecutor(t_list *lst_cmmd, t_env *tenv);
 
 // CMMD
 int		manage_infile(t_cmmd *cmmd, t_env *env);
@@ -154,13 +154,14 @@ int		pipe_e(int pipefd[2], t_env *env);
 void	execve_e(t_cmmd *cmmd, t_env *env);
 int		fork_e(pid_t pid, t_env *env);
 int		count_files(t_redir *redir, int type);
-int	process_exit_status(t_pipe_data *pipe_data);
+int		process_exit_status(t_pipe_data *pipe_data);
 // Init
 t_list	*init_lst_cmmd(char **argv);
 void	free_cmmd_node(void *ptr);
 int		correct_cmmd_namepath(t_list *lst_cmmd, t_env *env);
 int		create_heredocs(t_list *lst_cmmd, t_env *env);
 void	close_heredocs(t_list *lst_cmmd);
+char	*create_filename(char *str_name, int counter, t_env *env);
 
 // Utils
 void	print_lst_cmmd(t_list *lst_cmmd);
@@ -175,7 +176,7 @@ int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
 
 // Signals
-void    setup_signal_prompt(void);
+void	setup_signal_prompt(void);
 void	setup_signal_heredoc(void);
 void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int));
 int		update_heredoc(t_env *env, t_list *lst_cmmd);
