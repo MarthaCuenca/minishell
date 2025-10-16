@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/13 10:28:56 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 11:52:07 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ static int	write_heredoc(char *str_stop, int fd, t_env *env)
 		next_line = NULL;
 		next_line = get_next_line(0);
 	}
-	if (next_line)
+	if (!next_line)
+		ft_putstr_fd("warning: ended heredoc because Ctrl + D\n", 2);
+	else
 		free(next_line);
 	return (1);
 }
