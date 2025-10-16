@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/16 13:59:00 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 16:10:28 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ char	*get_env_value(t_list *match, int var_len);;
 //int		varname_len_in_str(char *start);
 int		env_key_len(char *str, int c);
 t_bool	exp_mng(t_env *env, char **str);
+char 	*obtain_env_var_value(t_env *env, char *dollar);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 

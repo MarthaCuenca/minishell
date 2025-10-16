@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 14:07:56 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/16 15:11:07 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int	create_heredocs(t_list *lst_cmmd, t_env *env)
 				if (!update_heredoc(env, lst_cmmd))
 					return (0);
 			}
-			lst_cmmd = lst_cmmd->next;
 		}
+		lst_cmmd = lst_cmmd->next;
 	}
 	return (1);
 }
