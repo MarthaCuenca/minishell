@@ -29,11 +29,11 @@ run_one_test() {
 		echo "✅ [OK] test: $test_str"
 	else
 		echo "❌ [Salida incorrecta] test: $test_str"
-		echo "    Resultado minishell: $out_usr"
-		echo "    Resultado bash: $out_bash"
+		echo "    - Resultado minishell: $out_usr"
+		echo "    - Resultado bash: $out_bash"
 	fi
 	if [ $status_usr -ne $status_bash ]; then
-		echo "⚠️ [Código diferente] test: $test_str → minishell: $status_usr, bash: $status_bash"
+		echo "⚠️ [Return diferente] test: $test_str → minishell: $status_usr, bash: $status_bash"
 	fi
 }
 

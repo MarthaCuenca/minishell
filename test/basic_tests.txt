@@ -1,5 +1,11 @@
-# Tests de prueba
+# Test evaluation checklist
 
-echo hola
-echo hola => hola
-skdfj => "skdfj: No such file or directory"
+echo content > out.txt
+cat <out.txt
+echo more >> out.txt
+cat out.txt
+cat < missing.txt
+cat < out.txt > copy.txt
+diff out.txt copy.txt
+echo A > a.txt > b.txt
+cat a.txt b.txt
