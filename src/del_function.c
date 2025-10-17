@@ -17,11 +17,9 @@
 
 void	del_char_ptr(void *str)
 {
-	char	*tmp;
 
 	if (!str)
 		return ;
-	tmp = (char *)str;
 	free(str);
 }
 

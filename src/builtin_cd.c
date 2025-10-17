@@ -46,11 +46,9 @@ t_state	update_old(t_list **old, char *curr_pwd)
 
 t_state	update_path(t_env **mini_env, char *new_pwd, char *cmmd)
 {
-	t_list	*tmp;
 	t_list	*old;
 	t_list	*curr;
 
-	tmp = (t_list *)(*mini_env)->vars;
 	old = check_env_var("OLDPWD", 6, (*mini_env)->vars);
 	curr = check_env_var("PWD", 3, (*mini_env)->vars);
 	if (update_old(&old, (char *)curr->content) == ST_ERR_MALLOC)

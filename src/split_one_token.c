@@ -38,9 +38,6 @@ void	rm_and_link(t_list **lst, t_list *nd_rm,
 
 static void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 {
-	char	*tmp;
-
-	tmp = 0;
 	if (*quote_state != NO_QUOTE)
 		return ;
 	if (ft_strstr(&str[*i], "<<<") || ft_strstr(&str[*i], ">>>"))

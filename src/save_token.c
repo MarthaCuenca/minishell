@@ -40,11 +40,9 @@ static t_token_type	token_type(t_token *nd)//y esto casos ";, &, \ "?
 {
 	char	*str;
 	int		quo;
-	int		len;
 
 	str = nd->token;
 	quo = nd->quote_type;
-	len = ft_strlen(str);
 	if (ft_strcmp(str, "<<") == 0 && quo == NO_QUOTE)
 		return (REDIR);
 	else if (ft_strcmp(str, ">>") == 0 && quo == NO_QUOTE)

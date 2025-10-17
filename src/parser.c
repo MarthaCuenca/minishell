@@ -57,13 +57,10 @@ t_bool	is_ineq_symbol_at_end(t_list *lex)
 
 t_bool	inequality_symbols_syntax(t_list *lex)
 {
-	t_list	*tmp;
-
 	if (!lex)
 		return (FALSE);
 	if (!lex)
 		return (FALSE);
-	tmp = lex;
 	if (is_ineq_symbol_at_end(lex))
 		return (FALSE);
 	if (is_word_after_redir(lex))
