@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 16:34:42 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/17 16:30:05 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -36,7 +36,8 @@ void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 	int		status;
 	t_cmmd	*tmp;
 
-	status = 0;
+	//status = 0;
+	status = mini_env->r;
 	tmp = nd;
 	if (tmp->cmmd[1])
 		status = check_arg_bi_exit(tmp->cmmd);

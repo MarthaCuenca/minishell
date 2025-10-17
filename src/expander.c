@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 16:44:43 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/15 13:18:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	varname_len_in_str(char *start)
 {
 	int		i;
 	char	*end;
-	char	*symbols[7];
+	char	*symbols[8];
 
 	i = 0;
 	end = NULL;
@@ -27,18 +27,15 @@ int	varname_len_in_str(char *start)
 	symbols[2] = ft_strchr(start, '\'');
 	symbols[3] = ft_strchr(start, '\"');
 	symbols[4] = ft_strchr(start, '$');
-	symbols[5] = ft_strchr(start, '\n');
-	symbols[6] = ft_strchr(start, '\0');
-	//if (!start)
-	//	return (0);
-	while (i < 7)
+	symbols[5] = ft_strchr(start, '-');
+	symbols[6] = ft_strchr(start, '\n');
+	symbols[7] = ft_strchr(start, '\0');
+	while (i < 8)
 	{
 		if (symbols[i] && (!end || symbols[i] < end))
 			end = symbols[i];
 		i++;
 	}
-	//if (!end)
-	//	return (0);
 	if ((end - start) == 0)
 		return (1);
 	return (end - start);
@@ -65,10 +62,10 @@ void	check_state(char *str, char *dollar, t_quote *quote_state)
 	int		i;
 
 	i = 0;
-	while (&str[i] != dollar)
+	while (str[i] && &str[i] != dollar)
 	{
 		if (str[i] == '\\')
-			i += 2;
+			i++;
 		if (str[i] == '\'')
 		{
 			if (*quote_state == NO_QUOTE)
@@ -87,24 +84,52 @@ void	check_state(char *str, char *dollar, t_quote *quote_state)
 	}
 }
 
+int	ft_is_samealloc_diffpos(char *str, char *ptr)
+{
+	int		len;
+	char	*str_len;
+
+	len = ft_strlen(str);
+	str_len = str + len;
+	if (ptr > str && ptr < str_len)
+		return (1);
+	return (0);
+}
+
+char	ft_prev_char(char *str, char *subptr)
+{
+	int	i;
+
+	if (str == subptr)
+		return ('\0');
+	if (!ft_is_samealloc_diffpos(str, subptr))
+		return ('\0');
+	i = 0;
+	while (str[i] && &str[i + 1] != subptr)
+		i++;
+	return (str[i]);
+}
+
 t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 {
-	char	symbols[4];
+	int		i;
+	int		len;
 	t_quote	quote_state;
 
 	if (!dollar)
 		return (FALSE);
-	symbols[0] = ' ';
-	symbols[1] = '\t';
-	symbols[2] = '\n';
-	symbols[3] = '\"';
+	i = 0;
+	len = varname_len_in_str(dollar);
 	quote_state = NO_QUOTE;
 	check_state(str, dollar, &quote_state);
 	if (quote_state == SIMPLE_QUOTE && is_heredoc == FALSE)
 		return (FALSE);
 	else if (!dollar[1])
 		return (FALSE);
-	else if (dollar[1] && is_c_symbol(dollar[1], symbols))
+	else if (!valid_env_varname_syntax(dollar + 1, len)
+		&& dollar[1] && dollar[1] != '?')
+		return (FALSE);
+	else if (ft_prev_char(str, dollar) == '\\')
 		return (FALSE);
 	return (TRUE);
 }
@@ -173,22 +198,16 @@ char	*exchange_exp_var(char **values, char *str, t_bool is_heredoc)
 
 char	*get_env_value(t_list *match, int var_len)
 {
-	int		value_len;
-	int		start;
 	char	*tmp;
 	char	*value;
 
 	if (match)
 	{
 		tmp = (char *)match->content;
-		start = var_len + 1;
-		value_len = ft_strlen(&tmp[start]);
-		value = ft_substr(tmp, start, value_len);
+		value = tmp + var_len + 1;
 	}
 	else
-		value = (char *)ft_calloc(1, sizeof(char));
-	if (!value)
-		return (malloc_err(), NULL);
+		value = "";
 	return (value);
 }
 
@@ -229,13 +248,16 @@ char	*obtain_env_var_value(t_env *env, char *dollar)
 			return (malloc_err(), NULL);
 		return (env_value);
 	}
-	sd[START] = dollar + 1;
+	/*sd[START] = dollar + 1;
+	in_len = varname_len_in_str(sd[START]);
+	sd[END] = dollar + in_len;
+	match = check_env_var(sd[START], in_len, (t_list *)env->vars);
+	env_value = get_env_value(match, in_len);*/
+	sd[START] = dollar;
 	in_len = varname_len_in_str(sd[START]);
 	sd[END] = dollar + in_len;
 	match = check_env_var(sd[START], in_len, (t_list *)env->vars);
 	env_value = get_env_value(match, in_len);
-	if (!env_value)
-		return (NULL);
 	return (env_value);
 }
 
@@ -254,11 +276,7 @@ char	**exp_values(t_env *env, char *str, int n_dollar, t_bool is_heredoc)
 	{
 		check_point = ft_strchr(check_point, '$');
 		if (check_point && is_dollar_valid(str, check_point, is_heredoc))
-		{
-			exp_str[j] = obtain_env_var_value(env, check_point);
-			if (!exp_str[j])
-				return (malloc_err(), ft_free_2p(exp_str), NULL);
-		}
+			exp_str[j] = obtain_env_var_value(env, check_point + 1);
 		check_point++;
 		j++;
 	}
@@ -280,10 +298,10 @@ t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc)
 		return (FALSE);
 	new_str = exchange_exp_var(values, *str, is_heredoc);
 	if (!new_str)
-		return (ft_free_2p(values), FALSE);
+		return (free(values), FALSE);
 	ft_swap_str(&new_str, str);
 	free(new_str);
-	ft_free_2p(values);
+	free(values);
 	return (TRUE);
 }
 
@@ -320,7 +338,7 @@ t_bool	arg_loop(t_env *env, char **arg)
 	return (TRUE);
 }
 
-t_bool	expander(t_env *env, t_list **pars)
+int	expander(t_env *env, t_list **pars)
 {
 	t_list	*tmp;
 	t_cmmd	*curr_cmmd;
@@ -328,7 +346,7 @@ t_bool	expander(t_env *env, t_list **pars)
 	char	**arg;
 
 	if (!pars || !env)
-		return (arg_err(), FALSE);
+		return (ST_ERR);
 	tmp = *pars;
 	while (tmp)
 	{
@@ -336,10 +354,10 @@ t_bool	expander(t_env *env, t_list **pars)
 		arg = curr_cmmd->cmmd;
 		dir = (t_redir *)curr_cmmd->redir;
 		if (!arg_loop(env, arg))
-			return (FALSE);
+			return (ST_ERR_MALLOC);
 		if (!dir_loop(env, dir))
-			return (FALSE);
+			return (ST_ERR_MALLOC);
 		tmp = tmp->next;
 	}
-	return (TRUE);
+	return (ST_OK);
 }

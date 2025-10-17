@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 16:34:01 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/16 13:29:25 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,110 +62,83 @@ t_state	update_path(t_env **mini_env, char *new_pwd, char *cmmd)
 	return (ST_OK);
 }
 
-char	*relative_path(t_env *mini_env, char *cmmd)
+t_state oldpwd_path(t_env *mini_env, char **result)
 {
-	int		pwd_len;
-	int		cmmd_len;
-	char	*match_val;
-	char	*result;
-	t_list	*match;
+	char	*value;
 
-	match = check_env_var("PWD", 3, mini_env->vars);
-	match_val = ft_strchr((char *)match->content, '=') + 1;
-	pwd_len = ft_strlen(match_val);
-	cmmd_len = ft_strlen(cmmd);
-	result = ft_calloc((pwd_len + cmmd_len + 1 + 1), sizeof(char));
-	if (!result)
-		return (NULL);
-	ft_memmove(result, match_val, pwd_len);
-	ft_strlcat(result, "/", pwd_len + cmmd_len + 1 + 1);
-	ft_strlcat(result, cmmd, pwd_len + cmmd_len + 1 + 1);
-	result[pwd_len + cmmd_len + 1] = '\0';
-	return (result);
+	value = obtain_env_var_value(mini_env, "OLDPWD");
+	if (!value)
+		return (ST_ERR);
+	*result = ft_strdup(value);
+	if (!*result)
+		return (ST_ERR_MALLOC);
+	return (ST_OK);
 }
 
-char	*oldpwd_path(t_env *mini_env)
-{
-	char	*match_val;
-	char	*result;
-	t_list	*match;
-
-	match = check_env_var("OLDPWD", 6, mini_env->vars);
-	match_val = ft_strchr((char *)match->content, '=') + 1;
-	result = ft_strdup(match_val);
-	if (!result)
-		return (NULL);
-	return (result);
-}
-
-char	*home_path_result(char *match_val, char *ptr)
+char	*home_path_result(char *match, char *ptr)
 {
 	char	*tmp;
 
-	tmp = ft_strdup(match_val);
+	if (ptr)
+		tmp = ft_strjoin(match, ptr);	
+	else
+		tmp = ft_strdup(match);
 	if (!tmp)
 		return (NULL);
-	if (ptr)
-	{
-		tmp = ft_strjoin(match_val, ptr);
-		free(ptr);
-		if (!tmp)
-			return (NULL);
-	}
 	return (tmp);
 }
 
-char	*home_path(t_env *mini_env, char *cmmd)
+
+t_state	home_path(t_env *mini_env, char *cmmd, char **result)
 {
 	char	*ptr;
-	char	*match_val;
-	char	*result;
-	t_list	*match;
-
+	char	*value;
+	
+	value = obtain_env_var_value(mini_env, "HOME");
+	if (!value)
+		return (ST_ERR);//Pintf("HOME no existe, lo has eliminado.\n");
 	ptr = NULL;
-	match = check_env_var("HOME", 4, mini_env->vars);
-	match_val = ft_strchr((char *)match->content, '=') + 1;
-	if (cmmd && cmmd[1] == '/' && cmmd[2])
-	{
-		ptr = ft_strdup(&cmmd[2]);
-		if (!ptr)
-			return (NULL);
-	}
-	result = home_path_result(match_val, ptr);
-	if (!result)
-		return (NULL);
-	return (result);
+	if (cmmd && cmmd[0] && cmmd[1] && cmmd[1] != '/')
+			return (ST_ERR);
+	else if (cmmd && cmmd[0] && cmmd[1] && cmmd[1] == '/')
+		ptr = &cmmd[1];
+	*result = home_path_result(value, ptr);
+	if (!*result)
+		return (ST_ERR_MALLOC);
+	return (ST_OK);
 }
 
-char	*check_path(t_env *mini_env, char *cmmd)
+t_state	check_path(t_env *mini_env, char *cmmd, char **result) 
 {
-	char	*result;
+	t_state	state;
 
+	state = ST_OK;
 	if (cmmd == NULL || (cmmd && cmmd[0] == '~'))
-		result = home_path(mini_env, cmmd);
-	else if (cmmd && cmmd[0] == '/')
-		result = ft_strdup(cmmd);
+		state = home_path(mini_env, cmmd, result);
 	else if (cmmd && cmmd[0] == '-' && !cmmd[1])
-		result = oldpwd_path(mini_env);
+		state = oldpwd_path(mini_env, result);
 	else
-		result = relative_path(mini_env, cmmd);
-	if (!result)
-		return (NULL);
-	return (result);
+	{
+		*result = ft_strdup(cmmd);
+		if (!*result)
+			state = ST_ERR_MALLOC;
+	}
+	return (state);
 }
 
 t_state	bi_cd(t_env **mini_env, char *cmmd)
 {
 	char	*new_pwd;
 	char	*tmp;
+	t_state	state;
 
-	tmp = check_path(*mini_env, cmmd);
-	if (!tmp)
-		return (ST_ERR_MALLOC);
+	state = check_path(*mini_env, cmmd, &tmp);
+	if (state == ST_ERR || state == ST_ERR_MALLOC)
+		return (state);
 	if (access(tmp, F_OK) != 0)
-		return (ST_ERR);
+		return (free(tmp), ST_ERR);//bash: cd: patat: No such file or directory
 	else if (chdir(tmp) != 0)
-		return (ST_ERR);
+		return (free(tmp), ST_ERR);//bash: cd: patat: Permission denied
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 		return (ST_ERR_MALLOC);
