@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 #include "libft.h"
+#include <unistd.h>
 
 int	is_builtin(char *str)
 {
@@ -52,14 +53,17 @@ void	choose_builtin(t_cmmd *cmmd, t_env *env)
 int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
 {
 	t_cmmd	*cmmd;
+	int	fd_stdout;
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
 	if (!lst_cmmd->next && is_builtin(cmmd->cmmd[0]))
 	{
+		fd_stdout = dup(1);
 		setup_signal_standard(SIG_DFL, SIG_DFL);
 		manage_infile(cmmd, env);
 		manage_outfile(cmmd, env);
 		choose_builtin(cmmd, env);
+		dup2(fd_stdout, 1);
 		return (1);
 	}
 	return (0);
