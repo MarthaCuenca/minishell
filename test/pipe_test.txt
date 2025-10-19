@@ -1,15 +1,16 @@
 # Combinations 1: Single commands
 
+## Single outfile
+ls tmp
+>tmp/infile.tmp
+ls tmp
+cat tmp/infile.tmp
+echo holaaa >tmp/infile.tmp
+cat tmp/infile.tmp
+
 ## Single infile
 <tmp/no_exists => open infile: No such file or directory
-<tmp/file.tmp
-
-## Single outfile
-ls
->tmp/outfile.tmp
-ls
-cat tmp/outfile.tmp
->tmp/outfile.tmp
+<tmp/infile.tmp
 
 ## Single command
 ls
@@ -19,7 +20,7 @@ echo hola
 # Combinations 2: One command
 
 ## Infile Cmmd
-<tmp/file.tmp cat
+<tmp/infile.tmp cat
 <tmp/no_exists cat => open infile: No such file or directory
 
 ## Cmmd Outfile
@@ -33,5 +34,17 @@ echo adeu > tmp/outfile.tmp
 < tmp/file.tmp > tmp/outfile.tmp
 < tmp/no_exists > tmp/outfile.tmp => open infile: No such file or directory
 cat tmp/outfile.tmp
-<tmp/file.tmp cat >tmp/outfile.tmp
+<tmp/infile.tmp cat >tmp/outfile.tmp
 cat tmp/outfile.tmp
+
+## Multiple redirection
+echo hola1 > tmp/infile1.tmp > tmp/infile2.tmp
+cat tmp/infile1.tmp
+cat tmp/infile2.tmp
+echo hola2 > tmp/infile1.tmp
+<tmp/infile1.tmp <tmp/infile2.tmp cat
+<tmp/infile2.tmp <tmp/infile1.tmp cat
+<no_file <no_file2 cat => open infile: No such file or directory
+<tmp/infile1.tmp <tmp/infile2.tmp cat >tmp/outfile1.tmp >tmp/outfile2.tmp
+cat tmp/outfile1.tmp
+cat tmp/outfile2.tmp

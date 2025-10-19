@@ -16,16 +16,17 @@ run_one_test() {
 	# Ejecutar test
 	out_usr=$(printf "%s\necho \$?\nexit\n" "$test_str" | "$MINISHELL" 2>&1)
 	out_usr=$(echo "$out_usr" | grep -v '^minishell-')
-	status_usr=$(echo "$out_usr" | tail -n 1)
+	status_usr=$(echo "$out_usr" | grep -E '^[0-9]+$' | tail -n1)
 	out_usr=$(echo "$out_usr" | sed '$d')
 	out_bash=$(printf "%s\necho \$?\nexit\n" "$test_str" | bash 2>&1)
 	status_bash=$(echo "$out_bash" | tail -n 1)
+	status_bash=$(echo "$out_bash" | grep -E '^[0-9]+$' | tail -n1)
 	out_bash=$(echo "$out_bash" | sed '$d')
 
 	if [ -n "$expected" ]; then
 		out_bash="$expected"
 	fi
-	
+
 	# Compare
 	if [[ "$out_usr" == "$out_bash" ]]; then
 		echo "✅ [OK] test: $test_str"
@@ -34,8 +35,12 @@ run_one_test() {
 		echo "    - Resultado minishell: $out_usr"
 		echo "    - Resultado bash: $out_bash"
 	fi
-	if [ $status_usr -ne $status_bash ]; then
-		echo "⚠️ [Return diferente] test: $test_str → minishell: $status_usr, bash: $status_bash"
+	if [[ "$status_usr" =~ ^[0-9]+$ && "$status_bash" =~ ^[0-9]+$ ]]; then
+		if [ $status_usr -ne $status_bash ]; then
+			echo "⚠️ [Return diferente] test: $test_str → minishell: $status_usr, bash: $status_bash"
+		fi
+	else
+		echo "⚠️ Status no numerico detectado: status_usr='$status_usr', status_bash='$status_bash'"
 	fi
 }
 
