@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 17:04:34 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:10:10 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	manage_infile(t_cmmd *cmmd, t_env *env)
 			if (fd < 0)
 			{
 				perror("open infile");
-				env->r = -4;
+				env->r = 1;
 				return (0);
 			}
 			if (n == 0)
@@ -92,7 +92,7 @@ int	manage_outfile(t_cmmd *cmmd, t_env *env)
 		if (fd < 0)
 		{
 			perror("open outfile");
-			env->r = -4;
+			env->r = 1;
 			return (0);
 		}
 		if (n == 0)
@@ -117,17 +117,17 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 	{
 		setup_signal_standard(SIG_DFL, SIG_DFL);
 		manage_pipes(pipe_data, lst_cmmd->next == NULL);
-		if (!manage_infile(cmmd, env) || !manage_outfile(cmmd, env))
-			return (0);
-		if (is_builtin(cmmd->cmmd[0]))
-			choose_builtin(cmmd, env);
-		else
-			execve_e(cmmd, env);
+		if (manage_infile(cmmd, env) && manage_outfile(cmmd, env))
+		{
+			if (is_builtin(cmmd->cmmd[0]))
+				choose_builtin(cmmd, env);
+			else
+				execve_e(cmmd, env);
+		}
 		clean_mng(env, NULL, NULL, &lst_cmmd);
 		exit(env->r);
 	}
-	else
-		manage_pipes(pipe_data, lst_cmmd->next == NULL);
+	manage_pipes(pipe_data, lst_cmmd->next == NULL);
 	return (1);
 }
 

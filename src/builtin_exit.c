@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/10 11:44:04 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/19 10:15:57 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -36,7 +36,7 @@ void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 	int		status;
 	t_cmmd	*tmp;
 
-	status = 0;
+	status = mini_env->r;
 	tmp = nd;
 	//cambiar por la funcion de Cesc
 	if (tmp->cmmd[1])

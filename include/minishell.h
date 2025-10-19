@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/16 16:10:28 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:05:21 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ int		manage_infile(t_cmmd *cmmd, t_env *env);
 int		manage_outfile(t_cmmd *cmmd, t_env *env);
 int		exec_cmmd(t_list *lst_cmmd, t_env *env);
 int		is_builtin(char *str);
+int		is_builtin_not_forkable(char *str);
 void	choose_builtin(t_cmmd *cmmd, t_env *env);
 int		exec_if_1builtin(t_list *lst_cmmd, t_env *env);
 int		pipe_e(int pipefd[2], t_env *env);

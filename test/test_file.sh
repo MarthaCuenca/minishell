@@ -12,14 +12,16 @@ run_one_test() {
 	local out_bash
 	local status_usr
 	local status_bash
-	
-	# Ejecutar test
-	out_usr=$(printf "%s\nexit\n" "$test_str" | "$MINISHELL" 2>&1)
-	out_usr=$(echo "$out_usr" | grep -v '^minishell-')
-	status_usr=$?
 
-	out_bash=$(printf "%s\nexit\n" "$test_str" | bash 2>&1)
-	status_bash=$?
+	# Ejecutar test
+	out_usr=$(printf "%s\necho \$?\nexit\n" "$test_str" | "$MINISHELL" 2>&1)
+	out_usr=$(echo "$out_usr" | grep -v '^minishell-')
+	status_usr=$(echo "$out_usr" | tail -n 1)
+	out_usr=$(echo "$out_usr" | sed '$d')
+	out_bash=$(printf "%s\necho \$?\nexit\n" "$test_str" | bash 2>&1)
+	status_bash=$(echo "$out_bash" | tail -n 1)
+	out_bash=$(echo "$out_bash" | sed '$d')
+
 	if [ -n "$expected" ]; then
 		out_bash="$expected"
 	fi
@@ -37,22 +39,24 @@ run_one_test() {
 	fi
 }
 
+# args:
+#	$1 = fichero a ejecutar, string
 run_tests_from_file() {
 	local file="$1"
 	local section_name=$(basename "$file" .txt)
 	local test_str
 	local expected
-	
+
 	echo "=== Seccion: $section_name ==="
 	while IFS= read -r line; do
 		# Ignorar comments o blanks
 		[[ -z "$line" || "$line" =~ ^# ]] && continue
 
-		## Si => separar comando en 2
-		if [[ "$line" == *"=>"* ]]; then
-			test_str="${line%%=>*}"
-			expected="${line#*=>}"
-			test_str=$(echo "$test_str" | xargs)
+			## Si => separar comando en 2
+			if [[ "$line" == *"=>"* ]]; then
+				test_str="${line%%=>*}"
+				expected="${line#*=>}"
+				test_str=$(echo "$test_str" | xargs)
 			expected=$(echo "$expected" | xargs)
 			run_one_test "$test_str" "$expected"
 		else

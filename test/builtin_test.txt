@@ -1,0 +1,18 @@
+# echo
+
+echo hello world
+echo tail
+
+# cd (no ; o \n)
+
+
+# export (no ; o \n)
+
+
+# unset (no ; o \n)
+
+
+# env
+env | grep -E '^(PATH|HOME)='
+
+# exit

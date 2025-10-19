@@ -6,13 +6,26 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 09:50:30 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:11:43 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
+
+int	is_builtin_not_forkable(char *str)
+{
+	if (!str)
+		return (0);
+	if (ft_strncmp(str, "export", 5) == 0 || \
+		ft_strncmp(str, "unset", 4) == 0 || \
+		ft_strncmp(str, "cd", 4) == 0 || \
+		ft_strncmp(str, "exit", 5) == 0)
+		return (1);
+	else
+		return (0);
+}
 
 int	is_builtin(char *str)
 {
@@ -23,6 +36,7 @@ int	is_builtin(char *str)
 		ft_strncmp(str, "pwd", 4) == 0 || \
 		ft_strncmp(str, "export", 7) == 0 || \
 		ft_strncmp(str, "env", 4) == 0 || \
+		ft_strncmp(str, "unset", 6) == 0 || \
 		ft_strncmp(str, "exit", 5) == 0)
 		return (1);
 	else
@@ -56,7 +70,7 @@ int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
 	int	fd_stdout;
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
-	if (!lst_cmmd->next && is_builtin(cmmd->cmmd[0]))
+	if (!lst_cmmd->next && is_builtin_not_forkable(cmmd->cmmd[0]))
 	{
 		fd_stdout = dup(1);
 		setup_signal_standard(SIG_DFL, SIG_DFL);
