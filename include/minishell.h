@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 12:53:36 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 18:02:05 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct s_pipe_data
 	int	pipefd[2];
 	int	fd_prev;
 	int	count;
+	char	*cmmd_name;
 }	t_pipe_data;
 
 void	clean_mng(t_env *mini_env, char **cmmd, t_list **lex, t_list **pars);

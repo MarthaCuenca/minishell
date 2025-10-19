@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 16:27:37 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 18:13:08 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,19 @@ static void	print_signal_output(int sig_return)
 	}
 }
 
+static void	print_if_error(int result, t_pipe_data *pipe_data)
+{
+	if (result == -1)
+	{
+		ft_putstr_fd(pipe_data->cmmd_name, 2);
+		ft_putstr_fd(": memory fail\n", 2);
+	}
+	else if (result == 127)
+	{
+		ft_putstr_fd(pipe_data->cmmd_name, 2);
+		ft_putstr_fd(": command not found\n", 2);
+	}
+}	
 int	process_exit_status(t_pipe_data *pipe_data)
 {
 	int	status;
@@ -61,6 +74,7 @@ int	process_exit_status(t_pipe_data *pipe_data)
 			else
 				last_return = WEXITSTATUS(status);
 		}
+		print_if_error(WEXITSTATUS(status), pipe_data);
 		wait_pid = wait(&status);
 	}
 	print_signal_output(sig_return);
