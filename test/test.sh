@@ -66,4 +66,5 @@ run_tests_from_file() {
 	echo
 }
 
-run_tests_from_file "$1"
+run_tests_from_file "pipe_test.txt"
+run_tests_from_file "builtin_test.txt"

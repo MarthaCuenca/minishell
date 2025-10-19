@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 12:10:10 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:54:47 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,23 +81,22 @@ int	manage_outfile(t_cmmd *cmmd, t_env *env)
 
 	n = count_files(cmmd->redir, DIR_OUT) + count_files(cmmd->redir, APPEND);
 	i = -1;
-	while ((cmmd->redir[++i].file && n > 0) && \
-		(cmmd->redir[i].type == DIR_OUT || cmmd->redir[i].type == APPEND))
+	while (cmmd->redir[++i].file && n > 0)
 	{
-		--n;
-		if (cmmd->redir[i].type == DIR_OUT)
-			fd = open(cmmd->redir[i].file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			fd = open(cmmd->redir[i].file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
+		if (cmmd->redir[i].type == DIR_OUT || cmmd->redir[i].type == APPEND)
 		{
-			perror("open outfile");
-			env->r = 1;
-			return (0);
+			--n;
+			fd = open(cmmd->redir[i].file, choose_outfile_flags(cmmd->redir[i].type), 0644);
+			if (fd < 0)
+			{
+				perror("open outfile");
+				env->r = 1;
+				return (0);
+			}
+			if (n == 0)
+				dup2(fd, 1);
+			close(fd);
 		}
-		if (n == 0)
-			dup2(fd, 1);
-		close(fd);
 	}
 	return (1);
 }

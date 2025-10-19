@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 12:05:21 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:53:36 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ char	*create_filename(char *str_name, int counter, t_env *env);
 // Utils
 void	print_lst_cmmd(t_list *lst_cmmd);
 int		get_error(t_env *env, t_state state, char *msg);
+int		choose_outfile_flags(t_redir_type flags);
 char	*get_error_chr(t_env *env, t_state state, char *msg);
 int		builtin_echo(t_cmmd *nd);
 int		builtin_cd(t_env *mini_env, char **cmmd);

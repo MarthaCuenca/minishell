@@ -6,13 +6,14 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 12:13:12 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:56:17 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <sys/wait.h>
+#include <fcntl.h>
 
 int	count_files(t_redir *redir, int type)
 {
@@ -63,4 +64,14 @@ int	process_exit_status(t_pipe_data *pipe_data)
 	}
 	print_signal_output(sig_return);
 	return (last_return);
+}
+
+int	choose_outfile_flags(t_redir_type flags)
+{
+	if (flags == DIR_OUT)
+		return (O_WRONLY | O_CREAT | O_TRUNC);
+	else if (flags == APPEND)
+		return (O_WRONLY | O_CREAT | O_APPEND);
+	else
+		return (0);
 }

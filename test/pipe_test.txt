@@ -1,4 +1,4 @@
-# Combinations 1
+# Combinations 1: Single commands
 
 ## Single infile
 <tmp/no_exists => open infile: No such file or directory
@@ -10,14 +10,13 @@ ls
 ls
 cat tmp/outfile.tmp
 >tmp/outfile.tmp
-ls
 
 ## Single command
 ls
 echo hola
 
 
-# Combinations 2
+# Combinations 2: One command
 
 ## Infile Cmmd
 <tmp/file.tmp cat
@@ -33,4 +32,6 @@ echo adeu > tmp/outfile.tmp
 ## Infile Outfile
 < tmp/file.tmp > tmp/outfile.tmp
 < tmp/no_exists > tmp/outfile.tmp => open infile: No such file or directory
+cat tmp/outfile.tmp
+<tmp/file.tmp cat >tmp/outfile.tmp
 cat tmp/outfile.tmp
