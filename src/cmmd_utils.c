@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 12:56:17 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/19 16:27:37 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ int	process_exit_status(t_pipe_data *pipe_data)
 	int	wait_pid;
 	int	last_return;
 	int	sig_return;
-
-	wait_pid = 1;
+	
+	last_return = 0;
 	sig_return = 0;
+	wait_pid = wait(&status);
 	while (wait_pid > 0)
 	{
-		wait_pid = wait(&status);
-		if (!WIFEXITED(status))
+		if (WIFSIGNALED(status))
 			sig_return = 128 + WTERMSIG(status);
 		if (wait_pid == pipe_data->last_pid)
 		{
@@ -61,6 +61,7 @@ int	process_exit_status(t_pipe_data *pipe_data)
 			else
 				last_return = WEXITSTATUS(status);
 		}
+		wait_pid = wait(&status);
 	}
 	print_signal_output(sig_return);
 	return (last_return);

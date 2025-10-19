@@ -12,22 +12,36 @@ run_one_test() {
 	local out_bash
 	local status_usr
 	local status_bash
+	local tmp_input_usr tmp_output_usr tmp_input_bash tmp_output_bash
+	tmp_input_usr=$(mktemp)
+	tmp_output_usr=$(mktemp)
+	tmp_input_bash=$(mktemp)
+	tmp_output_bash=$(mktemp)
 
-	# Ejecutar test
-	out_usr=$(printf "%s\necho \$?\nexit\n" "$test_str" | "$MINISHELL" 2>&1)
-	out_usr=$(echo "$out_usr" | grep -v '^minishell-')
-	status_usr=$(echo "$out_usr" | grep -E '^[0-9]+$' | tail -n1)
-	out_usr=$(echo "$out_usr" | sed '$d')
-	out_bash=$(printf "%s\necho \$?\nexit\n" "$test_str" | bash 2>&1)
-	status_bash=$(echo "$out_bash" | tail -n 1)
-	status_bash=$(echo "$out_bash" | grep -E '^[0-9]+$' | tail -n1)
-	out_bash=$(echo "$out_bash" | sed '$d')
+	# --- Prep tmp files ---
+	echo "$test_str" > "$tmp_input_usr"
+	echo "exit" >> "$tmp_input_usr"
 
+	echo "$test_str" > "$tmp_input_bash"
+	echo "exit" >> "$tmp_input_bash"
+
+	# --- Execute minishell ---
+	"$MINISHELL" < "$tmp_input_usr" > "$tmp_output_usr" 2>&1
+	status_usr=$?
+	out_usr=$(cat "$tmp_output_usr" | grep -v '^minishell-')
+
+	# --- Execute bash ---
+	bash < "$tmp_input_bash" > "$tmp_output_bash" 2>&1
+	status_bash=$?
+	out_bash=$(cat "$tmp_output_bash")
+
+	rm -f "$tmp_input_usr" "$tmp_output_usr" "$tmp_input_bash" "$tmp_output_bash" 
+
+	# --- Compare results ---
 	if [ -n "$expected" ]; then
 		out_bash="$expected"
 	fi
 
-	# Compare
 	if [[ "$out_usr" == "$out_bash" ]]; then
 		echo "✅ [OK] test: $test_str"
 	else
