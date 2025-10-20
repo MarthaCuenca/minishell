@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:45:36 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/15 14:59:26 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/19 20:16:10 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ char	*get_pwd(t_env *mini_env, t_bool *is_alloc)
 {
 	char	*value;
 
-	value = obtain_env_var_value(mini_env, "PWD");
+	value = obtain_env_var_value(mini_env, NULL, "PWD");
 	*is_alloc = FALSE;
-	if (!value)
+	if (!value || (value && value[0] == '\0'))
 	{
 		value = getcwd(NULL, 0);
 		if (!value)

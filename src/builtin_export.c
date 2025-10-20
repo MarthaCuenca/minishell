@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 16:35:45 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/19 19:10:22 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,10 @@ t_state	new_var_bi_export(t_list **vars, char *str)
 	new_node = ft_lstnew(new_str);
 	if (!new_node)
 		return (ST_ERR_MALLOC);
-	ft_lstadd_back(vars, new_node);
+	if (vars)
+		ft_lstadd_back(vars, new_node);
+	else
+		*vars = new_node;
 	return (ST_OK);
 }
 
@@ -118,7 +121,10 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 	t_list	*tmp;
 
 	state = ST_OK;
-	tmp = check_env_var(str, len, *vars);
+	if (vars)
+		tmp = check_env_var(str, len, *vars);
+	else
+		tmp = NULL;
 	if (!tmp)
 	{
 		if (valid_env_varname_syntax(str, len))

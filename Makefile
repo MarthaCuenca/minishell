@@ -27,7 +27,7 @@ SRCS := src/main.c \
 		src/cmmd_utils.c \
 		src/heredoc.c \
 		src/list_to_array.c \
-		src/error_mng.c \
+		src/err_mng.c \
 		src/cmmd_builtin.c \
 		src/builtin_echo.c \
 		src/builtin_cd.c \

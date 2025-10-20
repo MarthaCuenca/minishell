@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/15 14:54:13 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:54:09 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void		quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void		*new_token(t_list **head, char *cmmd, int start, int end);
 t_list		*split_one_token(t_list	**token_list);
 t_quote		token_quo_type(char *str);
-t_bool		is_special_dollar(char *str, int len);
+//t_bool		is_special_dollar(char *str, int len);
 //t_char_type	classify_char(char prev, char curr, int *quote_state);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
@@ -113,7 +113,7 @@ typedef struct s_redir
 typedef struct s_cmmd
 {
 	char	**cmmd;
-	t_redir	*redir; //merge: redir
+	t_redir	*redir;
 }	t_cmmd;
 
 typedef enum s_pr_crr_nx
@@ -137,7 +137,7 @@ int		env_key_len(char *str, int c);
 t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc);
 char	ft_prev_char(char *str, char *subptr);
 void	check_special_char(char *cmmd, int *quote_state, int *end, int *i);
-char	*obtain_env_var_value(t_env *env, char *dollar);
+char	*obtain_env_var_value(t_env *env, char b[], char *dollar);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 
@@ -201,5 +201,7 @@ void	arg_err(void);
 void	export_bi_err(char *str);
 int		count_token(char *cmmd);
 t_bool	is_c_symbol(char c, char *symbols);
+void	bi_err_mng(int err, char *cmmd, char *env_var);
+void	syntax_err(int err, char *str, char c);
 
 #endif

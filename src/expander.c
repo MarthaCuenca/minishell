@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/15 13:18:17 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:37:56 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,14 @@ char	ft_prev_char(char *str, char *subptr)
 	return (str[i]);
 }
 
+t_bool	is_special_dollar(char c)
+{
+	if (c == '?' || c == '$' || c == '!' || c == '#' || c == '@'
+		|| c == '0' || c == '1')
+		return (TRUE);
+	return (FALSE);
+}
+
 t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 {
 	int		i;
@@ -127,7 +135,7 @@ t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 	else if (!dollar[1])
 		return (FALSE);
 	else if (!valid_env_varname_syntax(dollar + 1, len)
-		&& dollar[1] && dollar[1] != '?')
+		&& (dollar[1] && is_special_dollar(dollar[1] == TRUE)))
 		return (FALSE);
 	else if (ft_prev_char(str, dollar) == '\\')
 		return (FALSE);
@@ -219,7 +227,7 @@ t_list	*check_env_var(char *str, int in_len, t_list *env)
 	t_list	*tmp;
 
 	if (!str || !in_len || !env)
-		return (arg_err(), NULL);
+		return (NULL);
 	check = 0;
 	tmp = env;
 	while (tmp)
@@ -234,25 +242,79 @@ t_list	*check_env_var(char *str, int in_len, t_list *env)
 	return (tmp);
 }
 
-char	*obtain_env_var_value(t_env *env, char *dollar)
+int	ft_count_digits(long int n)
+{
+	int	count;
+
+	if (n > 2147483647 | n < -2147483647)
+		return (0);
+	if (n == 0)
+		return (1);
+	if (n < 0)
+		n *= -1;
+	count = 0;
+	while (n > 0)
+	{
+		n = n / 10;
+		count++;
+	}
+	return (count);
+}
+
+char	*ft_static_itoa(char *dest, int size, long int n)
+{
+	int	digits;
+
+	if (!dest || size <= 0 || size > 12 || n > 2147483647 | n < -2147483647)
+		return (NULL);
+	digits = ft_count_digits(n);
+	if (n < 0)
+	{
+		n *= -1;
+		dest[0] = '-';
+		digits++;
+	}
+	if (digits >= size)
+	{
+		dest[0] = '\0';
+		return (NULL);
+	}
+	dest[digits] = '\0';
+	while (digits-- > 0)
+	{
+		dest[digits] = (n % 10) + '0';
+		n = n / 10;
+	}
+	return (dest);
+}
+
+char	*obtain_special_env_var_value(t_env *env, char b[], char dollar)
+{
+	int		i;
+	char	*env_value;
+
+	i = 0;
+	if (dollar == '?')
+		env_value = ft_static_itoa(b, 4, env->r);
+	else
+		env_value = "";
+	return (env_value);
+}
+
+char	*obtain_env_var_value(t_env *env, char b[], char *dollar)
 {
 	int		in_len;
 	char	*sd[2];
 	char	*env_value;
 	t_list	*match;
 
-	if (dollar[1] && dollar[1] == '?')
+	if (dollar && is_special_dollar(dollar[0]))
 	{
-		env_value = ft_itoa(env->r);
+		env_value = obtain_special_env_var_value(env, b, dollar[0]);
 		if (!env_value)
-			return (malloc_err(), NULL);
+			return (NULL);
 		return (env_value);
 	}
-	/*sd[START] = dollar + 1;
-	in_len = varname_len_in_str(sd[START]);
-	sd[END] = dollar + in_len;
-	match = check_env_var(sd[START], in_len, (t_list *)env->vars);
-	env_value = get_env_value(match, in_len);*/
 	sd[START] = dollar;
 	in_len = varname_len_in_str(sd[START]);
 	sd[END] = dollar + in_len;
@@ -261,13 +323,15 @@ char	*obtain_env_var_value(t_env *env, char *dollar)
 	return (env_value);
 }
 
-char	**exp_values(t_env *env, char *str, int n_dollar, t_bool is_heredoc)
+char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
 {
 	int		j;
+	int		n_dollar;
 	char	**exp_str;
-	char	*check_point;
+	void	*check_point;
 
 	j = 0;
+	n_dollar = count_dollar(str, is_heredoc);
 	exp_str = (char **)ft_calloc(n_dollar + 1, sizeof(char *));
 	if (!exp_str)
 		return (malloc_err(), NULL);
@@ -276,9 +340,8 @@ char	**exp_values(t_env *env, char *str, int n_dollar, t_bool is_heredoc)
 	{
 		check_point = ft_strchr(check_point, '$');
 		if (check_point && is_dollar_valid(str, check_point, is_heredoc))
-			exp_str[j] = obtain_env_var_value(env, check_point + 1);
+			exp_str[j++] = obtain_env_var_value(env, b, check_point + 1);
 		check_point++;
-		j++;
 	}
 	exp_str[j] = NULL;
 	return (exp_str);
@@ -286,14 +349,11 @@ char	**exp_values(t_env *env, char *str, int n_dollar, t_bool is_heredoc)
 
 t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc)
 {
-	int		n_dollar;
 	char	**values;
 	char	*new_str;
+	char	b[4];
 
-	n_dollar = count_dollar(*str, is_heredoc);
-	if (n_dollar == 0)
-		return (TRUE);
-	values = exp_values(env, *str, n_dollar, is_heredoc);
+	values = exp_values(env, b, *str, is_heredoc);
 	if (!values)
 		return (FALSE);
 	new_str = exchange_exp_var(values, *str, is_heredoc);
