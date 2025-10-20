@@ -83,9 +83,6 @@ export_src:
 export_head:
 	@echo $(HEAD)
 
-test:
-	$(MAKE) -C test test
-
 -include $(DEPS)
 
-.PHONY: all clean fclean re export_src export_head test
+.PHONY: all clean fclean re export_src export_head
