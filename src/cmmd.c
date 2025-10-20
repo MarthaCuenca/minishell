@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 18:02:37 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:59:26 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,10 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 	t_cmmd	*cmmd;
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
-	if (lst_cmmd->next)
-		if (!pipe_e(pipe_data->pipefd, env))
+	if (lst_cmmd->next && !pipe_e(pipe_data->pipefd, env))
 			return (0);
 	pipe_data->pid = fork();
+	cmmd->pid = pipe_data->pid;
 	if (!fork_e(pipe_data->pid, env))
 		return (0);
 	if (pipe_data->pid == 0)
@@ -136,11 +136,11 @@ int	exec_cmmd(t_list *lst_cmmd, t_env *env)
 
 	pipe_data.fd_prev = -1;
 	pipe_data.last_pid = -1;
+	pipe_data.lst_cmmd = lst_cmmd;
 	if (exec_if_1builtin(lst_cmmd, env))
 		return (1);
 	while (lst_cmmd)
 	{
-		pipe_data.cmmd_name = ((t_cmmd *)lst_cmmd->content)->cmmd[0];
 		if (!exec_cmmd_node(lst_cmmd, &pipe_data, env))
 			return (0);
 		lst_cmmd = lst_cmmd->next;

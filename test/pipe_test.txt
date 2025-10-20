@@ -52,5 +52,5 @@ cat tmp/outfile2.tmp
 # Combinations 3: Multiple commands
 printf "a\nc\nd\nb\nz\ne" > tmp/infile.tmp
 <tmp/infile1.tmp <tmp/infile.tmp cat | sort | tr [:lower:] [:upper:] > tmp/outfile.tmp
-asdf1 | asdf2 | asdf3
+asdf1 => asdf1 : command not found
 

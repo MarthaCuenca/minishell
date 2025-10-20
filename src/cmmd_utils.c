@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 18:13:08 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 18:32:53 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,33 @@ static void	print_signal_output(int sig_return)
 	}
 }
 
-static void	print_if_error(int result, t_pipe_data *pipe_data)
+static void	print_if_error(int status, t_pipe_data *pipe_data, int pid)
 {
-	if (result == -1)
+	t_list	*lst_cmmd;
+	t_cmmd	*cmmd;
+	int	num_return;
+
+	num_return = WEXITSTATUS(status);
+	if (num_return == -1 || num_return == 127)
 	{
-		ft_putstr_fd(pipe_data->cmmd_name, 2);
-		ft_putstr_fd(": memory fail\n", 2);
+		cmmd = NULL;
+		lst_cmmd = pipe_data->lst_cmmd;
+		while (lst_cmmd)
+		{
+			cmmd = (t_cmmd *)lst_cmmd->content;
+			if (cmmd->pid == pid)
+				break ;
+			lst_cmmd = lst_cmmd->next;
+		}
+		if (cmmd)
+			ft_putstr_fd(cmmd->cmmd[0], 2);
+		if (num_return == -1)
+			ft_putstr_fd(" : memory fail\n", 2);
+		if (num_return == 127)
+			ft_putstr_fd(" : command not found\n", 2);
 	}
-	else if (result == 127)
-	{
-		ft_putstr_fd(pipe_data->cmmd_name, 2);
-		ft_putstr_fd(": command not found\n", 2);
-	}
-}	
+}
+
 int	process_exit_status(t_pipe_data *pipe_data)
 {
 	int	status;
@@ -74,7 +88,7 @@ int	process_exit_status(t_pipe_data *pipe_data)
 			else
 				last_return = WEXITSTATUS(status);
 		}
-		print_if_error(WEXITSTATUS(status), pipe_data);
+		print_if_error(status, pipe_data, wait_pid);
 		wait_pid = wait(&status);
 	}
 	print_signal_output(sig_return);
