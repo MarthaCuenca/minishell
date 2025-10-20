@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 12:11:43 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 18:44:45 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	choose_builtin(t_cmmd *cmmd, t_env *env)
 int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
 {
 	t_cmmd	*cmmd;
-	int	fd_stdout;
+	int		fd_stdout;
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
 	if (!lst_cmmd->next && is_builtin_not_forkable(cmmd->cmmd[0]))

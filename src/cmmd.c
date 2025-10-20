@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 17:59:26 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 18:43:05 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int	manage_outfile(t_cmmd *cmmd, t_env *env)
 		if (cmmd->redir[i].type == DIR_OUT || cmmd->redir[i].type == APPEND)
 		{
 			--n;
-			fd = open(cmmd->redir[i].file, choose_outfile_flags(cmmd->redir[i].type), 0644);
+			fd = open(cmmd->redir[i].file, \
+				choose_outfile_flags(cmmd->redir[i].type), 0644);
 			if (fd < 0)
 			{
 				perror("open outfile");
@@ -107,7 +108,7 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
 	if (lst_cmmd->next && !pipe_e(pipe_data->pipefd, env))
-			return (0);
+		return (0);
 	pipe_data->pid = fork();
 	cmmd->pid = pipe_data->pid;
 	if (!fork_e(pipe_data->pid, env))

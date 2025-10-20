@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 18:32:53 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 18:41:25 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	print_if_error(int status, t_pipe_data *pipe_data, int pid)
 {
 	t_list	*lst_cmmd;
 	t_cmmd	*cmmd;
-	int	num_return;
+	int		num_return;
 
 	num_return = WEXITSTATUS(status);
 	if (num_return == -1 || num_return == 127)
@@ -73,7 +73,7 @@ int	process_exit_status(t_pipe_data *pipe_data)
 	int	wait_pid;
 	int	last_return;
 	int	sig_return;
-	
+
 	last_return = 0;
 	sig_return = 0;
 	wait_pid = wait(&status);
