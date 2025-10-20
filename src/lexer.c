@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/17 18:39:21 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:51:14 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,20 @@ t_bool	delete_empty_token(t_list **token_list)
 	return (TRUE);
 }
 
-t_list	*lexer(char *cmmd)
+int	lexer(t_list **lex, char *cmmd)
 {
+	t_state	state;
 	t_list	*token_list;
 
 	if (!cmmd)
-		return (NULL);
-	token_list = save_token(cmmd);
-	if (!token_list)
-		return (NULL);
+		return (ST_ERR);
+	state = save_token(&token_list, cmmd);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
 	if (!split_one_token(&token_list))
-		return (NULL);
+		return (ST_ERR_MALLOC);
 	if (!delete_empty_token(&token_list))
-		return (NULL);
-	return (token_list);
+		return (ST_ERR_MALLOC);
+	*lex = token_list;
+	return (ST_OK);
 }

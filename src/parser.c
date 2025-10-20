@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_v2.c                                        :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:19:06 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 13:13:40 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/20 18:25:26 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_bool	is_x_symbol(int x, int *symbols, int len)
 t_bool	is_word_after_redir(t_list *lex)
 {
 	int		tk_ty[3];
+	char	*str;
 	t_list	*tmp;
 
 	tmp = lex;
@@ -37,9 +38,10 @@ t_bool	is_word_after_redir(t_list *lex)
 	{
 		tk_ty[CURR] = ((t_token *)tmp->content)->type;
 		tk_ty[NEXT] = ((t_token *)tmp->next->content)->type;
+		str = ((t_token *)tmp->next->content)->token;
 		if (tk_ty[CURR] == REDIR)
 			if (tk_ty[NEXT] != WORD && tk_ty[NEXT] != EXP)
-				return (printf("Syntax error: no word after redir."), TRUE);
+				return (syntax_err(2, str, '\0'), TRUE);
 		tmp = tmp->next;
 	}
 	return (FALSE);
@@ -47,11 +49,15 @@ t_bool	is_word_after_redir(t_list *lex)
 
 t_bool	is_ineq_symbol_at_end(t_list *lex)
 {
-	int	last_nd;
+	char	*nd_tk;
+	int		nd_type;
+	t_token	*last_nd;
 
-	last_nd = ((t_token *)ft_lstlast(lex)->content)->type;
-	if (last_nd == REDIR)
-		return (printf("Syntax error: redir at last position."), TRUE);
+	last_nd = (t_token *)ft_lstlast(lex)->content;
+	nd_type = last_nd->type;
+	nd_tk = last_nd->token;
+	if (nd_type == REDIR)
+		return (syntax_err(2, nd_tk, '\0'), TRUE);
 	return (FALSE);
 }
 
@@ -81,7 +87,7 @@ t_bool	is_pipe_misplaced(t_list *lex)
 		if (tk_ty[CURR] == PIPE)
 			if ((tk_ty[NEXT] != REDIR && tk_ty[NEXT] != WORD)
 				&& tk_ty[PREV] != WORD)
-				return (printf("Syntax error: misplaced pipe."), TRUE);
+				return (syntax_err(1, NULL, '|'), TRUE);
 		tk_ty[PREV] = tk_ty[CURR];
 		tmp = tmp->next;
 	}
@@ -98,9 +104,9 @@ t_bool	is_pipe_at_start_or_end(t_list *lex)
 	first_nd = ((t_token *)lex->content)->type;
 	last_nd = ((t_token *)ft_lstlast(lex)->content)->type;
 	if (first_nd == PIPE)
-		return (printf("Syntax error: pipe at first position."), TRUE);
+		return (syntax_err(1, NULL, '|'), TRUE);
 	else if (last_nd == PIPE)
-		return (printf("Syntax error: pipe at last position."), TRUE);
+		return (syntax_err(1, NULL, '|'), TRUE);
 	return (FALSE);
 }
 
@@ -126,17 +132,18 @@ t_bool	syntax(t_list *lex)
 	return (TRUE);
 }
 
-t_list	*parser(t_list **lex)
+int	parser(t_list **pars, t_list **lex)
 {
-	t_list	*pars;
+	t_list	*cmmd_list;
 
 	if (!*lex)
-		return (NULL);
-	pars = NULL;
+		return (ST_ERR);
+	cmmd_list = NULL;
 	if (!syntax(*lex))
-		return (NULL);
-	pars = save_cmmd(lex);
-	if (!pars)
-		return (NULL);
-	return (pars);
+		return (ST_ERR);
+	cmmd_list = save_cmmd(lex);
+	if (!cmmd_list)
+		return (ST_ERR_MALLOC);
+	*pars = cmmd_list;
+	return (ST_OK);
 }

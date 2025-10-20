@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_one_token_v3.c                               :+:      :+:    :+:   */
+/*   split_one_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 14:13:46 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:37:33 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	rm_and_link(t_list **lst, t_list *nd_rm,
 	t_list	*anchor;
 
 	if (!*lst && !nd_rm && !del)
-		return (arg_err());
+		return ;
 	anchor = *lst;
 	if (*lst == nd_rm)
 		anchor = nd_rm;
@@ -56,7 +56,7 @@ t_bool	is_c_symbol(char c, char *symbols)
 	int	i;
 
 	if (!symbols)
-		return (arg_err(), FALSE);
+		return (FALSE);
 	i = 0;
 	while (symbols[i] && c != symbols[i])
 		i++;
@@ -117,7 +117,7 @@ t_list	*split_amalgam(t_list *tk)
 	{
 		start_end_amalgam(str, &quote_state, sd, &i);
 		if (sd[END] == -1)
-			return (printf("Error: quotations marks were not closed."), NULL);
+			return (NULL);//return (printf("Error: quotations marks were not closed."), NULL);
 		if (!new_token(&head, str, sd[START], sd[END]))
 			return (ft_lstclear(&head, &del_t_token), NULL);
 	}
@@ -127,7 +127,7 @@ t_list	*split_amalgam(t_list *tk)
 t_bool	is_amalgam(t_token *tk)
 {
 	if (!tk)
-		return (arg_err(), FALSE);
+		return (FALSE);
 	if (tk->type == WORD
 		&& tk->quote_type != SIMPLE_QUOTE && tk->quote_type != DOUBLE_QUOTE)
 	{
@@ -154,7 +154,7 @@ t_list	*split_one_token(t_list **token_list)
 	t_list	*add;
 
 	if (!*token_list)
-		return (arg_err(), NULL);
+		return (NULL);
 	tmp = *token_list;
 	next = NULL;
 	add = NULL;

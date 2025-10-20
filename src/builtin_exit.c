@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 10:15:57 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:25:51 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -21,7 +21,7 @@ int	check_arg_bi_exit(char **cmmd)
 	int	num;
 
 	if (cmmd[2])
-		return (127);
+		return (1);
 	else if (!ft_str_isdigit(cmmd[1]) || is_overflow(cmmd[1]))
 		return (2);
 	else
@@ -38,9 +38,13 @@ void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 
 	status = mini_env->r;
 	tmp = nd;
-	//cambiar por la funcion de Cesc
 	if (tmp->cmmd[1])
-		status = check_arg_bi_exit(tmp->cmmd);
+	{
+		if (tmp->cmmd[2])
+			return (bi_err_mng(1, tmp->cmmd[0], NULL));
+		else
+			status = check_arg_bi_exit(tmp->cmmd);
+	}
 	clean_mng(mini_env, NULL, NULL, pars);
 	exit(status);
 }

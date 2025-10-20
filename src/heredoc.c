@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:34:29 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 15:11:07 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:24:54 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 static int	write_line(char **line, t_env *env, int fd)
 {
-	if (!exp_mng(env, line))
+	if (!exp_mng(env, line, TRUE))
 		return (get_error(env, ST_ERR_MALLOC, NULL));
 	if (ft_putstr_fd(*line, fd) == 0)
 		return (get_error(env, ST_ERR_FD, NULL));

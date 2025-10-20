@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/13 07:30:58 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:30:35 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,6 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
-/*int	fake_exec(t_env *mini_env, t_list **pars)
-{
-	int		bi_value;
-	//char	**mini_env_arr;
-	t_list	*tmp;
-
-	bi_value = 0;
-	tmp = *pars;
-	if (!expander(mini_env, pars))
-		return (-1);
-	if (!quote_removal(pars))
-		return (-1);
-	mini_env_arr = env_to_array(mini_env);
-	if (!mini_env_arr)
-		return (-1);
-	ft_free_2p(mini_env_arr);
-	while (tmp)
-	{
-		bi_value = builtin_mng(mini_env, pars, ((t_cmmd *)tmp->content));
-		if (bi_value < 0)
-			return (-1);
-		tmp = tmp->next;
-	}
-	return (bi_value);
-}*/
 
 void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
@@ -58,46 +32,76 @@ void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 	}
 }
 
-void	init_minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
+int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
 {
+	int	state;
+
+	state = expander(mini_env, pars);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
+	state = quote_removal(pars);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
+	state = excecutor(*pars, mini_env);
+	if (!state)
+		return (ST_ERR_MALLOC);
+	clean_mng(NULL, NULL, NULL, pars);
+	return (ST_OK);
+}
+
+int	init_lexer_parser(char **line, t_list **lex, t_list **pars)
+{
+	int	state;
+
+	state = lexer(lex, *line);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
+	state = parser(pars, lex);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
+	clean_mng(NULL, line, lex, NULL);
+	return (ST_OK);
+}
+
+void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
+{
+	int	state;
+
+	state = 0;
 	while (1)
 	{
+		clean_mng(NULL, line, lex, pars);
 		setup_signal_prompt();
 		*line = readline("minishell-");
 		update_r(mini_env);
 		if (!*line)
 			return ;
 		add_history(*line);
-		*lex = lexer(*line);
-		if (!*lex)
+		state = init_lexer_parser(line, lex, pars);
+		if (state == ST_ERR_MALLOC)
 			return ;
-		*pars = parser(lex);
-		if (!*pars)
+		else if (state == ST_ERR)
+			continue ;
+		state = init_expander_quorm_executor(mini_env, pars);
+		if (state == ST_ERR_MALLOC)
 			return ;
-		clean_mng(NULL, line, lex, NULL);
-		if (!expander(mini_env, pars))
-			return ;
-		if (!quote_removal(pars))
-			return ;
-		/*mini_env->r = fake_exec(mini_env, pars);
-		if (mini_env->r < 0)
-			return ;*/
-		if (!excecutor(*pars, mini_env))
-		{
-			clean_mng(NULL, NULL, NULL, pars);
-			return ;
-		}
-		clean_mng(NULL, NULL, NULL, pars);
+		else if (state == ST_ERR)
+			continue ;
 	}
 }
 
-t_bool	env_mng(t_env *mini_env, char **envp)
+t_state	env_mng(t_env *mini_env, char **envp)
 {
+	if (!envp)
+	{
+		mini_env->vars = NULL;
+		return (ST_OK);
+	}
 	mini_env->vars = env_dup(envp);
 	if (!mini_env->vars)
-		return (malloc_err(), FALSE);
+		return (ST_ERR_MALLOC);
 	mini_env->r = 0;
-	return (TRUE);
+	return (ST_OK);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -108,16 +112,15 @@ int	main(int argc, char **argv, char **envp)
 	t_env	mini_env;
 
 	(void)argv;
-	if (starter_err(argc, envp))
-		return (1);
+	if (argc > 1)
+		return (ft_putstr_fd("Error: minishell: too many arguments\n", 2), 1);
+	line = NULL;
 	lex = NULL;
 	pars = NULL;
-	if (!env_mng(&mini_env, envp))
+	if (env_mng(&mini_env, envp) == ST_ERR_MALLOC)
 		return (1);
-	init_minishell(&mini_env, &line, &lex, &pars);
-	clean_mng(&mini_env, &line, &lex, &pars);//
-	//ft_lstclear(&mini_env.vars, del_char_ptr);
+	minishell(&mini_env, &line, &lex, &pars);
+	clean_mng(&mini_env, &line, &lex, &pars);
 	rl_clear_history();
-	return (1);//Si llego hasta aqui es que fue un error de malloc
-	//return (0);
+	return (1);
 }

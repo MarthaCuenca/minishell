@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_v3.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:48:45 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/19 18:46:15 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:35:48 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ char	*increase_shell_level(char *shell_var)
 	lvl++;
 	tmp = ft_itoa(lvl);
 	if (!tmp)
-		return (arg_err(), NULL);
+		return (malloc_err(), NULL);
 	new_lvl = ft_strjoin("SHLVL=", tmp);
 	if (!new_lvl)
-		return (arg_err(), NULL);
+		return (malloc_err(), NULL);
 	free(tmp);
 	return (new_lvl);
 }

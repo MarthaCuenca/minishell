@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 18:44:45 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/20 19:27:28 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	is_builtin(char *str)
 		ft_strncmp(str, "cd", 3) == 0 || \
 		ft_strncmp(str, "pwd", 4) == 0 || \
 		ft_strncmp(str, "export", 7) == 0 || \
+		ft_strncmp(str, "unset", 5) == 0 || \
 		ft_strncmp(str, "env", 4) == 0 || \
 		ft_strncmp(str, "unset", 6) == 0 || \
 		ft_strncmp(str, "exit", 5) == 0)
@@ -45,23 +46,28 @@ int	is_builtin(char *str)
 
 void	choose_builtin(t_cmmd *cmmd, t_env *env)
 {
+	int		state;
 	char	*str;
 
+	state = 0;
 	str = (char *)cmmd->cmmd[0];
 	if (ft_strcmp(str, "echo") == 0)
-		env->r = builtin_echo(cmmd);
+		state = builtin_echo(cmmd);
 	else if (ft_strcmp(str, "cd") == 0)
-		env->r = builtin_cd(env, cmmd->cmmd);
+		state = builtin_cd(env, cmmd->cmmd);
 	else if (ft_strcmp(str, "pwd") == 0)
-		env->r = builtin_pwd(env);
+		state = builtin_pwd(env);
 	else if (ft_strcmp(str, "export") == 0)
-		env->r = builtin_export(env, cmmd->cmmd);
+		state = builtin_export(env, cmmd->cmmd);
 	else if (ft_strcmp(str, "unset") == 0)
-		env->r = builtin_unset(env, cmmd->cmmd);
+		state = builtin_unset(env, cmmd->cmmd);
 	else if (ft_strcmp(str, "env") == 0)
-		env->r = builtin_env(env);
+		state = builtin_env(env);
 	else if (ft_strcmp(str, "exit") == 0)
 		builtin_exit(env, NULL, cmmd);
+	if (state != 0)
+		state = 1;
+	env->r = state;
 }
 
 int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
