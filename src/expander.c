@@ -120,13 +120,11 @@ t_bool	is_special_dollar(char c)
 
 t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 {
-	int		i;
 	int		len;
 	t_quote	quote_state;
 
 	if (!dollar)
 		return (FALSE);
-	i = 0;
 	len = varname_len_in_str(dollar);
 	quote_state = NO_QUOTE;
 	check_state(str, dollar, &quote_state);
@@ -246,7 +244,7 @@ int	ft_count_digits(long int n)
 {
 	int	count;
 
-	if (n > 2147483647 | n < -2147483647)
+	if (n > 2147483647 || n < -2147483647)
 		return (0);
 	if (n == 0)
 		return (1);
@@ -265,7 +263,7 @@ char	*ft_static_itoa(char *dest, int size, long int n)
 {
 	int	digits;
 
-	if (!dest || size <= 0 || size > 12 || n > 2147483647 | n < -2147483647)
+	if (!dest || size <= 0 || size > 12 || n > 2147483647 || n < -2147483647)
 		return (NULL);
 	digits = ft_count_digits(n);
 	if (n < 0)
@@ -290,10 +288,8 @@ char	*ft_static_itoa(char *dest, int size, long int n)
 
 char	*obtain_special_env_var_value(t_env *env, char b[], char dollar)
 {
-	int		i;
 	char	*env_value;
 
-	i = 0;
 	if (dollar == '?')
 		env_value = ft_static_itoa(b, 4, env->r);
 	else

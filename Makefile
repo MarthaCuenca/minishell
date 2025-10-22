@@ -60,7 +60,7 @@ all: $(LIB_PATH) $(NAME)
 $(NAME): $(LIB_PATH) $(OBJS) Makefile
 	$(CC) $(CFLAGS) $(CFLAGS_I) $(OBJS) $(LIB_PATH) -o $(NAME) -lreadline
 
-$(LIB_PATH): $(LIB_SRCS)
+$(LIB_PATH): $(LIB_SRCS) $(LIB)/Makefile
 	$(MAKE) -C $(LIB)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
@@ -71,9 +71,11 @@ $(OBJ_PATH):
 
 clean:
 	rm -rf $(OBJ_PATH)
+	make clean -C libft
 
 fclean: clean
 	rm -f $(NAME)
+	make fclean -C libft
 
 re: fclean all
 
