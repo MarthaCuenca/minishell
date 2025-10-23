@@ -16,7 +16,7 @@ void	ft_free_2p(char **array)
 {
 	size_t	i;
 
-	if (!array || !*array)
+	if (!array)
 		return ;
 	i = 0;
 	while (array[i])

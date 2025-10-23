@@ -124,7 +124,7 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 			else
 				execve_e(cmmd, env);
 		}
-		clean_mng(env, NULL, NULL, &lst_cmmd);
+		clean_mng(env, NULL, NULL, &(pipe_data->lst_cmmd));
 		exit(env->r);
 	}
 	manage_pipes(pipe_data, lst_cmmd->next == NULL);
