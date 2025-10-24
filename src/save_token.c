@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:33:13 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 17:56:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:12:10 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void	*new_token(t_list **head, char *cmmd, int start, int end)
  * dudosos: "", '', {}, [], () */
 t_bool	is_operand(char c, char next, int quo_st)
 {
-	if (quo_st == NO_QUOTE && (c == '&' || c == '*' || c == '#'
+	if (quo_st == NO_QUOTE && (c == '&' || c == '*' || c == '#' || c == ';'
 			|| c == '{' || c == '}' || c == '(' || c == ')'
 			|| c == '[' || c == ']'))
 		return (TRUE);
@@ -217,7 +217,8 @@ int	double_quo(char *cmmd, int *qs, int *i)
 	{
 		if (cmmd[tmp] == '`')
 			return (-1);
-		if (cmmd[tmp] == '\\' && (cmmd[tmp + 1] == '\"' || cmmd[tmp + 1] == '`'))
+		if (cmmd[tmp] == '\\'
+			&& (cmmd[tmp + 1] == '\"' || cmmd[tmp + 1] == '`'))
 			tmp++;
 		tmp++;
 	}
@@ -257,6 +258,8 @@ void	quote_mng(char *cmmd, int *quote_state, int *end, int *i)
 		*end = simple_quo(cmmd, quote_state, i);
 	else if (cmmd[*i] == '\"')
 		*end = double_quo(cmmd, quote_state, i);
+	if (*end == -1)
+		syntax_err(3, NULL, '\0');
 }
 
 int	std_char(t_list	**head, char *cmmd, int *range)
@@ -272,7 +275,7 @@ int	std_char(t_list	**head, char *cmmd, int *range)
 			return (ST_ERR);
 		quote_mng(cmmd, &quote_state, &range[END], &i);
 		if (range[END] == -1)
-			return (syntax_err(3, NULL, '\0'), ST_ERR);
+			return (ST_ERR);
 		i++;
 	}
 	if (range[END] == -1)

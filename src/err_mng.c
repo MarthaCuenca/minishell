@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 14:25:01 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 18:20:01 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:10:11 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 #include "libft.h"
 #include <stdio.h>
 
-void	malloc_err(void)//mirar aqui y abajo, porque aun hay archivos que los usan
+void	malloc_err(void)
 {
 	printf("Error: malloc falied.\n");
 }
-
-/*void	arg_err(void)
-{
-	printf("Error: expected arguments are missing.\n");
-}*/
 
 void	syntax_err(int err, char *str, char c)
 {
@@ -44,4 +39,8 @@ void	bi_err_mng(int err, char *cmmd, char *not_found)
 		printf("Error: %s: %s: No such file or directory\n", cmmd, not_found);
 	else if (err == 4)
 		printf("Error: %s: %s: Permission denied\n", cmmd, not_found);
+	else if (err == 5)
+		printf("Error: %s: %s: numeric argument required\n", cmmd, not_found);
+	else if (err == 6)
+		printf ("Error: %s: `%s': not a valid identifier\n", cmmd, not_found);
 }

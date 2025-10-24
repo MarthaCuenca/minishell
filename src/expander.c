@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 17:37:56 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:07:36 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 	else if (!dollar[1])
 		return (FALSE);
 	else if (!valid_env_varname_syntax(dollar + 1, len)
-		&& (dollar[1] && is_special_dollar(dollar[1] == TRUE)))
+		&& (dollar[1] && is_special_dollar(dollar[1]) == TRUE))
 		return (FALSE);
 	else if (ft_prev_char(str, dollar) == '\\')
 		return (FALSE);
@@ -143,18 +143,18 @@ t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 int	count_dollar(char *str, t_bool is_heredoc)
 {
 	int		count;
-	char	*check_point;
+	char	*checkpoint;
 
 	count = 0;
-	check_point = str;
-	while (check_point)
+	checkpoint = str;
+	while (checkpoint)
 	{
-		check_point = ft_strchr(check_point, '$');
-		if (!check_point)
+		checkpoint = ft_strchr(checkpoint, '$');
+		if (!checkpoint)
 			break ;
-		if (is_dollar_valid(str, check_point, is_heredoc))
+		if (is_dollar_valid(str, checkpoint, is_heredoc))
 			count++;
-		check_point++;
+		checkpoint++;
 	}
 	return (count);
 }
@@ -240,7 +240,7 @@ t_list	*check_env_var(char *str, int in_len, t_list *env)
 	return (tmp);
 }
 
-int	ft_count_digits(long int n)
+/*int	ft_count_digits(long int n)
 {
 	int	count;
 
@@ -284,7 +284,7 @@ char	*ft_static_itoa(char *dest, int size, long int n)
 		n = n / 10;
 	}
 	return (dest);
-}
+}*/
 
 char	*obtain_special_env_var_value(t_env *env, char b[], char dollar)
 {
@@ -324,20 +324,20 @@ char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
 	int		j;
 	int		n_dollar;
 	char	**exp_str;
-	void	*check_point;
+	void	*checkpoint;
 
 	j = 0;
 	n_dollar = count_dollar(str, is_heredoc);
 	exp_str = (char **)ft_calloc(n_dollar + 1, sizeof(char *));
 	if (!exp_str)
 		return (malloc_err(), NULL);
-	check_point = str;
+	checkpoint = str;
 	while (j < n_dollar)
 	{
-		check_point = ft_strchr(check_point, '$');
-		if (check_point && is_dollar_valid(str, check_point, is_heredoc))
-			exp_str[j++] = obtain_env_var_value(env, b, check_point + 1);
-		check_point++;
+		checkpoint = ft_strchr(checkpoint, '$');
+		if (checkpoint && is_dollar_valid(str, checkpoint, is_heredoc))
+			exp_str[j++] = obtain_env_var_value(env, b, checkpoint + 1);
+		checkpoint++;
 	}
 	exp_str[j] = NULL;
 	return (exp_str);

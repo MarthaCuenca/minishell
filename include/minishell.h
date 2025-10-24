@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 19:33:46 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:13:18 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,8 @@ int			lexer(t_list **lex, char *cmmd);
 int			save_token(t_list **token_list, char *cmmd);
 void		quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void		*new_token(t_list **head, char *cmmd, int start, int end);
-t_list		*split_one_token(t_list	**token_list);
+t_state		split_one_token(t_list	**token_list);
 t_quote		token_quo_type(char *str);
-//t_bool		is_special_dollar(char *str, int len);
-//t_char_type	classify_char(char prev, char curr, int *quote_state);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
@@ -136,7 +134,6 @@ int		expander(t_env *mini_env, t_list **pars);
 int		quote_removal(t_list **pars);
 t_list	*check_env_var(char *str, int in_len, t_list *env);
 char	*get_env_value(t_list *match, int var_len);;
-//int		varname_len_in_str(char *start);
 int		env_key_len(char *str, int c);
 t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc);
 char	ft_prev_char(char *str, char *subptr);
@@ -216,5 +213,4 @@ int		count_token(char *cmmd);
 t_bool	is_c_symbol(char c, char *symbols);
 void	bi_err_mng(int err, char *cmmd, char *env_var);
 void	syntax_err(int err, char *str, char c);
-
 #endif

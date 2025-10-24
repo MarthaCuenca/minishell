@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:19:06 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 18:25:26 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:42:16 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_bool	is_pipe_misplaced(t_list *lex)
 		tk_ty[NEXT] = ((t_token *)tmp->next->content)->type;
 		if (tk_ty[CURR] == PIPE)
 			if ((tk_ty[NEXT] != REDIR && tk_ty[NEXT] != WORD)
-				&& tk_ty[PREV] != WORD)
+				|| tk_ty[PREV] != WORD)
 				return (syntax_err(1, NULL, '|'), TRUE);
 		tk_ty[PREV] = tk_ty[CURR];
 		tmp = tmp->next;

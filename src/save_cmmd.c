@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:54:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 16:45:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:11:23 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,13 @@ void	fill_arg_array(t_list *lex, char **array)
 	{
 		tk = (t_token *)tmp->content;
 		if (tk->type == REDIR)
-			tmp = tmp->next->next;
+			tmp = tmp->next;
 		else if (tk->type == WORD || tk->type == EXP)
 		{
 			ft_swap_str(&array[j], &tk->token);
 			j++;
-			tmp = tmp->next;
 		}
-		else
-			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 	array[j] = NULL;
 }

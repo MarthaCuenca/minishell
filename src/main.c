@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 19:30:35 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:10:45 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,22 @@ int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
 	return (ST_OK);
 }
 
-int	init_lexer_parser(char **line, t_list **lex, t_list **pars)
+int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	int	state;
 
 	state = lexer(lex, *line);
 	if (state == ST_ERR_MALLOC || state == ST_ERR)
+	{
+		mini_env->r = 1;
 		return (state);
+	}
 	state = parser(pars, lex);
 	if (state == ST_ERR_MALLOC || state == ST_ERR)
+	{
+		mini_env->r = 1;
 		return (state);
+	}
 	clean_mng(NULL, line, lex, NULL);
 	return (ST_OK);
 }
@@ -74,10 +80,10 @@ void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 		setup_signal_prompt();
 		*line = readline("minishell-");
 		update_r(mini_env);
-		if (!*line)
+		if (*line == NULL)
 			return ;
 		add_history(*line);
-		state = init_lexer_parser(line, lex, pars);
+		state = init_lexer_parser(mini_env, line, lex, pars);
 		if (state == ST_ERR_MALLOC)
 			return ;
 		else if (state == ST_ERR)
@@ -92,11 +98,6 @@ void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 
 t_state	env_mng(t_env *mini_env, char **envp)
 {
-	if (!envp)
-	{
-		mini_env->vars = NULL;
-		return (ST_OK);
-	}
 	mini_env->vars = env_dup(envp);
 	if (!mini_env->vars)
 		return (ST_ERR_MALLOC);
@@ -118,6 +119,7 @@ int	main(int argc, char **argv, char **envp)
 	lex = NULL;
 	pars = NULL;
 	if (env_mng(&mini_env, envp) == ST_ERR_MALLOC)
+	if (env_mng(&mini_env, NULL) == ST_ERR_MALLOC)
 		return (1);
 	minishell(&mini_env, &line, &lex, &pars);
 	clean_mng(&mini_env, &line, &lex, &pars);

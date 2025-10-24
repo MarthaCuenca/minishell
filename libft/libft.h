@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:23:01 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/03 17:04:35 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/24 16:23:44 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	*ft_memchr(const void *s, int c, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 //Changed so it accepts long long.
 char	*ft_itoa(long long n);
+char	*ft_static_itoa(char *dest, int size, long int n);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strnstr(const char *big, const char *little, size_t len);

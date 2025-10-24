@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 19:25:51 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/22 19:00:53 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -23,7 +23,7 @@ int	check_arg_bi_exit(char **cmmd)
 	if (cmmd[2])
 		return (1);
 	else if (!ft_str_isdigit(cmmd[1]) || is_overflow(cmmd[1]))
-		return (2);
+		return (bi_err_mng(5, cmmd[0], cmmd[1]), 2);
 	else
 		num = ft_atoi(cmmd[1]);
 	if (num > 255)

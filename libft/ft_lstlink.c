@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 10:57:05 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/08/28 18:25:34 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 17:32:23 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_lstunlink(t_list **lst, t_list *nd_rm, void (*del)(void *))
 
 	if (!*lst || !nd_rm)
 		return ;
-	if (ft_lstsize(*lst) <= 2)
+	if (ft_lstsize(*lst) <= 2 || nd_rm == *lst)
 	{
 		if (*lst == nd_rm)
 			*lst = nd_rm->next;

@@ -39,7 +39,6 @@ SRCS := src/main.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
 		src/utils.c \
-		src/print_util.c \
 		src/signal.c \
 		src/signal_updater.c
 

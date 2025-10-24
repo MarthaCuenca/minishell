@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:15:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/13 18:51:14 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:51:37 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include <stdio.h>
 
-t_bool	delete_empty_token(t_list **token_list)
+void	delete_empty_token(t_list **token_list)
 {
 	int		len;
 	t_list	**tmp;
@@ -35,7 +35,6 @@ t_bool	delete_empty_token(t_list **token_list)
 		else
 			tmp = &(*tmp)->next;
 	}
-	return (TRUE);
 }
 
 int	lexer(t_list **lex, char *cmmd)
@@ -48,10 +47,10 @@ int	lexer(t_list **lex, char *cmmd)
 	state = save_token(&token_list, cmmd);
 	if (state == ST_ERR_MALLOC || state == ST_ERR)
 		return (state);
-	if (!split_one_token(&token_list))
-		return (ST_ERR_MALLOC);
-	if (!delete_empty_token(&token_list))
-		return (ST_ERR_MALLOC);
+	state = split_one_token(&token_list);
+	if (state == ST_ERR_MALLOC || state == ST_ERR)
+		return (state);
+	delete_empty_token(&token_list);
 	*lex = token_list;
 	return (ST_OK);
 }

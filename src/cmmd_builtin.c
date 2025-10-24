@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 19:27:28 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/24 17:50:32 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	is_builtin_not_forkable(char *str)
 {
 	if (!str)
 		return (0);
-	if (ft_strncmp(str, "export", 5) == 0 || \
-		ft_strncmp(str, "unset", 4) == 0 || \
-		ft_strncmp(str, "cd", 4) == 0 || \
-		ft_strncmp(str, "exit", 5) == 0)
+	if (ft_strcmp(str, "export") == 0 || \
+		ft_strcmp(str, "unset") == 0 || \
+		ft_strcmp(str, "cd") == 0 || \
+		ft_strcmp(str, "exit") == 0)
 		return (1);
 	else
 		return (0);
@@ -31,14 +31,14 @@ int	is_builtin(char *str)
 {
 	if (!str)
 		return (0);
-	if (ft_strncmp(str, "echo", 5) == 0 || \
-		ft_strncmp(str, "cd", 3) == 0 || \
-		ft_strncmp(str, "pwd", 4) == 0 || \
-		ft_strncmp(str, "export", 7) == 0 || \
-		ft_strncmp(str, "unset", 5) == 0 || \
-		ft_strncmp(str, "env", 4) == 0 || \
-		ft_strncmp(str, "unset", 6) == 0 || \
-		ft_strncmp(str, "exit", 5) == 0)
+	if (ft_strcmp(str, "echo") == 0 || \
+		ft_strcmp(str, "cd") == 0 || \
+		ft_strcmp(str, "pwd") == 0 || \
+		ft_strcmp(str, "export") == 0 || \
+		ft_strcmp(str, "unset") == 0 || \
+		ft_strcmp(str, "env") == 0 || \
+		ft_strcmp(str, "unset") == 0 || \
+		ft_strcmp(str, "exit") == 0)
 		return (1);
 	else
 		return (0);

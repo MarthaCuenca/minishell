@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/20 17:37:33 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:46:22 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ static void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 	if (*quote_state != NO_QUOTE)
 		return ;
 	if (ft_strstr(&str[*i], "<<<") || ft_strstr(&str[*i], ">>>"))
+	{
 		*end = -1;
+		syntax_err(1, NULL, str[*i + 2]);
+	}
 	else
 	{
 		if (ft_strrstr(&str[*i], "<<") || ft_strstr(&str[*i], ">>"))
@@ -99,29 +102,27 @@ int	start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
 	return (1);
 }
 
-t_list	*split_amalgam(t_list *tk)
+t_state	split_amalgam(t_list *tk, t_list **head)
 {
 	int		i;
 	int		sd[2];
 	int		quote_state;
 	char	*str;
-	t_list	*head;
 
 	i = 0;
 	quote_state = NO_QUOTE;
 	str = ((t_token *)tk->content)->token;
-	head = NULL;
 	sd[START] = 0;
 	sd[END] = 0;
 	while (str[i])
 	{
 		start_end_amalgam(str, &quote_state, sd, &i);
 		if (sd[END] == -1)
-			return (NULL);//return (printf("Error: quotations marks were not closed."), NULL);
-		if (!new_token(&head, str, sd[START], sd[END]))
-			return (ft_lstclear(&head, &del_t_token), NULL);
+			return (ST_ERR);
+		if (!new_token(head, str, sd[START], sd[END]))
+			return (ft_lstclear(head, &del_t_token), ST_ERR_MALLOC);
 	}
-	return (head);
+	return (ST_OK);
 }
 
 t_bool	is_amalgam(t_token *tk)
@@ -147,14 +148,13 @@ t_bool	is_amalgam(t_token *tk)
 	return (FALSE);
 }
 
-t_list	*split_one_token(t_list **token_list)
+t_state	split_one_token(t_list **token_list)
 {
 	t_list	*tmp;
 	t_list	*next;
 	t_list	*add;
+	t_state	state;
 
-	if (!*token_list)
-		return (NULL);
 	tmp = *token_list;
 	next = NULL;
 	add = NULL;
@@ -163,14 +163,14 @@ t_list	*split_one_token(t_list **token_list)
 		if (is_amalgam((t_token *)tmp->content))
 		{
 			next = tmp->next;
-			add = split_amalgam(tmp);
-			if (!add)
-				return (ft_lstclear(token_list, del_t_token), NULL);
+			state = split_amalgam(tmp, &add);
+			if (state == ST_ERR_MALLOC || state == ST_ERR)
+				return (ft_lstclear(token_list, del_t_token), state);
 			rm_and_link(token_list, tmp, add, del_t_token);
 			tmp = next;
 		}
 		else
 			tmp = tmp->next;
 	}
-	return (*token_list);
+	return (ST_OK);
 }

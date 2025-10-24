@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:06:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/03 15:57:28 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/22 20:37:43 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 
 void	del_char_ptr(void *str)
 {
+	char	*tmp;
 
 	if (!str)
 		return ;
-	free(str);
+	tmp = (char *)str;
+	free(tmp);
 }
 
 void	del_t_env(void	*minishell_env)
@@ -40,8 +42,9 @@ void	del_t_token(void *tk_nd)
 	if (!tk_nd)
 		return ;
 	tmp = (t_token *)tk_nd;
-	del_char_ptr(tmp->token);
-	free(tk_nd);
+	if (tmp)
+		del_char_ptr(tmp->token);
+	free(tmp);
 }
 
 void	del_t_redir(void *dir_array)

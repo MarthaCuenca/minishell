@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 19:10:22 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:58:44 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 		if (valid_env_varname_syntax(str, len))
 			state = new_var_bi_export(vars, str);
 		else
-			return (ST_ERR);
+			return (bi_err_mng(6, "export", str), ST_ERR);
 	}
 	else
 		state = new_env_var_value_bi_export(&tmp, str);

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 19:16:57 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 17:40:54 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	rm_sim_quo_and_backslash(char **str, int *quo_st, int *read, int *write)
 
 	(*read)++;
 	prev = '\0';
-	is_escaped = TRUE;
+	if ((*str)[*read] != '\'')
+		is_escaped = TRUE;
+	else
+		is_escaped = FALSE;
 	while ((*str)[*read] && is_escaped)
 	{
 		(*str)[*write] = (*str)[*read];

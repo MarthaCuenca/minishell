@@ -6,7 +6,7 @@
 #    By: faguirre <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 10:47:10 by faguirre          #+#    #+#              #
-#    Updated: 2025/10/03 17:00:02 by faguirre         ###   ########.fr        #
+#    Updated: 2025/10/24 16:24:07 by mcuenca-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,8 @@ SRCS = ft_isalpha.c \
        get_next_line_utils.c \
        ft_count_split_by_start.c \
        ft_free_split.c \
-       ft_join_path.c
+       ft_join_path.c \
+	   ft_static_itoa.c
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)

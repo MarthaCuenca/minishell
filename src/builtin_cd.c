@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 20:58:27 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:08:24 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_state	update_old(t_list **old, char *curr_pwd)
 {
 	char	*up_old;
 	char	*result;
+
 	if (*old)
 	{
 		up_old = ft_strchr(curr_pwd, '=') + 1;
@@ -56,12 +57,15 @@ t_state	update_path(t_env **mini_env, char *new_pwd, char *cmmd)
 
 	old = check_env_var("OLDPWD", 6, (*mini_env)->vars);
 	curr = check_env_var("PWD", 3, (*mini_env)->vars);
-	if (update_old(&old, (char *)curr->content) == ST_ERR_MALLOC)
-		return (free(new_pwd), ST_ERR_MALLOC);
-	if (update_curr(&curr, new_pwd) == ST_ERR_MALLOC)
-		return (free(new_pwd), ST_ERR_MALLOC);
-	if (cmmd && cmmd[0] == '-' && !cmmd[1])
-		printf("%s\n", ft_strchr((char *)curr->content, '=') + 1);
+	if (old && curr)
+	{
+		if (update_old(&old, (char *)curr->content) == ST_ERR_MALLOC)
+			return (free(new_pwd), ST_ERR_MALLOC);
+		if (update_curr(&curr, new_pwd) == ST_ERR_MALLOC)
+			return (free(new_pwd), ST_ERR_MALLOC);
+		if (cmmd && cmmd[0] == '-' && !cmmd[1])
+			printf("%s\n", ft_strchr((char *)curr->content, '=') + 1);
+	}
 	return (ST_OK);
 }
 
@@ -159,7 +163,7 @@ int	builtin_cd(t_env *mini_env, char **cmmd)
 	if (cmmd[1])
 	{
 		if (cmmd[2])
-			return (bi_err_mng(1, cmmd[0], NULL), ST_ERR);//"bash: cd: too many arguments.
+			return (bi_err_mng(1, cmmd[0], NULL), ST_ERR);
 		else
 			state = bi_cd(&mini_env, cmmd[1]);
 	}
