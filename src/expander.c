@@ -6,13 +6,15 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:07:36 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 18:05:14 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+//AQUI falta expansiones de multiples dollars y que una var_no_existe + var_existe me poner 1 espacio
 
 int	varname_len_in_str(char *start)
 {
@@ -132,9 +134,9 @@ t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc)
 		return (FALSE);
 	else if (!dollar[1])
 		return (FALSE);
-	else if (!valid_env_varname_syntax(dollar + 1, len)
+	/*else if (!valid_env_varname_syntax(dollar + 1, len)
 		&& (dollar[1] && is_special_dollar(dollar[1]) == TRUE))
-		return (FALSE);
+		return (FALSE);*/
 	else if (ft_prev_char(str, dollar) == '\\')
 		return (FALSE);
 	return (TRUE);
@@ -154,6 +156,8 @@ int	count_dollar(char *str, t_bool is_heredoc)
 			break ;
 		if (is_dollar_valid(str, checkpoint, is_heredoc))
 			count++;
+		if (is_special_dollar(checkpoint[1]) == TRUE)
+			checkpoint++;
 		checkpoint++;
 	}
 	return (count);
@@ -173,6 +177,7 @@ void	fill_new_str(char *dest, char **values, char *str, t_bool is_heredoc)
 	{
 		if (str[i] == '$' && is_dollar_valid(str, &str[i], is_heredoc))
 		{
+			//if (values[j][0] != '\0')
 			i += varname_len_in_str(&str[i] + 1) + 1;
 			value_len = ft_strlen(values[j]);
 			ft_memcpy(&dest[k], values[j], value_len);
@@ -324,7 +329,7 @@ char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
 	int		j;
 	int		n_dollar;
 	char	**exp_str;
-	void	*checkpoint;
+	char	*checkpoint;
 
 	j = 0;
 	n_dollar = count_dollar(str, is_heredoc);
@@ -337,6 +342,8 @@ char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
 		checkpoint = ft_strchr(checkpoint, '$');
 		if (checkpoint && is_dollar_valid(str, checkpoint, is_heredoc))
 			exp_str[j++] = obtain_env_var_value(env, b, checkpoint + 1);
+		if (is_special_dollar(checkpoint[1]) == TRUE)
+			checkpoint++;
 		checkpoint++;
 	}
 	exp_str[j] = NULL;

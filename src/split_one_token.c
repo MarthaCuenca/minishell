@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 15:46:22 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/24 21:14:44 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,12 +157,12 @@ t_state	split_one_token(t_list **token_list)
 
 	tmp = *token_list;
 	next = NULL;
-	add = NULL;
 	while (tmp)
 	{
 		if (is_amalgam((t_token *)tmp->content))
 		{
 			next = tmp->next;
+			add = NULL;
 			state = split_amalgam(tmp, &add);
 			if (state == ST_ERR_MALLOC || state == ST_ERR)
 				return (ft_lstclear(token_list, del_t_token), state);

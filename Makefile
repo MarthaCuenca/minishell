@@ -13,6 +13,7 @@ HEAD := include/minishell.h \
 
 SRCS := src/main.c \
 		src/env.c \
+		src/env_shlvl.c\
 		src/lexer.c \
 		src/del_function.c \
 		src/save_token.c \
@@ -38,6 +39,9 @@ SRCS := src/main.c \
 		src/builtin_pwd.c \
 		src/builtin_env.c \
 		src/builtin_exit.c \
+		src/bi_cd_path.c \
+		src/bi_cd_up_path.c \
+		src/bi_export_print.c \
 		src/utils.c \
 		src/signal.c \
 		src/signal_updater.c

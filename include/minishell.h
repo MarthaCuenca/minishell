@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:13:18 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 18:17:57 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ typedef struct s_env
 	int		r;
 }	t_env;
 
+t_state	env_mng(t_env *mini_env, char **envp);
 t_list	*env_dup(char **env);
 char	**env_to_array(t_env *mini_env);
+char	*create_content_env_nd(char **envp, int *i, t_bool *shlvl_founded);
+t_list	*is_not_shlvl(t_list **head, t_bool *shlvl_founded);
+char	*increase_shell_level(char *shell_var);
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
 
@@ -190,6 +194,10 @@ int		builtin_export(t_env *mini_env, char **cmmd);
 int		builtin_unset(t_env *mini_env, char **cmmd);
 int		builtin_env(t_env *mini_env);
 void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
+
+t_state	check_path(t_env *mini_env, char *cmmd, char **result);
+t_state	update_path(t_env **mini_env, char *new_pwd, char *cmmd);
+t_state	builtin_export_print(t_env	*mini_env);
 
 // Signals
 void	setup_signal_prompt(void);

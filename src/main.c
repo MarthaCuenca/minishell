@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:10:45 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 18:15:41 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,14 @@ void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 	}
 }
 
-t_state	env_mng(t_env *mini_env, char **envp)
+/*t_state	env_mng(t_env *mini_env, char **envp)
 {
 	mini_env->vars = env_dup(envp);
 	if (!mini_env->vars)
 		return (ST_ERR_MALLOC);
 	mini_env->r = 0;
 	return (ST_OK);
-}
+}*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -119,7 +119,6 @@ int	main(int argc, char **argv, char **envp)
 	lex = NULL;
 	pars = NULL;
 	if (env_mng(&mini_env, envp) == ST_ERR_MALLOC)
-	if (env_mng(&mini_env, NULL) == ST_ERR_MALLOC)
 		return (1);
 	minishell(&mini_env, &line, &lex, &pars);
 	clean_mng(&mini_env, &line, &lex, &pars);
