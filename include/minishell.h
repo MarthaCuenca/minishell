@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:17:57 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 19:00:19 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,13 @@ typedef enum s_pr_crr_nx
 }	t_pr_crr_nx;
 
 int		parser(t_list **pars, t_list **lex);
+t_bool	pipe_syntax(t_list *lex);
+t_bool	inequality_symbols_syntax(t_list *lex);
 t_list	*save_cmmd(t_list **lex);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
 
 int		expander(t_env *mini_env, t_list **pars);
-int		quote_removal(t_list **pars);
 t_list	*check_env_var(char *str, int in_len, t_list *env);
 char	*get_env_value(t_list *match, int var_len);;
 int		env_key_len(char *str, int c);
@@ -143,6 +144,11 @@ t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc);
 char	ft_prev_char(char *str, char *subptr);
 void	check_special_char(char *cmmd, int *quote_state, int *end, int *i);
 char	*obtain_env_var_value(t_env *env, char b[], char *dollar);
+
+/*** *** *** *** *** *** *** *** QUOTE_RM* *** *** *** *** *** *** *** *** ***/
+
+int		quote_removal(t_list **pars);
+void	rm_quote_mng(char **str);
 
 /*** *** *** *** *** *** *** *** EXCECUTOR *** *** *** *** *** *** *** *** ***/
 
@@ -213,12 +219,11 @@ void	del_t_cmmd(void *cmmd_nd);
 void	del_t_env(void *mini_env);
 void	del_t_redir(void *dir_array);
 void	print_array_2p(char **array);
-t_bool	starter_err(int argc, char **envp);
 void	malloc_err(void);
-void	arg_err(void);
 void	export_bi_err(char *str);
 int		count_token(char *cmmd);
 t_bool	is_c_symbol(char c, char *symbols);
+t_bool	is_x_symbol(int x, int *symbols, int len);
 void	bi_err_mng(int err, char *cmmd, char *env_var);
 void	syntax_err(int err, char *str, char c);
 #endif

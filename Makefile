@@ -19,9 +19,12 @@ SRCS := src/main.c \
 		src/save_token.c \
 		src/split_one_token.c \
 		src/parser.c \
+		src/parser_pipe.c \
+		src/parser_inequality_symbols.c  \
 		src/save_cmmd.c \
 		src/expander.c \
 		src/quote_removal.c \
+		src/quote_removal_mng.c \
 		src/excecutor.c \
 		src/cmmd.c \
 		src/cmmd_transform_namepath.c \
@@ -43,6 +46,7 @@ SRCS := src/main.c \
 		src/bi_cd_up_path.c \
 		src/bi_export_print.c \
 		src/utils.c \
+		src/ft_utils.c \
 		src/signal.c \
 		src/signal_updater.c
 
