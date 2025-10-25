@@ -18,10 +18,14 @@ SRCS := src/main.c \
 		src/del_function.c \
 		src/save_token.c \
 		src/split_one_token.c \
+		src/split_amalgam.c \
 		src/parser.c \
 		src/parser_pipe.c \
 		src/parser_inequality_symbols.c  \
 		src/save_cmmd.c \
+		src/save_cmmd_arg.c \
+		src/save_cmmd_redir.c \
+		src/save_cmmd_utils.c \
 		src/expander.c \
 		src/quote_removal.c \
 		src/quote_removal_mng.c \
@@ -45,6 +49,7 @@ SRCS := src/main.c \
 		src/bi_cd_path.c \
 		src/bi_cd_up_path.c \
 		src/bi_export_print.c \
+		src/type.c \
 		src/utils.c \
 		src/ft_utils.c \
 		src/signal.c \

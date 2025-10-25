@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:00:19 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 19:58:27 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int			save_token(t_list **token_list, char *cmmd);
 void		quote_mng(char *cmmd, int *quote_state, int *end, int *i);
 void		*new_token(t_list **head, char *cmmd, int start, int end);
 t_state		split_one_token(t_list	**token_list);
+t_state		split_amalgam(t_list *tk, t_list **head);
 t_quote		token_quo_type(char *str);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
@@ -133,6 +134,11 @@ int		parser(t_list **pars, t_list **lex);
 t_bool	pipe_syntax(t_list *lex);
 t_bool	inequality_symbols_syntax(t_list *lex);
 t_list	*save_cmmd(t_list **lex);
+t_bool	create_arg_array(t_list *lex, char ***arg_arr, int n_arg);
+t_bool	create_dir_array(t_list *lex, t_redir **dir_array, int n_dir);
+
+t_list	*next_pipe(t_list *tmp);
+int	count_token_until_pipe(t_list *lex, t_token_type target_type);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
 
@@ -220,8 +226,9 @@ void	del_t_env(void *mini_env);
 void	del_t_redir(void *dir_array);
 void	print_array_2p(char **array);
 void	malloc_err(void);
-void	export_bi_err(char *str);
+//void	export_bi_err(char *str);
 int		count_token(char *cmmd);
+int	redir_type(t_token *nd);
 t_bool	is_c_symbol(char c, char *symbols);
 t_bool	is_x_symbol(int x, int *symbols, int len);
 void	bi_err_mng(int err, char *cmmd, char *env_var);

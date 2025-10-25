@@ -1,41 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*   type.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 18:51:14 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:52:49 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/10/25 19:49:32 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/10/25 19:49:55 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 
-t_bool	is_c_symbol(char c, char *symbols)
+int	redir_type(t_token *nd)
 {
-	int	i;
+	char	*str;
+	t_quote	quo;
 
-	if (!symbols)
-		return (FALSE);
-	i = 0;
-	while (symbols[i] && c != symbols[i])
-		i++;
-	if (c == symbols[i])
-		return (TRUE);
-	return (FALSE);
-}
-
-t_bool	is_x_symbol(int x, int *symbols, int len)
-{
-	int	i;
-
-	if (!symbols)
-		return (FALSE);
-	i = 0;
-	while (i < len && x != symbols[i])
-		i++;
-	if (x == symbols[i])
-		return (TRUE);
-	return (FALSE);
+	str = nd->token;
+	quo = nd->quote_type;
+	if (ft_strcmp(str, "<<") == 0 && quo == NO_QUOTE)
+		return (HEREDOC);
+	else if (ft_strcmp(str, ">>") == 0 && quo == NO_QUOTE)
+		return (APPEND);
+	else if (ft_strcmp(str, "<") == 0 && quo == NO_QUOTE)
+		return (DIR_IN);
+	else if (ft_strcmp(str, ">") == 0 && quo == NO_QUOTE)
+		return (DIR_OUT);
+	return (0);
 }
