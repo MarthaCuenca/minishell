@@ -16,7 +16,10 @@ SRCS := src/main.c \
 		src/env_shlvl.c\
 		src/lexer.c \
 		src/del_function.c \
-		src/save_token.c \
+		src/save_token_quote_mng.c \
+		src/save_token_char_loop.c \
+		src/save_new_token.c \
+		src/save_token_classification.c \
 		src/split_one_token.c \
 		src/split_amalgam.c \
 		src/parser.c \
@@ -27,6 +30,10 @@ SRCS := src/main.c \
 		src/save_cmmd_redir.c \
 		src/save_cmmd_utils.c \
 		src/expander.c \
+		src/expander_mng.c \
+		src/expander_new_value.c \
+		src/expander_obtain_value.c \
+		src/expander_utils.c \
 		src/quote_removal.c \
 		src/quote_removal_mng.c \
 		src/excecutor.c \
@@ -50,6 +57,7 @@ SRCS := src/main.c \
 		src/bi_cd_up_path.c \
 		src/bi_export_print.c \
 		src/type.c \
+		src/token_type.c \
 		src/utils.c \
 		src/ft_utils.c \
 		src/signal.c \

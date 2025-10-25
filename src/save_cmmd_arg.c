@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 19:39:58 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:40:56 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 20:59:41 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,3 @@ t_bool	create_arg_array(t_list *lex, char ***arg_arr, int n_arg)
 	fill_arg_array(lex, *arg_arr);
 	return (TRUE);
 }
-

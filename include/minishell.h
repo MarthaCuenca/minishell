@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:58:27 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/25 20:57:09 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,16 @@ typedef struct s_token
 	t_token_type	type;
 }	t_token;
 
-int			lexer(t_list **lex, char *cmmd);
-int			save_token(t_list **token_list, char *cmmd);
-void		quote_mng(char *cmmd, int *quote_state, int *end, int *i);
-void		*new_token(t_list **head, char *cmmd, int start, int end);
-t_state		split_one_token(t_list	**token_list);
-t_state		split_amalgam(t_list *tk, t_list **head);
-t_quote		token_quo_type(char *str);
+int				lexer(t_list **lex, char *cmmd);
+int				save_token(t_list **token_list, char *cmmd);
+int				cmmd_loop(t_list **head, char *cmmd, int *i);
+void			quote_mng(char *cmmd, int *quote_state, int *end, int *i);
+void			*new_token(t_list **head, char *cmmd, int start, int end);
+t_token_type	token_type(t_token *nd);
+t_quote			token_quo_type(char *str);
+t_state			split_one_token(t_list	**token_list);
+t_state			split_amalgam(t_list *tk, t_list **head);
+t_quote			token_quo_type(char *str);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
@@ -143,13 +146,17 @@ int	count_token_until_pipe(t_list *lex, t_token_type target_type);
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
 
 int		expander(t_env *mini_env, t_list **pars);
-t_list	*check_env_var(char *str, int in_len, t_list *env);
-char	*get_env_value(t_list *match, int var_len);;
-int		env_key_len(char *str, int c);
 t_bool	exp_mng(t_env *env, char **str, t_bool is_heredoc);
-char	ft_prev_char(char *str, char *subptr);
-void	check_special_char(char *cmmd, int *quote_state, int *end, int *i);
+t_list	*check_env_var(char *str, int in_len, t_list *env);
+char	*get_env_value(t_list *match, int var_len);
 char	*obtain_env_var_value(t_env *env, char b[], char *dollar);
+char	*exchange_exp_var(char **values, char *str, t_bool is_heredoc);
+void	check_special_char(char *cmmd, int *quote_state, int *end, int *i);
+int		count_dollar(char *str, t_bool is_heredoc);
+t_bool	is_dollar_valid(char *str, char *dollar, t_bool is_heredoc);
+t_bool	is_special_dollar(char c);
+int		varname_len_in_str(char *start);
+int		env_key_len(char *str, int c);
 
 /*** *** *** *** *** *** *** *** QUOTE_RM* *** *** *** *** *** *** *** *** ***/
 
@@ -226,11 +233,11 @@ void	del_t_env(void *mini_env);
 void	del_t_redir(void *dir_array);
 void	print_array_2p(char **array);
 void	malloc_err(void);
-//void	export_bi_err(char *str);
 int		count_token(char *cmmd);
-int	redir_type(t_token *nd);
+int		redir_type(t_token *nd);
 t_bool	is_c_symbol(char c, char *symbols);
 t_bool	is_x_symbol(int x, int *symbols, int len);
+char	ft_prev_char(char *str, char *subptr);
 void	bi_err_mng(int err, char *cmmd, char *env_var);
 void	syntax_err(int err, char *str, char c);
 #endif
