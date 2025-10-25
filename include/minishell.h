@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:57:09 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/26 00:37:13 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,13 @@ typedef enum e_token_type
 	REDIR
 }	t_token_type;
 
-typedef enum e_char_type 
+typedef enum e_char_type
 {
 	C_STD = 0,
-    C_LIT,
+	C_LIT,
 	C_ESC,
 	C_BACKSLASH,
-    C_FORBID,
+	C_FORBID,
 }	t_char_type;
 
 typedef struct s_token
@@ -99,16 +99,16 @@ typedef struct s_token
 	t_token_type	type;
 }	t_token;
 
-int				lexer(t_list **lex, char *cmmd);
-int				save_token(t_list **token_list, char *cmmd);
-int				cmmd_loop(t_list **head, char *cmmd, int *i);
-void			quote_mng(char *cmmd, int *quote_state, int *end, int *i);
-void			*new_token(t_list **head, char *cmmd, int start, int end);
+int		lexer(t_list **lex, char *cmmd);
+int		save_token(t_list **token_list, char *cmmd);
+int		cmmd_loop(t_list **head, char *cmmd, int *i);
+void	quote_mng(char *cmmd, int *quote_state, int *end, int *i);
+void	*new_token(t_list **head, char *cmmd, int start, int end);
+t_quote	token_quo_type(char *str);
+t_state	split_one_token(t_list	**token_list);
+t_state	split_amalgam(t_list *tk, t_list **head);
+t_quote	token_quo_type(char *str);
 t_token_type	token_type(t_token *nd);
-t_quote			token_quo_type(char *str);
-t_state			split_one_token(t_list	**token_list);
-t_state			split_amalgam(t_list *tk, t_list **head);
-t_quote			token_quo_type(char *str);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
 
@@ -123,7 +123,7 @@ typedef struct s_cmmd
 {
 	char	**cmmd;
 	t_redir	*redir;
-	int	pid;
+	int		pid;
 }	t_cmmd;
 
 typedef enum s_pr_crr_nx
@@ -141,7 +141,7 @@ t_bool	create_arg_array(t_list *lex, char ***arg_arr, int n_arg);
 t_bool	create_dir_array(t_list *lex, t_redir **dir_array, int n_dir);
 
 t_list	*next_pipe(t_list *tmp);
-int	count_token_until_pipe(t_list *lex, t_token_type target_type);
+int		count_token_until_pipe(t_list *lex, t_token_type target_type);
 
 /*** *** *** *** *** *** *** *** EXPANDER* *** *** *** *** *** *** *** *** ***/
 
@@ -167,11 +167,11 @@ void	rm_quote_mng(char **str);
 
 typedef struct s_pipe_data
 {
-	int	pid;
-	int	last_pid;
-	int	pipefd[2];
-	int	fd_prev;
-	int	count;
+	int		pid;
+	int		last_pid;
+	int		pipefd[2];
+	int		fd_prev;
+	int		count;
 	t_list	*lst_cmmd;
 }	t_pipe_data;
 
