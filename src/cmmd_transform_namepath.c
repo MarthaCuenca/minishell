@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:58 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 19:46:08 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/26 00:13:30 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	split_envpath(t_env *env, char ***path_split)
 
 	path_str = obtain_env_var_value(env, NULL, "PATH");
 	if (!path_str)
-		get_error(env, ST_ERR, "Error: env $PATH not found");
+		return (get_error(env, ST_ERR, "Error: env $PATH not found"));
 	*path_split = ft_split(path_str, ':');
 	if (!path_split)
 		return (get_error(env, ST_ERR_MALLOC, NULL));
@@ -71,6 +71,8 @@ int	correct_cmmd_namepath(t_list *lst_cmmd, t_env *env)
 		cmmd = (t_cmmd *)lst_cmmd->content;
 		if (cmmd->cmmd[0])
 		{
+			if (!cmmd->cmmd[0][0])
+				return (1);
 			if (is_builtin(cmmd->cmmd[0]) || ft_strchr(cmmd->cmmd[0], '/'))
 				;
 			else if (!correct_namepath(cmmd->cmmd, env))
