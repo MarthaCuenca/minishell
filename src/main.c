@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:15:41 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:14:23 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	int	state;
 
+	if (*line && *line[0] == '\0')
+	{
+		mini_env->r = 0;
+		return (ST_ERR);
+	}
 	state = lexer(lex, *line);
 	if (state == ST_ERR_MALLOC || state == ST_ERR)
 	{
@@ -81,7 +86,7 @@ void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 		*line = readline("minishell-");
 		update_r(mini_env);
 		if (*line == NULL)
-			return ;
+			return (malloc_err());
 		add_history(*line);
 		state = init_lexer_parser(mini_env, line, lex, pars);
 		if (state == ST_ERR_MALLOC)
@@ -95,15 +100,6 @@ void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 			continue ;
 	}
 }
-
-/*t_state	env_mng(t_env *mini_env, char **envp)
-{
-	mini_env->vars = env_dup(envp);
-	if (!mini_env->vars)
-		return (ST_ERR_MALLOC);
-	mini_env->r = 0;
-	return (ST_OK);
-}*/
 
 int	main(int argc, char **argv, char **envp)
 {
