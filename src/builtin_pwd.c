@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:45:36 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/19 20:16:10 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:20:12 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char	*get_pwd(t_env *mini_env, t_bool *is_alloc)
+static char	*get_pwd(t_env *mini_env, t_bool *is_alloc)
 {
 	char	*value;
 

@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 19:42:17 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:50:02 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:06:49 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-t_state	oldpwd_path(t_env *mini_env, char **result)
+static t_state	oldpwd_path(t_env *mini_env, char **result)
 {
 	char	*value;
 
@@ -26,7 +26,7 @@ t_state	oldpwd_path(t_env *mini_env, char **result)
 	return (ST_OK);
 }
 
-char	*home_path_result(char *match, char *ptr)
+static char	*home_path_result(char *match, char *ptr)
 {
 	char	*tmp;
 
@@ -39,7 +39,7 @@ char	*home_path_result(char *match, char *ptr)
 	return (tmp);
 }
 
-t_state	home_path(t_env *mini_env, char *cmmd, char **result)
+static t_state	home_path(t_env *mini_env, char *cmmd, char **result)
 {
 	char	*ptr;
 	char	*value;

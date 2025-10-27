@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 19:44:29 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:51:00 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:07:30 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_state	update_curr(t_list **curr, char *new_pwd)
+static t_state	update_curr(t_list **curr, char *new_pwd)
 {
 	char	*result;
 
@@ -30,7 +30,7 @@ t_state	update_curr(t_list **curr, char *new_pwd)
 	return (ST_OK);
 }
 
-t_state	update_old(t_list **old, char *curr_pwd)
+static t_state	update_old(t_list **old, char *curr_pwd)
 {
 	char	*up_old;
 	char	*result;

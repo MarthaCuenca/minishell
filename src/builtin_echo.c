@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:02:10 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/11 19:34:20 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:09:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	is_less_n(char **cmmd)
+static int	is_less_n(char **cmmd)
 {
 	int	j;
 	int	i;

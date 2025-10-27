@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 14:56:52 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 21:00:08 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:28:44 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_bool	dir_loop(t_env *env, t_redir *dir)
+static t_bool	dir_loop(t_env *env, t_redir *dir)
 {
 	int	j;
 
@@ -31,7 +31,7 @@ t_bool	dir_loop(t_env *env, t_redir *dir)
 	return (TRUE);
 }
 
-t_bool	arg_loop(t_env *env, char **arg)
+static t_bool	arg_loop(t_env *env, char **arg)
 {
 	int	j;
 

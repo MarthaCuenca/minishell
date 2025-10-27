@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 19:54:33 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 20:16:26 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:08:22 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	declare_print(char **env_arr)
+static void	declare_print(char **env_arr)
 {
 	int		j;
 	char	**tmp;
@@ -26,7 +26,7 @@ void	declare_print(char **env_arr)
 		printf("declare -x %s\n", tmp[j++]);
 }
 
-void	ft_sort_ascii(char **env_arr, int count)
+static void	ft_sort_ascii(char **env_arr, int count)
 {
 	int	i;
 	int	j;

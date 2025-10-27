@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:42:39 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:53:55 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:53:32 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	varname_len_in_str(char *start)
 {
 	int		i;
 	char	*end;
-	char	*symbols[8];
+	char	*symbols[10];
 
 	i = 0;
 	end = NULL;
@@ -28,8 +28,10 @@ int	varname_len_in_str(char *start)
 	symbols[4] = ft_strchr(start, '$');
 	symbols[5] = ft_strchr(start, '-');
 	symbols[6] = ft_strchr(start, '\n');
-	symbols[7] = ft_strchr(start, '\0');
-	while (i < 8)
+	symbols[7] = ft_strchr(start, '/');
+	symbols[8] = ft_strchr(start, '.');
+	symbols[9] = ft_strchr(start, '\0');
+	while (i < 10)
 	{
 		if (symbols[i] && (!end || symbols[i] < end))
 			end = symbols[i];
@@ -56,7 +58,7 @@ int	env_key_len(char *str, int c)
 	return (i);
 }
 
-void	check_state(char *str, char *dollar, t_quote *quote_state)
+static void	check_state(char *str, char *dollar, t_quote *quote_state)
 {
 	int		i;
 

@@ -6,13 +6,13 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 18:51:14 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:40:50 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:33:17 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_is_samealloc_diffpos(char *str, char *ptr)
+static int	ft_is_samealloc_diffpos(char *str, char *ptr)
 {
 	int		len;
 	char	*str_len;

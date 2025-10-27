@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:49:26 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 20:18:21 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:19:22 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_state	new_env_var_value_bi_export(t_list **node, char *str)
+static t_state	bi_export_new_env_var_value(t_list **node, char *str)
 {
 	char	*tmp;
 	char	*dup;
@@ -29,7 +29,7 @@ t_state	new_env_var_value_bi_export(t_list **node, char *str)
 	return (ST_OK);
 }
 
-t_state	new_var_bi_export(t_list **vars, char *str)
+static t_state	bi_export_new_var(t_list **vars, char *str)
 {
 	char	*equal_char;
 	char	*new_str;
@@ -68,7 +68,7 @@ t_bool	valid_env_varname_syntax(char *str, int len)
 	return (TRUE);
 }
 
-t_state	bi_export_loop(t_list **vars, char *str, int len)
+static t_state	bi_export_loop(t_list **vars, char *str, int len)
 {
 	t_state	state;
 	t_list	*tmp;
@@ -81,12 +81,12 @@ t_state	bi_export_loop(t_list **vars, char *str, int len)
 	if (!tmp)
 	{
 		if (valid_env_varname_syntax(str, len))
-			state = new_var_bi_export(vars, str);
+			state = bi_export_new_var(vars, str);
 		else
 			return (bi_err_mng(6, "export", str), ST_ERR);
 	}
 	else
-		state = new_env_var_value_bi_export(&tmp, str);
+		state = bi_export_new_env_var_value(&tmp, str);
 	return (state);
 }
 

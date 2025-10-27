@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 13:00:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/22 19:00:53 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:11:16 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-int	check_arg_bi_exit(char **cmmd)
+static int	bi_exit_check_arg(char **cmmd)
 {
 	int	num;
 
@@ -43,7 +43,7 @@ void	builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd)
 		if (tmp->cmmd[2])
 			return (bi_err_mng(1, tmp->cmmd[0], NULL));
 		else
-			status = check_arg_bi_exit(tmp->cmmd);
+			status = bi_exit_check_arg(tmp->cmmd);
 	}
 	clean_mng(mini_env, NULL, NULL, pars);
 	exit(status);

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/24 19:52:30 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:08:53 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-t_state	bi_cd(t_env **mini_env, char *cmmd)
+static t_state	bi_cd(t_env **mini_env, char *cmmd)
 {
 	char	*new_pwd;
 	char	*tmp;

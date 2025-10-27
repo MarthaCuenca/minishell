@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:45:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:48:07 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:29:19 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
+static char	**exp_values(t_env *env, char b[], char *str, t_bool is_heredoc)
 {
 	int		j;
 	int		n_dollar;

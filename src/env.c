@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:48:45 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:24:09 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 13:54:39 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*create_content_env_nd(char **envp, int *i, t_bool *shlvl_founded)
 	return (dup_var);
 }
 
-t_list	*is_env(char **envp, t_list **head, t_bool *shlvl_founded)
+static t_list	*is_env(char **envp, t_list **head, t_bool *shlvl_founded)
 {
 	int		i;
 	char	*tmp;
@@ -59,7 +59,7 @@ t_list	*is_env(char **envp, t_list **head, t_bool *shlvl_founded)
 	return (*head);
 }
 
-t_list	*env_dup(char **envp)
+static t_list	*env_dup(char **envp)
 {
 	t_list	*head;
 	t_bool	shlvl_founded;
