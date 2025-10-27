@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 12:26:45 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 12:34:44 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/27 15:35:28 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	setup_signal_standard(void (*fsigint)(int), void (*fsigquit)(int))
 	g_signal = 0;
 	sa1.sa_handler = fsigint;
 	sa1.sa_flags = 0;
-	sigemptyset(&sa1.sa_mask);
+	ft_memset(&sa1.sa_mask, 0, sizeof (sigset_t));
 	sa2.sa_handler = fsigquit;
 	sa2.sa_flags = 0;
-	sigemptyset(&sa2.sa_mask);
+	ft_memset(&sa2.sa_mask, 0, sizeof (sigset_t));
 	sigaction(SIGINT, &sa1, NULL);
 	sigaction(SIGQUIT, &sa2, NULL);
 }
@@ -53,11 +53,11 @@ void	setup_signal_prompt(void)
 	g_signal = 0;
 	sa_int.sa_handler = handler_prompt;
 	sa_int.sa_flags = SA_RESTART;
-	sigemptyset(&sa_int.sa_mask);
+	ft_memset(&sa_int.sa_mask, 0, sizeof (sigset_t));
 	sigaction(SIGINT, &sa_int, NULL);
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = SA_RESTART;
-	sigemptyset(&sa_quit.sa_mask);
+	ft_memset(&sa_quit.sa_mask, 0, sizeof (sigset_t));
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
@@ -78,10 +78,10 @@ void	setup_signal_heredoc(void)
 	g_signal = 0;
 	sa_int.sa_handler = handler_heredoc;
 	sa_int.sa_flags = 0;
-	sigemptyset(&sa_int.sa_mask);
+	ft_memset(&sa_int.sa_mask, 0, sizeof (sigset_t));
 	sigaction(SIGINT, &sa_int, NULL);
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = SA_RESTART;
-	sigemptyset(&sa_quit.sa_mask);
+	ft_memset(&sa_quit.sa_mask, 0, sizeof (sigset_t));
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }

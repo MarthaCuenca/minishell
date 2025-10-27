@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 18:41:25 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/27 15:27:18 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static void	print_if_error(int status, t_pipe_data *pipe_data, int pid)
 		if (cmmd)
 			ft_putstr_fd(cmmd->cmmd[0], 2);
 		if (num_return == -1)
-			ft_putstr_fd(" : memory fail\n", 2);
+			ft_putstr_fd(": memory fail\n", 2);
 		if (num_return == 127)
-			ft_putstr_fd(" : command not found\n", 2);
+			ft_putstr_fd(": command not found\n", 2);
 	}
 }
 
