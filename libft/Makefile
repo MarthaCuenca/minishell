@@ -6,7 +6,7 @@
 #    By: faguirre <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 10:47:10 by faguirre          #+#    #+#              #
-#    Updated: 2025/10/24 16:24:07 by mcuenca-         ###   ########.fr        #
+#    Updated: 2025/10/27 15:19:23 by faguirre         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,10 +84,10 @@ CFLAGS = -Wall -Wextra -Werror -MMD -MP -g
 
 all: $(NAME)
 
-$(NAME): $(OBJS) Makefile
+$(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-%.o: %.c
+%.o: %.c Makefile
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:

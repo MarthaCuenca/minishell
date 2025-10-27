@@ -77,13 +77,13 @@ LIB_SRCS := $(addprefix $(LIB)/, $(shell $(MAKE) -s -C $(LIB) export_srcs))
 
 all: $(LIB_PATH) $(NAME)
 
-$(NAME): $(LIB_PATH) $(OBJS) Makefile
+$(NAME): $(LIB_PATH) $(OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_I) $(OBJS) $(LIB_PATH) -o $(NAME) -lreadline
 
 $(LIB_PATH): $(LIB_SRCS) $(LIB)/Makefile
 	$(MAKE) -C $(LIB)
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c Makefile | $(OBJ_PATH)
 	$(CC) $(CFLAGS) $(CFLAGS_I) -c -o $@ $<
 
 $(OBJ_PATH):
