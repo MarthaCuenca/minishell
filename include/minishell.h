@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 13:26:29 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:30:28 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char			**env_to_array(t_env *mini_env);
 char			*create_content_env_nd(char **envp,
 					int *i, t_bool *shlvl_founded);
 t_list			*is_not_shlvl(t_list **head, t_bool *shlvl_founded);
+t_list			*is_not_pwd(t_list **head);
 char			*increase_shell_level(char *shell_var);
 
 /*** *** *** *** *** *** *** *** * LEXER * *** *** *** *** *** *** *** *** ***/
@@ -107,7 +108,7 @@ void			*new_token(t_list **head, char *cmmd, int start, int end);
 t_quote			token_quo_type(char *str);
 t_state			split_one_token(t_list	**token_list);
 t_state			split_amalgam(t_list *tk, t_list **head);
-t_quote			token_quo_type(char *str);
+//t_quote			token_quo_type(char *str);
 t_token_type	token_type(t_token *nd);
 
 /*** *** *** *** *** *** *** *** *PARSER * *** *** *** *** *** *** *** *** ***/
@@ -215,7 +216,7 @@ int				builtin_export(t_env *mini_env, char **cmmd);
 int				builtin_unset(t_env *mini_env, char **cmmd);
 int				builtin_env(t_env *mini_env);
 void			builtin_exit(t_env *mini_env, t_list **pars, t_cmmd *nd);
-
+char			*get_pwd(t_env *mini_env, t_bool *is_alloc);
 t_state			check_path(t_env *mini_env, char *cmmd, char **result);
 t_state			update_path(t_env **mini_env, char *new_pwd, char *cmmd);
 t_state			builtin_export_print(t_env	*mini_env);

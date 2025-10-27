@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:17:15 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:27:32 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:41:29 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,7 +15,7 @@
 /* validos: $, |, <, >, ~
  * prohibidos: \, &, *, #, \n, \t
  * dudosos: "", '', {}, [], () */
-t_bool	is_operand(char c, char next, int quo_st)
+static t_bool	is_operand(char c, char next, int quo_st)
 {
 	if (quo_st == NO_QUOTE && (c == '&' || c == '*' || c == '#' || c == ';'
 			|| c == '{' || c == '}' || c == '(' || c == ')'
@@ -28,7 +28,7 @@ t_bool	is_operand(char c, char next, int quo_st)
 	return (FALSE);
 }
 
-int	check_char(char *cmmd, int *quote_state, int *i)
+static int	check_char(char *cmmd, int *quote_state, int *i)
 {
 	char	c[3];
 
@@ -37,11 +37,15 @@ int	check_char(char *cmmd, int *quote_state, int *i)
 	if (is_operand(c[CURR], c[NEXT], *quote_state))
 		return (syntax_err(1, NULL, c[CURR]), -1);
 	if (c[CURR] == '\\')
+	{
+		if (c[NEXT] == '\''|| c[NEXT] == '\"')
+			(*i)++;
 		(*i)++;
+	}
 	return (1);
 }
 
-int	std_char(t_list	**head, char *cmmd, int *range)
+static int	std_char(t_list	**head, char *cmmd, int *range)
 {
 	int	i;
 	int	quote_state;
@@ -67,7 +71,7 @@ int	std_char(t_list	**head, char *cmmd, int *range)
 	return (i);
 }
 
-int	spc_char(char *cmmd)
+static int	spc_char(char *cmmd)
 {
 	int	i;
 

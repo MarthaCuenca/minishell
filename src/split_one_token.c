@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:04:50 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:59:52 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:35:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-void	rm_and_link(t_list **lst, t_list *nd_rm,
+static void	rm_and_link(t_list **lst, t_list *nd_rm,
 		t_list *add, void (*del)(void *))
 {
 	t_list	*anchor;
@@ -36,7 +36,7 @@ void	rm_and_link(t_list **lst, t_list *nd_rm,
 		ft_lstunlink(lst, nd_rm, del);
 }
 
-t_bool	is_amalgam(t_token *tk)
+static t_bool	is_amalgam(t_token *tk)
 {
 	if (!tk)
 		return (FALSE);

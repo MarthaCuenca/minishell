@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 12:26:49 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/09/23 11:42:35 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:08:05 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-char	**fill_env_array(t_list *og, int len)
+static char	**fill_env_array(t_list *og, int len)
 {
 	int		j;
 	char	*dup;

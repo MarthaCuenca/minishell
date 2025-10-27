@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:54:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:47:39 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:14:35 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_cmmd	*create_cmmd_node(char **arg_arr, t_redir *dir_arr)
+static t_cmmd	*create_cmmd_node(char **arg_arr, t_redir *dir_arr)
 {
 	t_cmmd	*new_nd;
 
@@ -26,7 +26,7 @@ t_cmmd	*create_cmmd_node(char **arg_arr, t_redir *dir_arr)
 	return (new_nd);
 }
 
-t_cmmd	*get_cmmd_data(t_list *lex, int n_dir, int n_arg)
+static t_cmmd	*get_cmmd_data(t_list *lex, int n_dir, int n_arg)
 {
 	char	**arg_arr;
 	t_redir	*dir_arr;
@@ -46,7 +46,7 @@ t_cmmd	*get_cmmd_data(t_list *lex, int n_dir, int n_arg)
 	return (nd);
 }
 
-t_cmmd	*token_to_cmmd(t_list **head, t_list *lex)
+static t_cmmd	*token_to_cmmd(t_list **head, t_list *lex)
 {
 	int		n_dir;
 	int		n_arg;

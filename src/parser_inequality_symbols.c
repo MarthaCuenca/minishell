@@ -6,13 +6,13 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 18:47:07 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:49:09 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:06:31 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_bool	is_word_after_redir(t_list *lex)
+static t_bool	is_word_after_redir(t_list *lex)
 {
 	int		tk_ty[3];
 	char	*str;
@@ -32,7 +32,7 @@ t_bool	is_word_after_redir(t_list *lex)
 	return (FALSE);
 }
 
-t_bool	is_ineq_symbol_at_end(t_list *lex)
+static t_bool	is_ineq_symbol_at_end(t_list *lex)
 {
 	char	*nd_tk;
 	int		nd_type;

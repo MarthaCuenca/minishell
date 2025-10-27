@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_shlvl.c                                        :+:      :+:    :+:   */
+/*   env_min.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 18:13:20 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:21:15 by mcuenca-         ###   ########.fr       */
+/*   Created: 2025/10/27 17:39:25 by mcuenca-          #+#    #+#             */
+/*   Updated: 2025/10/27 17:39:28 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include <stdlib.h>
 
 char	*increase_shell_level(char *shell_var)
 {
@@ -46,7 +47,32 @@ t_list	*is_not_shlvl(t_list **head, t_bool *shlvl_founded)
 		return (NULL);
 	new_nd = ft_lstnew(shlvl);
 	if (!new_nd)
-		return (ft_lstclear(&new_nd, del_char_ptr), NULL);
+		return (ft_lstclear(head, del_char_ptr), NULL);
+	if (!*head)
+		*head = new_nd;
+	else
+		ft_lstadd_back(head, new_nd);
+	return (new_nd);
+}
+
+t_list	*is_not_pwd(t_list **head)
+{
+	char	*pwd;
+	char	*tmp;
+	t_bool	is_alloc;
+	t_list	*new_nd;
+
+	is_alloc = FALSE;
+	tmp = get_pwd(NULL, &is_alloc);
+	if (!tmp)
+		return (NULL);
+	pwd = ft_strjoin("PWD=", tmp);
+	free(tmp);
+	if (!pwd)
+		return (NULL);
+	new_nd = ft_lstnew(pwd);
+	if (!new_nd)
+		return (free(pwd), NULL);
 	if (!*head)
 		*head = new_nd;
 	else

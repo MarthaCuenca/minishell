@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 19:41:34 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:41:40 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:15:10 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-void	fill_dir_array(t_list *lex, t_redir	*array)
+static void	fill_dir_array(t_list *lex, t_redir	*array)
 {
 	int		j;
 	t_list	*tmp;

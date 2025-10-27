@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 19:39:58 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:59:41 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:12:19 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-void	fill_arg_array(t_list *lex, char **array)
+static void	fill_arg_array(t_list *lex, char **array)
 {
 	int		j;
 	t_list	*tmp;

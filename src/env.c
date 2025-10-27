@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 16:48:45 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 13:54:39 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:02:37 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,17 @@ char	*create_content_env_nd(char **envp, int *i, t_bool *shlvl_founded)
 	if (!dup_var)
 		return (NULL);
 	return (dup_var);
+}
+
+static t_list	*is_not_env(t_list **head, t_bool *shlvl_founded)
+{
+	is_not_pwd(head);
+	if (!*head)
+		return (ft_lstclear(head, del_char_ptr), NULL);
+	is_not_shlvl(head, shlvl_founded);
+	if (!*head)
+		return (ft_lstclear(head, del_char_ptr), NULL);
+	return (*head);
 }
 
 static t_list	*is_env(char **envp, t_list **head, t_bool *shlvl_founded)
@@ -66,18 +77,18 @@ static t_list	*env_dup(char **envp)
 
 	head = NULL;
 	shlvl_founded = FALSE;
-	if (envp)
+	if (envp && *envp && *envp[0] != '\0')
 	{
 		is_env(envp, &head, &shlvl_founded);
 		if (!head)
 			return (NULL);
+		if (shlvl_founded == FALSE)
+			is_not_shlvl(&head, &shlvl_founded);
 	}
-	if (shlvl_founded == FALSE || !envp)
-	{
-		is_not_shlvl(&head, &shlvl_founded);
-		if (!head)
-			return (NULL);
-	}
+	else
+		is_not_env(&head, &shlvl_founded);
+	if (!head)
+		return (NULL);
 	return (head);
 }
 

@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:19:06 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:53:30 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:05:48 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-t_bool	syntax(t_list *lex)
+static t_bool	syntax(t_list *lex)
 {
 	if (!lex)
 		return (FALSE);

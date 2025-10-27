@@ -6,13 +6,13 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 18:45:39 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 18:46:01 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:07:09 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_bool	is_pipe_misplaced(t_list *lex)
+static t_bool	is_pipe_misplaced(t_list *lex)
 {
 	int		tk_ty[3];
 	t_list	*tmp;
@@ -32,7 +32,7 @@ t_bool	is_pipe_misplaced(t_list *lex)
 	return (FALSE);
 }
 
-t_bool	is_pipe_at_start_or_end(t_list *lex)
+static t_bool	is_pipe_at_start_or_end(t_list *lex)
 {
 	int	first_nd;
 	int	last_nd;

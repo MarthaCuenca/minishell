@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:26:48 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 20:27:17 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:34:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-int	double_quo(char *cmmd, int *qs, int *i)
+static int	double_quo(char *cmmd, int *qs, int *i)
 {
 	int	tmp;
 
@@ -37,7 +37,7 @@ int	double_quo(char *cmmd, int *qs, int *i)
 	return (-1);
 }
 
-int	simple_quo(char *cmmd, int *qs, int *i)
+static int	simple_quo(char *cmmd, int *qs, int *i)
 {
 	int	tmp;
 

@@ -13,7 +13,7 @@ HEAD := include/minishell.h \
 
 SRCS := src/main.c \
 		src/env.c \
-		src/env_shlvl.c\
+		src/env_min.c\
 		src/lexer.c \
 		src/del_function.c \
 		src/save_token_quote_mng.c \
@@ -57,7 +57,6 @@ SRCS := src/main.c \
 		src/bi_cd_up_path.c \
 		src/bi_export_print.c \
 		src/type.c \
-		src/token_type.c \
 		src/utils.c \
 		src/ft_utils.c \
 		src/signal.c \

@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 16:14:23 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:15:22 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	clean_mng(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 	}
 }
 
-int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
+static int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
 {
 	int	state;
 
@@ -49,7 +49,7 @@ int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
 	return (ST_OK);
 }
 
-int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
+static int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	int	state;
 
@@ -74,7 +74,7 @@ int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 	return (ST_OK);
 }
 
-void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
+static void	minishell(t_env *mini_env, char **line, t_list **lex, t_list **pars)
 {
 	int	state;
 

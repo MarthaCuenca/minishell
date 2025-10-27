@@ -6,14 +6,14 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 19:51:58 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:59:18 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:50:59 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
+static void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 {
 	if (*quote_state != NO_QUOTE)
 		return ;
@@ -31,18 +31,20 @@ void	is_inequality_symbols(char *str, int *quote_state, int *end, int *i)
 	}
 }
 
-void	is_underscore(char *str, int *end, int *i)
+static void	is_underscore(char *str, int *end, int *i)
 {
 	if (str[*i] == '|')
 		(*i)++;
 	*end = *i - 1;
 }
 
-void	is_other(char *str, int *quote_state, int *end, int *i)
+static void	is_other(char *str, int *quote_state, int *end, int *i)
 {
 	while (str[*i] && str[*i] != '<' && str[*i] != '>' && str[*i] != '|')
 	{
-		if (str[*i] == '\'' || str[*i] == '\"')
+		if (str[*i] == '\\' && (str[*i + 1] == '\'' || str[*i + 1] == '\"'))
+			(*i)++;
+		else if (str[*i] == '\'' || str[*i] == '\"')
 			quote_mng(str, quote_state, end, i);
 		if (*end == -1)
 			return ;
@@ -51,7 +53,7 @@ void	is_other(char *str, int *quote_state, int *end, int *i)
 	*end = *i - 1;
 }
 
-int	start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
+static int	start_end_amalgam(char *str, int *quote_state, int *sd, int *i)
 {
 	sd[START] = *i;
 	if (str[*i] == '<' || str[*i] == '>')

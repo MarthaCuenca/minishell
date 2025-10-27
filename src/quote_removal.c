@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:13:08 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/25 19:01:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:10:21 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_bool	dir_quote_rm_loop(t_redir *dir)
+static t_bool	dir_quote_rm_loop(t_redir *dir)
 {
 	int	j;
 
@@ -30,7 +30,7 @@ t_bool	dir_quote_rm_loop(t_redir *dir)
 	return (TRUE);
 }
 
-t_bool	arg_rm_quote_loop(char **arg)
+static t_bool	arg_rm_quote_loop(char **arg)
 {
 	int	j;
 
