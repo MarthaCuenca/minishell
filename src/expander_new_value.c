@@ -6,14 +6,15 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:50:12 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 13:29:49 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:57:49 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-static void	fill_new_str(char *dest, char **values, char *str, t_bool is_heredoc)
+static void	fill_new_str(char *dest, char **values,
+		char *str, t_bool is_heredoc)
 {
 	int	i;
 	int	j;

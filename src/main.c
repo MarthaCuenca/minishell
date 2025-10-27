@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:04:03 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 18:15:22 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:54:43 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static int	init_expander_quorm_executor(t_env *mini_env, t_list **pars)
 	return (ST_OK);
 }
 
-static int	init_lexer_parser(t_env *mini_env, char **line, t_list **lex, t_list **pars)
+static int	init_lexer_parser(t_env *mini_env, char **line,
+		t_list **lex, t_list **pars)
 {
 	int	state;
 

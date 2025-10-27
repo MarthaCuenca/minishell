@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 18:58:31 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 18:11:37 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:55:47 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static t_bool	is_new_state(char *str, int *quo_st, int read, char prev)
 	return (FALSE);
 }
 
-static void	rm_dou_quo_and_backslash(char **str, int *quo_st, int *read, int *write)
+static void	rm_dou_quo_and_backslash(char **str, int *quo_st,
+		int *read, int *write)
 {
 	char	c[3];
 
@@ -66,7 +67,8 @@ static void	rm_dou_quo_and_backslash(char **str, int *quo_st, int *read, int *wr
 	is_new_state(*str, quo_st, *read, c[PREV]);
 }
 
-static void	rm_sim_quo_and_backslash(char **str, int *quo_st, int *read, int *write)
+static void	rm_sim_quo_and_backslash(char **str, int *quo_st,
+		int *read, int *write)
 {
 	char	prev;
 	t_bool	is_escaped;

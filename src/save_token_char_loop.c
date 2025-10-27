@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:17:15 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 18:41:29 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/27 18:56:56 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -38,7 +38,7 @@ static int	check_char(char *cmmd, int *quote_state, int *i)
 		return (syntax_err(1, NULL, c[CURR]), -1);
 	if (c[CURR] == '\\')
 	{
-		if (c[NEXT] == '\''|| c[NEXT] == '\"')
+		if (c[NEXT] == '\'' || c[NEXT] == '\"')
 			(*i)++;
 		(*i)++;
 	}
