@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:36:09 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/27 15:27:18 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/28 15:54:26 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static void	print_signal_output(int sig_return)
 	{
 		if (sig_return == 131)
 			ft_putstr_fd("Quit (core dumped)", 1);
-		ft_putstr_fd("\n", 1);
+		else if (sig_return == 130)
+			ft_putstr_fd("\n", 1);
 	}
 }
 
