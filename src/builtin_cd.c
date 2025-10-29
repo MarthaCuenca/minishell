@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 13:08:53 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:50:46 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,15 @@ static t_state	bi_cd(t_env **mini_env, char *cmmd)
 	state = check_path(*mini_env, cmmd, &tmp);
 	if (state == ST_ERR || state == ST_ERR_MALLOC)
 		return (state);
-	if (access(tmp, F_OK) != 0)
-		return (bi_err_mng(3, "cd", cmmd), free(tmp), ST_ERR);
-	else if (chdir(tmp) != 0)
-		return (bi_err_mng(4, "cd", cmmd), free(tmp), ST_ERR);
+	if (chdir(tmp) != 0)
+		return (free(tmp), chdir_err_mng(cmmd));
+	free(tmp);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
-		return (ST_ERR_MALLOC);
+		return (getpwd_err_mng());
 	if (update_path(mini_env, new_pwd, cmmd) == ST_ERR_MALLOC)
-		return (ST_ERR_MALLOC);
+		return (free(new_pwd), ST_ERR_MALLOC);
 	free(new_pwd);
-	free(tmp);
 	return (ST_OK);
 }
 

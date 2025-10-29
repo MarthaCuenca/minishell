@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/29 17:16:13 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:32:26 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,4 +245,6 @@ t_bool			is_x_symbol(int x, int *symbols, int len);
 char			ft_prev_char(char *str, char *subptr);
 void			bi_err_mng(int err, char *cmmd, char *env_var);
 void			syntax_err(int err, char *str, char c);
+t_state			chdir_err_mng(char *not_found);
+t_state			getpwd_err_mng(void);
 #endif
