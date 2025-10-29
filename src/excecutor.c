@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:00 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/16 14:08:34 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:18:24 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 // Return 1 if not malloc fail.
 int	excecutor(t_list *lst_cmmd, t_env *tenv)
 {
+	int	status_r;
+
 	setup_signal_heredoc();
 	if (create_heredocs(lst_cmmd, tenv))
 	{
@@ -26,7 +28,9 @@ int	excecutor(t_list *lst_cmmd, t_env *tenv)
 		}
 	}
 	close_heredocs(lst_cmmd);
-	if (tenv->r == -1)
+	status_r = tenv->r;
+	tenv->r = fix_exit(tenv->r);
+	if (status_r == -1)
 		return (0);
 	return (1);
 }

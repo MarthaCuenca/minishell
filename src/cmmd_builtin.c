@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:13 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/24 17:50:32 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:14:54 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,19 @@ void	choose_builtin(t_cmmd *cmmd, t_env *env)
 		state = builtin_env(env);
 	else if (ft_strcmp(str, "exit") == 0)
 		builtin_exit(env, NULL, cmmd);
-	if (state != 0)
-		state = 1;
 	env->r = state;
 }
 
-int	exec_if_1builtin(t_list *lst_cmmd, t_env *env)
+void	exec_1builtin(t_list *lst_cmmd, t_env *env)
 {
 	t_cmmd	*cmmd;
 	int		fd_stdout;
 
 	cmmd = (t_cmmd *)lst_cmmd->content;
-	if (!lst_cmmd->next && is_builtin_not_forkable(cmmd->cmmd[0]))
-	{
-		fd_stdout = dup(1);
-		setup_signal_standard(SIG_DFL, SIG_DFL);
-		manage_infile(cmmd, env);
-		manage_outfile(cmmd, env);
-		choose_builtin(cmmd, env);
-		dup2(fd_stdout, 1);
-		return (1);
-	}
-	return (0);
+	fd_stdout = dup(1);
+	setup_signal_standard(SIG_DFL, SIG_DFL);
+	manage_infile(cmmd, env);
+	manage_outfile(cmmd, env);
+	choose_builtin(cmmd, env);
+	dup2(fd_stdout, 1);
 }

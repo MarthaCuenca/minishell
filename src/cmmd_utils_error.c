@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 12:36:24 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/19 17:56:02 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:54:56 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,12 @@ int	fork_e(pid_t pid, t_env *env)
 		return (0);
 	}
 	return (1);
+}
+
+int	fix_exit(int status)
+{
+	if (status < 0)
+		return (1);
+	else
+		return (status);
 }

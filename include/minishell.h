@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 14:18:40 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/27 18:30:28 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:16:13 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,11 +184,11 @@ int				excecutor(t_list *lst_cmmd, t_env *tenv);
 // CMMD
 int				manage_infile(t_cmmd *cmmd, t_env *env);
 int				manage_outfile(t_cmmd *cmmd, t_env *env);
-int				exec_cmmd(t_list *lst_cmmd, t_env *env);
+void			exec_cmmd(t_list *lst_cmmd, t_env *env);
 int				is_builtin(char *str);
 int				is_builtin_not_forkable(char *str);
 void			choose_builtin(t_cmmd *cmmd, t_env *env);
-int				exec_if_1builtin(t_list *lst_cmmd, t_env *env);
+void			exec_1builtin(t_list *lst_cmmd, t_env *env);
 int				pipe_e(int pipefd[2], t_env *env);
 void			execve_e(t_cmmd *cmmd, t_env *env);
 int				fork_e(pid_t pid, t_env *env);
@@ -199,6 +199,7 @@ t_list			*init_lst_cmmd(char **argv);
 void			free_cmmd_node(void *ptr);
 int				correct_cmmd_namepath(t_list *lst_cmmd, t_env *env);
 int				create_heredocs(t_list *lst_cmmd, t_env *env);
+int				fix_exit(int status);
 void			close_heredocs(t_list *lst_cmmd);
 char			*create_filename(char *str_name, int counter, t_env *env);
 

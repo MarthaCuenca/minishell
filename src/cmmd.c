@@ -6,7 +6,7 @@
 /*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 03:35:33 by faguirre          #+#    #+#             */
-/*   Updated: 2025/10/20 18:43:05 by faguirre         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:14:58 by faguirre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,27 +125,31 @@ int	exec_cmmd_node(t_list *lst_cmmd, t_pipe_data *pipe_data, t_env *env)
 				execve_e(cmmd, env);
 		}
 		clean_mng(env, NULL, NULL, &(pipe_data->lst_cmmd));
-		exit(env->r);
+		exit(fix_exit(env->r));
 	}
 	manage_pipes(pipe_data, lst_cmmd->next == NULL);
 	return (1);
 }
 
-int	exec_cmmd(t_list *lst_cmmd, t_env *env)
+void	exec_cmmd(t_list *lst_cmmd, t_env *env)
 {
 	t_pipe_data	pipe_data;
 
 	pipe_data.fd_prev = -1;
 	pipe_data.last_pid = -1;
 	pipe_data.lst_cmmd = lst_cmmd;
-	if (exec_if_1builtin(lst_cmmd, env))
-		return (1);
+	if (!lst_cmmd->next && is_builtin_not_forkable(\
+		((t_cmmd *)lst_cmmd->content)->cmmd[0]))
+	{
+		exec_1builtin(lst_cmmd, env);
+		return ;
+	}
 	while (lst_cmmd)
 	{
 		if (!exec_cmmd_node(lst_cmmd, &pipe_data, env))
-			return (0);
+			return ;
 		lst_cmmd = lst_cmmd->next;
 	}
 	env->r = process_exit_status(&pipe_data);
-	return (1);
+	return ;
 }
