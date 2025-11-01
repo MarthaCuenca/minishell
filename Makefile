@@ -2,8 +2,6 @@
 
 NAME := minishell
 LIB := libft
-VERBOSE ?= 1
-export VERBOSE
 
 LIB_PATH := $(LIB)/$(LIB).a
 SRC_PATH := src
