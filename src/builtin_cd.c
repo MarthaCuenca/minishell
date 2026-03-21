@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:36:38 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/29 19:50:46 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/29 20:37:04 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_state	bi_cd(t_env **mini_env, char *cmmd)
 	if (state == ST_ERR || state == ST_ERR_MALLOC)
 		return (state);
 	if (chdir(tmp) != 0)
-		return (free(tmp), chdir_err_mng(cmmd));
+		return ((bi_err_mng(7, "cd", cmmd), free(tmp), ST_ERR));
 	free(tmp);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)

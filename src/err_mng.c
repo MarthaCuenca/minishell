@@ -6,7 +6,7 @@
 /*   By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 14:25:01 by mcuenca-          #+#    #+#             */
-/*   Updated: 2025/10/29 19:52:04 by mcuenca-         ###   ########.fr       */
+/*   Updated: 2025/10/29 20:36:51 by mcuenca-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,19 @@ void	bi_err_mng(int err, char *cmmd, char *not_found)
 		printf("Error: %s: %s: numeric argument required\n", cmmd, not_found);
 	else if (err == 6)
 		printf ("Error: %s: `%s': not a valid identifier\n", cmmd, not_found);
+	else if (err == 7)
+	{
+		write(1, "Error: ", 7);
+		write(1, cmmd, ft_strlen(cmmd));
+		write(1, ": ", 2);
+		write(1, not_found, ft_strlen(not_found));
+		write(1, ": ", 2);
+		perror("");
+		write(1, "\n", 1);
+	}
 }
 
-t_state	chdir_err_mng(char *cmmd)
+/*t_state	chdir_err_mng(char *cmmd)
 {
 	if (errno == EACCES)
 		printf ("Error: cd: %s: %s\n", cmmd, strerror(errno));
@@ -65,8 +75,7 @@ t_state	chdir_err_mng(char *cmmd)
 	else if (errno == ENOTDIR)
 		printf ("Error: cd: %s:%s\n", cmmd, strerror(errno));
 	return (ST_ERR);
-}
-
+}*/
 t_state	getpwd_err_mng(void)
 {
 	if (errno == ENOMEM)
